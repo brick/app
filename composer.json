@@ -1,0 +1,29 @@
+{
+    "name": "brick/app",
+    "description": "Web application framework",
+    "type": "library",
+    "keywords": [
+        "Brick",
+        "App",
+        "Application",
+        "Controller",
+        "View"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5",
+        "brick/di": "dev-master",
+        "brick/event": "dev-master",
+        "brick/http": "dev-master",
+        "brick/reflection": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brick\\App\\": "src/"
+        }
+    }
+}
