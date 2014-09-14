@@ -23,7 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Brick\\App\\": "src/"
+            "Brick\\App\\": "src/",
+            "Brick\\App\\Tests\\": "tests/"
         }
     }
 }
