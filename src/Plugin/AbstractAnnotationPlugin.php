@@ -28,7 +28,9 @@ abstract class AbstractAnnotationPlugin implements Plugin
      */
     public function __construct(Reader $annotationReader)
     {
-        AnnotationRegistry::registerAutoloadNamespace('Brick\App\Controller\Annotation', __DIR__ . '/../../..');
+        AnnotationRegistry::registerLoader(function($class) {
+            return class_exists($class);
+        });
 
         $this->annotationReader = $annotationReader;
         $this->reflectionTools  = new ReflectionTools();
