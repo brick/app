@@ -129,4 +129,16 @@ abstract class AbstractController
             ->setStatusCode($statusCode)
             ->setHeader('Location', $uri);
     }
+
+    /**
+     * Escapes a string for inclusion in an HTML or XML document.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    protected function escape($text)
+    {
+        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
 }
