@@ -56,7 +56,7 @@ abstract class AbstractController
     /**
      * Returns a plain text response.
      *
-     * @param string $text
+     * @param string $text The text content.
      *
      * @return \Brick\Http\Response
      */
@@ -68,13 +68,23 @@ abstract class AbstractController
     /**
      * Returns an HTML response.
      *
-     * @param string $html The HTML content.
+     * @param string $html The HTML document.
      *
      * @return \Brick\Http\Response
      */
     protected function html($html)
     {
         return $this->createResponse($html, 'text/html');
+    }
+
+    /**
+     * @param string $xml The XML document.
+     *
+     * @return Response
+     */
+    protected function xml($xml)
+    {
+        return $this->createResponse($xml, 'application/xml');
     }
 
     /**
