@@ -10,7 +10,7 @@ abstract class AbstractView implements View
     /**
      * HTML-escapes a text string.
      *
-     * This is the single most important protection againts XSS attacks:
+     * This is the single most important protection against XSS attacks:
      * any user-originated data, or more generally any data that is not known to be valid and trusted HTML,
      * must be escaped before being displayed in a web page.
      *
