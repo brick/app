@@ -94,8 +94,8 @@ class FormView implements View
     {
         return
             $this->renderErrors($this->form) .
-            $this->form->openTag() .
+            $this->form->open() .
             $this->renderForm($this->form) .
-            $this->form->closeTag();
+            $this->form->close();
     }
 }
