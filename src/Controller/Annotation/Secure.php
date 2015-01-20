@@ -20,10 +20,10 @@ namespace Brick\App\Controller\Annotation;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class Secure extends AbstractAnnotation
+class Secure
 {
     /**
-     * @var string|null
+     * @var string
      */
     public $hsts;
 }
