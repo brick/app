@@ -3,9 +3,17 @@
 namespace Brick\App\Controller\Annotation;
 
 /**
- * Forces a controller to be accessed on an HTTPS connection.
+ * Enforces HTTPS on a controller.
  *
- * Can be used on a controller class (will apply to all controller methods), or on a single method.
+ * Can be used on a controller class (to secure all controller methods), or on a single method.
+ * Note that this will also secure subclasses of the controller.
+ *
+ * If an HSTS (HTTP Strict Transport Security) policy is provided in the annotation,
+ * the policy is injected in responses to HTTPS requests on the secured controller.
+ *
+ * Example HSTS policy: 'max-age=3600; includeSubDomains'.
+ * This policy would force the browser to transparently rewrite any http URL to https,
+ * on the current domain and all of its subdomains, for the next hour.
  *
  * This annotation requires the `SecurePlugin`.
  *
@@ -14,4 +22,8 @@ namespace Brick\App\Controller\Annotation;
  */
 class Secure extends AbstractAnnotation
 {
+    /**
+     * @var string|null
+     */
+    public $hsts;
 }
