@@ -3,8 +3,8 @@ Brick\App
 
 A web application framework.
 
-[![Build Status](https://secure.travis-ci.org/brick/app.png?branch=master)](http://travis-ci.org/brick/app)
-[![Coverage Status](https://coveralls.io/repos/brick/app/badge.png?branch=master)](https://coveralls.io/r/brick/app?branch=master)
+[![Build Status](https://secure.travis-ci.org/brick/app.svg?branch=master)](http://travis-ci.org/brick/app)
+[![Coverage Status](https://coveralls.io/repos/brick/app/badge.svg?branch=master)](https://coveralls.io/r/brick/app?branch=master)
 
 Installation
 ------------
