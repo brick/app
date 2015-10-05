@@ -61,7 +61,13 @@ class FormView implements View
      */
     private function renderElement(Element $element)
     {
-        return $element->getLabel()->render() . $element->render();
+        $label = $element->getLabel();
+
+        if ($label->isEmpty()) {
+            return $element->render();
+        }
+
+        return $label->render() . $element->render();
     }
 
     /**

@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "brick/brick": "dev-master",
+        "brick/form": "dev-master",
         "doctrine/dbal": "*",
         "phpunit/phpunit": "*",
         "satooshi/php-coveralls": "*"
