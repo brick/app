@@ -44,11 +44,11 @@ trait TranslatorHelper
     /**
      * @param string      $key
      * @param array       $parameters
-     * @param Locale|null $locale
+     * @param string|null $locale
      *
      * @return string
      */
-    final public function translate($key, array $parameters = [], Locale $locale = null)
+    final public function translate($key, array $parameters = [], $locale = null)
     {
         return $this->getTranslator()->translate($key, $parameters, $locale);
     }
