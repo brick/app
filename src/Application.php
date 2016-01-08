@@ -126,6 +126,7 @@ class Application implements RequestHandler
 
     /**
      * @param \Brick\Http\Request $request
+     *
      * @return \Brick\Http\Response
      */
     public function handle(Request $request)
@@ -134,7 +135,7 @@ class Application implements RequestHandler
             return $this->handleRequest($request);
         } catch (HttpException $e) {
             return $this->handleHttpException($e, $request);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->handleUncaughtException($e, $request);
         }
     }
@@ -165,12 +166,12 @@ class Application implements RequestHandler
     /**
      * Wraps an uncaught exception in an HttpInternalServerErrorException, and converts it to a Response.
      *
-     * @param \Exception          $exception
+     * @param \Throwable          $exception
      * @param \Brick\Http\Request $request
      *
      * @return \Brick\Http\Response
      */
-    private function handleUncaughtException(\Exception $exception, Request $request)
+    private function handleUncaughtException(\Throwable $exception, Request $request)
     {
         $httpException = new HttpInternalServerErrorException('Uncaught exception', $exception);
 
