@@ -62,9 +62,14 @@ Let's create a simple controller class:
 
 	use Brick\Http\Response;
 
-	class Index
+	class IndexController
 	{
-	    public function hello()
+	    public function indexAction()
+	    {
+	        return new Response('This is the index page.');
+	    }
+
+	    public function helloAction()
 	    {
 	        return new Response('Hello, world');
 	    }
@@ -78,27 +83,29 @@ The next step is to instruct our application what controller to invoke for a giv
 
 The application ships with a few routes that cover the most common use cases. If you have more complex requirements, you can easily write your own routes.
 
-Let's add an off-the-box route that automatically maps the request path to the class path:
+Let's add an off-the-box route that maps a each path directory to a controller:
 
-    use Brick\App\Route\StandardRoute;
+    use Brick\App\Route\SimpleRoute;
 
-    $route = new StandardRoute('MyApp\Controller');
+    $route = new SimpleRoute([
+        '/' => MyApp\Controller\IndexController::class,
+    ]);
+
     $application->addRoute($route);
 
-Open your browser as `/index/hello`, you should get the "Hello, world" message.
-
-What happened here is that our route mapped the request path `index/hello` to the class/method path `MyApp\Controller\Index::hello()`.
+Open your browser at `/`, you should get the index page message.
+Open your browser at `/hello`, you should get the "Hello, world" message.
 
 ### Getting request data
 
 Returning information is great, but most of the time you will need to get data from the current request first. It's very easy to get access to the `Request` object, just add it as a parameter to your method:
 
-    public function hello(Request $request)
+    public function helloAction(Request $request)
     {
         return new Response('Hello, ' . $request->getQuery('name'));
     }
 
-Now if you open your browser at `/index/hello?name=John`, you should get a "Hello, John" message.
+Now if you open your browser at `/hello?name=John`, you should get a "Hello, John" message.
 
 ### Adding plugins
 
@@ -117,7 +124,7 @@ Once this is done, let's add the plugin to our application:
     $plugin = new RequestParamPlugin($reader);
     $application->addPlugin($plugin);
 
-That's it. Let's update our `hello()` controller once again to use this new functionality:
+That's it. Let's update our `helloAction()` once again to use this new functionality:
 
     namespace MyApp\Controller;
 
@@ -129,7 +136,7 @@ That's it. Let's update our `hello()` controller once again to use this new func
         /**
          * @QueryParam("name")
          */
-	    public function hello($name)
+	    public function helloAction($name)
 	    {
 	        return new Response('Hello, ' . $name);
 	    }
@@ -137,7 +144,7 @@ That's it. Let's update our `hello()` controller once again to use this new func
 
 *Important: the annotation needs to be imported, do not forget the `use Brick\...\QueryParam;` line.*
 
-If you open your browser at `/index/hello?name=Bob`, you should get "Hello, Bob". We did not need to interact directly with the Request object anymore. Request variables are now automatically injected in our controller parameters. Magic.
+If you open your browser at `/hello?name=Bob`, you should get "Hello, Bob". We did not need to interact directly with the Request object anymore. Request variables are now automatically injected in our controller parameters. Magic.
 
 ### Writing your own plugins
 
