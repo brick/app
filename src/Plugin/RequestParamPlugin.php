@@ -154,6 +154,41 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
             }
         }
 
+        $type = $parameter->getType();
+
+        if ($type !== null) {
+            $type = (string) $type;
+
+            if ($value === '') {
+                if ($parameter->isDefaultValueAvailable()) {
+                    return $parameter->getDefaultValue();
+                }
+            }
+
+            if ($type === 'bool') {
+                if ($value === '0' || $value === 'false' || $value === 'off' || $value === 'no') {
+                    return false;
+                }
+                if ($value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
+                    return true;
+                }
+            } elseif ($type === 'int') {
+                if (ctype_digit($value)) {
+                    return (int) $value;
+                }
+            } elseif ($type === 'float') {
+                if (is_numeric($value)) {
+                    return (float) $value;
+                }
+            } elseif ($type === 'string') {
+                return $value;
+            } else {
+                throw $this->unsupportedBuiltinType($controller, $annotation, $type);
+            }
+
+            throw $this->invalidScalarParameterException($controller, $annotation, $type);
+        }
+
         return $value;
     }
 
@@ -188,10 +223,10 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
     }
 
     /**
-     * @param \ReflectionFunctionAbstract                           $controller
-     * @param \Brick\App\Controller\Annotation\RequestParam $annotation
+     * @param \ReflectionFunctionAbstract $controller
+     * @param RequestParam                $annotation
      *
-     * @return \Brick\Http\Exception\HttpInternalServerErrorException
+     * @return HttpInternalServerErrorException
      */
     private function unknownParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation)
     {
@@ -203,10 +238,10 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
     }
 
     /**
-     * @param \ReflectionFunctionAbstract               $controller
-     * @param \Brick\App\Controller\Annotation\RequestParam $annotation
+     * @param \ReflectionFunctionAbstract $controller
+     * @param RequestParam                $annotation
      *
-     * @return \Brick\Http\Exception\HttpBadRequestException
+     * @return HttpBadRequestException
      */
     private function missingParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation)
     {
@@ -219,16 +254,54 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
     }
 
     /**
-     * @param \ReflectionFunctionAbstract                           $controller
-     * @param \Brick\App\Controller\Annotation\RequestParam $annotation
+     * @param \ReflectionFunctionAbstract $controller
+     * @param RequestParam                $annotation
      *
-     * @return \Brick\Http\Exception\HttpBadRequestException
+     * @return HttpBadRequestException
      */
     private function invalidArrayParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation)
     {
         return new HttpBadRequestException(sprintf(
             '%s() expects an array for %s parameter "%s" (bound to $%s), string given.',
             $this->reflectionTools->getFunctionName($controller),
+            $annotation->getParameterType(),
+            $annotation->getName(),
+            $annotation->getBindTo()
+        ));
+    }
+
+    /**
+     * @param \ReflectionFunctionAbstract $controller
+     * @param RequestParam                $annotation
+     * @param string                      $type
+     *
+     * @return HttpBadRequestException
+     */
+    private function invalidScalarParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation, string $type)
+    {
+        return new HttpBadRequestException(sprintf(
+            '%s() received an invalid %s value for %s parameter "%s" (bound to $%s).',
+            $this->reflectionTools->getFunctionName($controller),
+            $type,
+            $annotation->getParameterType(),
+            $annotation->getName(),
+            $annotation->getBindTo()
+        ));
+    }
+
+    /**
+     * @param \ReflectionFunctionAbstract $controller
+     * @param RequestParam                $annotation
+     * @param string                      $type
+     *
+     * @return HttpInternalServerErrorException
+     */
+    private function unsupportedBuiltinType(\ReflectionFunctionAbstract $controller, RequestParam $annotation, string $type)
+    {
+        return new HttpInternalServerErrorException(sprintf(
+            '%s() requests an unsupported type (%s) for %s parameter "%s" (bound to $%s).',
+            $this->reflectionTools->getFunctionName($controller),
+            $type,
             $annotation->getParameterType(),
             $annotation->getName(),
             $annotation->getBindTo()
