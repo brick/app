@@ -152,41 +152,41 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
                     }
                 }
             }
-        }
+        } else {
+            $type = $parameter->getType();
 
-        $type = $parameter->getType();
+            if ($type !== null) {
+                $type = (string) $type;
 
-        if ($type !== null) {
-            $type = (string) $type;
-
-            if ($value === '') {
-                if ($parameter->isDefaultValueAvailable()) {
-                    return $parameter->getDefaultValue();
+                if ($value === '') {
+                    if ($parameter->isDefaultValueAvailable()) {
+                        return $parameter->getDefaultValue();
+                    }
                 }
+
+                if ($type === 'bool') {
+                    if ($value === '0' || $value === 'false' || $value === 'off' || $value === 'no') {
+                        return false;
+                    }
+                    if ($value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
+                        return true;
+                    }
+                } elseif ($type === 'int') {
+                    if (ctype_digit($value)) {
+                        return (int) $value;
+                    }
+                } elseif ($type === 'float') {
+                    if (is_numeric($value)) {
+                        return (float) $value;
+                    }
+                } elseif ($type === 'string') {
+                    return $value;
+                } else {
+                    throw $this->unsupportedBuiltinType($controller, $annotation, $type);
+                }
+
+                throw $this->invalidScalarParameterException($controller, $annotation, $type);
             }
-
-            if ($type === 'bool') {
-                if ($value === '0' || $value === 'false' || $value === 'off' || $value === 'no') {
-                    return false;
-                }
-                if ($value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
-                    return true;
-                }
-            } elseif ($type === 'int') {
-                if (ctype_digit($value)) {
-                    return (int) $value;
-                }
-            } elseif ($type === 'float') {
-                if (is_numeric($value)) {
-                    return (float) $value;
-                }
-            } elseif ($type === 'string') {
-                return $value;
-            } else {
-                throw $this->unsupportedBuiltinType($controller, $annotation, $type);
-            }
-
-            throw $this->invalidScalarParameterException($controller, $annotation, $type);
         }
 
         return $value;
