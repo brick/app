@@ -147,8 +147,8 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
                     $resolver = new ImportResolver($parameter);
                     $type = $resolver->resolve($type);
 
-                    foreach ($value as & $item) {
-                        $item = $this->getObject($type, $item, $annotation->getOptions());
+                    foreach ($value as $key => $item) {
+                        $value[$key] = $this->getObject($type, $item, $annotation->getOptions());
                     }
                 }
             }
