@@ -6,6 +6,7 @@ use Brick\App\Event\ControllerReadyEvent;
 use Brick\App\Plugin;
 use Brick\App\Controller\Annotation\RequestParam;
 use Brick\Event\EventDispatcher;
+use Brick\Http\Exception\HttpException;
 use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Request;
 use Brick\Http\Exception\HttpBadRequestException;
@@ -55,6 +56,8 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      * @param \ReflectionFunctionAbstract $controller
      *
      * @return array
+     *
+     * @throws HttpException
      */
     private function getParameters(Request $request, \ReflectionFunctionAbstract $controller)
     {
@@ -94,10 +97,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return mixed The value to assign to the function parameter.
      *
-     * @throws \RuntimeException
-     * @throws \Brick\Http\Exception\HttpBadRequestException
-     * @throws \Brick\Http\Exception\HttpNotFoundException
-     * @throws \Brick\Http\Exception\HttpInternalServerErrorException
+     * @throws HttpException
      */
     private function getParameter(RequestParam $annotation, \ReflectionFunctionAbstract $controller, array $parameters, Request $request)
     {
@@ -199,7 +199,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return object
      *
-     * @throws \RuntimeException
+     * @throws HttpException
      */
     private function getObject($className, $value, array $options)
     {
