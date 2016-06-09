@@ -205,8 +205,7 @@ class Application implements RequestHandler
         if ($controllerReflection instanceof \ReflectionMethod) {
             $className = $controllerReflection->getDeclaringClass()->getName();
             $instance = $this->injector->instantiate($className);
-
-            $callable = [$instance, $controllerReflection->getName()];
+            $callable = $controllerReflection->getClosure($instance);
         } elseif ($controllerReflection instanceof \ReflectionFunction) {
             $callable = $controllerReflection->getClosure();
         } else {
