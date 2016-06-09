@@ -46,7 +46,7 @@ class RouteMatch
      *
      * @throws RoutingException If the class or method does not exist.
      */
-    public static function forMethod($class, $method, array $classParameters = [], array $functionParameters = [])
+    public static function forMethod(string $class, string $method, array $classParameters = [], array $functionParameters = [])
     {
         try {
             $controller = new \ReflectionMethod($class, $method);

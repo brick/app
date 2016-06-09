@@ -33,7 +33,7 @@ final class ControllerInvocatedEvent
 
     /**
      * @param Request     $request    The request.
-     * @param \Brick\App\RouteMatch  $routeMatch The route match.
+     * @param RouteMatch  $routeMatch The route match.
      * @param object|null $instance   The controller instance.
      */
     public function __construct(Request $request, RouteMatch $routeMatch, $instance)

@@ -48,7 +48,7 @@ trait TranslatorHelper
      *
      * @return string
      */
-    final public function translate($key, array $parameters = [], $locale = null)
+    final public function translate(string $key, array $parameters = [], string $locale = null)
     {
         return $this->getTranslator()->translate($key, $parameters, $locale);
     }

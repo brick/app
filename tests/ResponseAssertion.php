@@ -27,7 +27,7 @@ class ResponseAssertion
     }
 
     /**
-     * @param integer $statusCode
+     * @param int $statusCode
      *
      * @return ResponseAssertion
      */

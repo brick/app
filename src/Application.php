@@ -285,7 +285,7 @@ class Application implements RequestHandler
      *
      * @return \UnexpectedValueException
      */
-    private function invalidReturnValue($what, $expected, $actual)
+    private function invalidReturnValue(string $what, string $expected, $actual)
     {
         $message = 'Invalid return value from %s: expected %s, got %s.';
         $actual  = is_object($actual) ? get_class($actual) : gettype($actual);

@@ -14,7 +14,7 @@ class RoutingException extends \RuntimeException
      *
      * @return RoutingException
      */
-    public static function invalidControllerClassMethod(\ReflectionException $e, $class, $method)
+    public static function invalidControllerClassMethod(\ReflectionException $e, string $class, string $method)
     {
         return new self(sprintf(
             'Cannot find a controller method called %s::%s().',

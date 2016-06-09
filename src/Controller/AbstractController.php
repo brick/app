@@ -60,7 +60,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function text($text)
+    protected function text(string $text)
     {
         return $this->createResponse($text, 'text/plain');
     }
@@ -72,7 +72,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function html($html)
+    protected function html(string $html)
     {
         return $this->createResponse($html, 'text/html');
     }
@@ -82,7 +82,7 @@ abstract class AbstractController
      *
      * @return Response
      */
-    protected function xml($xml)
+    protected function xml(string $xml)
     {
         return $this->createResponse($xml, 'application/xml');
     }
@@ -90,12 +90,12 @@ abstract class AbstractController
     /**
      * Returns a JSON response.
      *
-     * @param mixed   $data   The data to encode, or a valid JSON string if `$encode` == `false`.
-     * @param boolean $encode Whether to JSON-encode the data.
+     * @param mixed $data   The data to encode, or a valid JSON string if `$encode` == `false`.
+     * @param bool  $encode Whether to JSON-encode the data.
      *
      * @return \Brick\Http\Response
      */
-    protected function json($data, $encode = true)
+    protected function json($data, bool $encode = true)
     {
         if ($encode) {
             $data = json_encode($data);
@@ -110,7 +110,7 @@ abstract class AbstractController
      *
      * @return Response
      */
-    private function createResponse($data, $contentType)
+    private function createResponse(string $data, string $contentType)
     {
         return (new Response())
             ->setContent($data)
@@ -118,12 +118,12 @@ abstract class AbstractController
     }
 
     /**
-     * @param string  $uri
-     * @param integer $statusCode
+     * @param string $uri
+     * @param int    $statusCode
      *
      * @return \Brick\Http\Response
      */
-    protected function redirect($uri, $statusCode = 302)
+    protected function redirect(string $uri, int $statusCode = 302)
     {
         return (new Response())
             ->setStatusCode($statusCode)
@@ -137,7 +137,7 @@ abstract class AbstractController
      *
      * @return string
      */
-    protected function escape($text)
+    protected function escape(string $text)
     {
         return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     }

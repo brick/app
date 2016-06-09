@@ -28,9 +28,9 @@ class FormTableView implements View
      * @param \Brick\Form\Form $form
      * @param string $class
      */
-    public function __construct(Form $form, $class = '')
+    public function __construct(Form $form, string $class = '')
     {
-        $this->form = $form;
+        $this->form  = $form;
         $this->class = $class;
     }
 
@@ -38,6 +38,7 @@ class FormTableView implements View
      * Renders the errors of a Form or an Element as an unordered list.
      *
      * @param \Brick\Form\Base $base
+     *
      * @return string
      */
     private function renderErrors(Base $base)
@@ -63,9 +64,10 @@ class FormTableView implements View
     /**
      * @param string $tagName
      * @param string $html
+     *
      * @return string
      */
-    private function renderCell($tagName, $html)
+    private function renderCell(string $tagName, string $html)
     {
         $td = new Tag($tagName);
         $td->setHtmlContent($html);
@@ -77,6 +79,7 @@ class FormTableView implements View
      * Renders an element, along with its label.
      *
      * @param \Brick\Form\Element $element
+     *
      * @return string
      */
     private function renderElementAsRow(Element $element)
@@ -93,7 +96,9 @@ class FormTableView implements View
 
     /**
      * @param \Brick\Form\Form $form
+     *
      * @return string
+     *
      * @throws \RuntimeException
      */
     private function renderForm(Form $form)

@@ -9,6 +9,7 @@ abstract class AbstractAnnotation
 {
     /**
      * @param array $parameters
+     *
      * @throws \RuntimeException
      */
     public function __construct(array $parameters)

@@ -14,12 +14,12 @@ abstract class AbstractView implements View
      * any user-originated data, or more generally any data that is not known to be valid and trusted HTML,
      * must be escaped before being displayed in a web page.
      *
-     * @param string  $text       The text to escape.
-     * @param boolean $lineBreaks Whether to escape line breaks. Defaults to `false`.
+     * @param string $text       The text to escape.
+     * @param bool   $lineBreaks Whether to escape line breaks. Defaults to `false`.
      *
      * @return string
      */
-    public function html($text, $lineBreaks = false)
+    public function html(string $text, bool $lineBreaks = false)
     {
         $html = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 

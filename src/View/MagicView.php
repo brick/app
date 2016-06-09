@@ -21,7 +21,7 @@ class MagicView extends ScriptView
      * @param string $scriptPath The view script path, typically a .phtml file.
      * @param array  $parameters An optional array of parameters to initialize.
      */
-    public function __construct($scriptPath, array $parameters = [])
+    public function __construct(string $scriptPath, array $parameters = [])
     {
         $this->scriptPath = $scriptPath;
         $this->parameters = $parameters;
@@ -40,18 +40,18 @@ class MagicView extends ScriptView
      *
      * @return mixed The value, or null if no parameter by that name.
      */
-    public function __get($name)
+    public function __get(string $name)
     {
-        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+        return $this->parameters[$name] ?? null;
     }
 
     /**
      * @param string $name  The parameter name.
-     * @param string $value The parameter value.
+     * @param mixed  $value The parameter value.
      *
      * @return void
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         $this->parameters[$name] = $value;
     }

@@ -78,7 +78,7 @@ class SimpleRoute implements Route
      *
      * @return string
      */
-    private function capitalize($name)
+    private function capitalize(string $name)
     {
         return preg_replace_callback('/\-([a-z])/', function (array $matches) {
             return strtoupper($matches[1]);

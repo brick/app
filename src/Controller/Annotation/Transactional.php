@@ -46,7 +46,7 @@ class Transactional extends AbstractAnnotation
      *
      * @throws \RuntimeException
      */
-    public function setValue($isolationLevel)
+    public function setValue(string $isolationLevel)
     {
         if (! isset(self::$isolationLevels[$isolationLevel])) {
             throw new \RuntimeException('Invalid transaction isolation level: ' . $isolationLevel);

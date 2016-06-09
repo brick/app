@@ -15,10 +15,10 @@ class TextView extends AbstractView
     /**
      * Private constructor. Use factory methods to obtain an instance.
      *
-     * @param string  $string
-     * @param boolean $escape
+     * @param string $string
+     * @param bool   $escape
      */
-    private function __construct($string, $escape)
+    private function __construct(string $string, bool $escape)
     {
         $this->html = $escape ? $this->html($string) : (string) $string;
     }
@@ -28,7 +28,7 @@ class TextView extends AbstractView
      *
      * @return TextView
      */
-    public static function text($text)
+    public static function text(string $text)
     {
         return new self($text, true);
     }

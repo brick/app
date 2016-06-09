@@ -22,7 +22,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param integer  $statusCode
+     * @param int      $statusCode
      * @param Response $response
      */
     private function assertStatusCode($statusCode, Response $response)
