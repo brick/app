@@ -200,7 +200,7 @@ class Application implements RequestHandler
         $instance = null;
 
         $this->valueResolver->setRequest($request);
-        $this->valueResolver->setParameters($match->getParameters());
+        $this->valueResolver->setParameters($match->getClassParameters());
 
         if ($controllerReflection instanceof \ReflectionMethod) {
             $className = $controllerReflection->getDeclaringClass()->getName();
@@ -214,9 +214,10 @@ class Application implements RequestHandler
         }
 
         $event = new ControllerReadyEvent($request, $match, $instance);
-        $this->eventDispatcher->dispatch(ControllerReadyEvent::class, $event);
+        $event->addParameters($match->getFunctionParameters());
 
-        $this->valueResolver->addParameters($event->getParameters());
+        $this->eventDispatcher->dispatch(ControllerReadyEvent::class, $event);
+        $this->valueResolver->setParameters($event->getParameters());
 
         try {
             $result = $this->injector->invoke($callable);

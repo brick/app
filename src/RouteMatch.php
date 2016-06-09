@@ -15,16 +15,23 @@ class RouteMatch
     /**
      * @var array
      */
-    private $parameters;
+    private $classParameters = [];
 
     /**
-     * @param \ReflectionFunctionAbstract $controller A reflection of the controller.
-     * @param array                       $parameters An associative array of parameters matched from the request.
+     * @var array
      */
-    public function __construct(\ReflectionFunctionAbstract $controller, array $parameters = [])
+    private $functionParameters = [];
+
+    /**
+     * @param \ReflectionFunctionAbstract $controller         A reflection of the controller.
+     * @param array                       $classParameters    An associative array of parameters matched from the request to resolve the controller class.
+     * @param array                       $functionParameters An associative array of parameters matched from the request to resolve the controller function parameters.
+     */
+    public function __construct(\ReflectionFunctionAbstract $controller, array $classParameters = [], array $functionParameters = [])
     {
-        $this->controller = $controller;
-        $this->parameters = $parameters;
+        $this->controller         = $controller;
+        $this->classParameters    = $classParameters;
+        $this->functionParameters = $functionParameters;
     }
 
     /**
@@ -32,38 +39,43 @@ class RouteMatch
      *
      * @param string $class
      * @param string $method
-     * @param array  $parameters
+     * @param array  $classParameters
+     * @param array  $functionParameters
      *
      * @return RouteMatch The route match.
      *
      * @throws RoutingException If the class or method does not exist.
      */
-    public static function forMethod($class, $method, array $parameters = [])
+    public static function forMethod($class, $method, array $classParameters = [], array $functionParameters = [])
     {
         try {
-            return new self(new \ReflectionMethod($class, $method), $parameters);
+            $controller = new \ReflectionMethod($class, $method);
         } catch (\ReflectionException $e) {
             throw RoutingException::invalidControllerClassMethod($e, $class, $method);
         }
+
+        return new RouteMatch($controller, $classParameters, $functionParameters);
     }
 
     /**
      * Returns a RouteMatch for the given function or closure.
      *
      * @param string|\Closure $function
-     * @param array           $parameters
+     * @param array           $functionParameters
      *
      * @return RouteMatch The route match.
      *
      * @throws RoutingException If the function is invalid.
      */
-    public static function forFunction($function, array $parameters = [])
+    public static function forFunction($function, array $functionParameters = [])
     {
         try {
-            return new self(new \ReflectionFunction($function), $parameters);
+            $controller = new \ReflectionFunction($function);
         } catch (\ReflectionException $e) {
             throw RoutingException::invalidControllerFunction($e, $function);
         }
+
+        return new self($controller, $functionParameters);
     }
 
     /**
@@ -77,8 +89,16 @@ class RouteMatch
     /**
      * @return array
      */
-    public function getParameters()
+    public function getClassParameters()
     {
-        return $this->parameters;
+        return $this->classParameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctionParameters()
+    {
+        return $this->functionParameters;
     }
 }

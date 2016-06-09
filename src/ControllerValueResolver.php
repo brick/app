@@ -65,21 +65,6 @@ class ControllerValueResolver implements ValueResolver
     }
 
     /**
-     * Adds key-value pairs to resolve the controller parameters.
-     *
-     * The parameters will be merged with the current parameters.
-     * If duplicate keys are found, new keys overwrite previous ones.
-     *
-     * @param array $parameters
-     *
-     * @return void
-     */
-    public function addParameters(array $parameters)
-    {
-        $this->parameters = $parameters + $this->parameters;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getParameterValue(\ReflectionParameter $parameter)
