@@ -7,37 +7,15 @@ use Brick\App\Plugin;
 use Brick\App\Controller\Annotation\RequestParam;
 use Brick\Event\EventDispatcher;
 use Brick\Http\Exception\HttpException;
-use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Request;
 use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
-use Brick\ObjectConverter\Exception\ObjectNotConvertibleException;
-use Brick\ObjectConverter\Exception\ObjectNotFoundException;
-use Brick\ObjectConverter\ObjectConverter;
-use Brick\Reflection\ImportResolver;
 
 /**
  * Injects request parameters into controllers with the QueryParam and PostParam annotations.
  */
 class RequestParamPlugin extends AbstractAnnotationPlugin
 {
-    /**
-     * @var \Brick\ObjectConverter\ObjectConverter[]
-     */
-    private $objectConverters = [];
-
-    /**
-     * @param ObjectConverter $converter
-     *
-     * @return static
-     */
-    public function addObjectConverter(ObjectConverter $converter)
-    {
-        $this->objectConverters[] = $converter;
-
-        return $this;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -129,111 +107,46 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
             throw $this->invalidArrayParameterException($controller, $annotation);
         }
 
-        $class = $parameter->getClass();
+        if ($parameter->isArray() || $parameter->getClass()) {
+            return $value;
+        }
 
-        if ($class) {
-            if ($parameter->isVariadic()) {
-                $result = [];
+        $type = $parameter->getType();
 
-                foreach ($value as $subValue) {
-                    $result[] = $this->getObject($class->getName(), $subValue, $annotation->getOptions());
-                }
+        if ($type === null) {
+            return $value;
+        }
 
-                return $result;
-            } else {
-                return $this->getObject($class->getName(), $value, $annotation->getOptions());
+        $type = (string) $type;
+
+        if ($value === '') {
+            if ($parameter->isDefaultValueAvailable()) {
+                return $parameter->getDefaultValue();
             }
         }
 
-        if ($parameter->isArray()) {
-            $types = $this->reflectionTools->getParameterTypes($parameter);
-
-            // Must be a single type.
-            if (count($types) === 1) {
-                $type = $types[0];
-
-                // Must end with empty square brackets.
-                if (substr($type, -2) === '[]') {
-                    // Remove the trailing square brackets.
-                    $type = substr($type, 0, -2);
-
-                    // Resolve the type to its fully qualified name.
-                    $resolver = new ImportResolver($parameter);
-                    $type = $resolver->resolve($type);
-
-                    foreach ($value as $key => $item) {
-                        $value[$key] = $this->getObject($type, $item, $annotation->getOptions());
-                    }
-                }
+        if ($type === 'bool') {
+            if ($value === '0' || $value === 'false' || $value === 'off' || $value === 'no') {
+                return false;
             }
+            if ($value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
+                return true;
+            }
+        } elseif ($type === 'int') {
+            if (ctype_digit($value)) {
+                return (int) $value;
+            }
+        } elseif ($type === 'float') {
+            if (is_numeric($value)) {
+                return (float) $value;
+            }
+        } elseif ($type === 'string') {
+            return $value;
         } else {
-            $type = $parameter->getType();
-
-            if ($type !== null) {
-                $type = (string) $type;
-
-                if ($value === '') {
-                    if ($parameter->isDefaultValueAvailable()) {
-                        return $parameter->getDefaultValue();
-                    }
-                }
-
-                if ($type === 'bool') {
-                    if ($value === '0' || $value === 'false' || $value === 'off' || $value === 'no') {
-                        return false;
-                    }
-                    if ($value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
-                        return true;
-                    }
-                } elseif ($type === 'int') {
-                    if (ctype_digit($value)) {
-                        return (int) $value;
-                    }
-                } elseif ($type === 'float') {
-                    if (is_numeric($value)) {
-                        return (float) $value;
-                    }
-                } elseif ($type === 'string') {
-                    return $value;
-                } else {
-                    throw $this->unsupportedBuiltinType($controller, $annotation, $type);
-                }
-
-                throw $this->invalidScalarParameterException($controller, $annotation, $type);
-            }
+            throw $this->unsupportedBuiltinType($controller, $annotation, $type);
         }
 
-        return $value;
-    }
-
-    /**
-     * @param string       $className The class name.
-     * @param string|array $value     The parameter value.
-     * @param array        $options   The options passed to the annotation.
-     *
-     * @return object
-     *
-     * @throws HttpException
-     */
-    private function getObject($className, $value, array $options)
-    {
-        foreach ($this->objectConverters as $converter) {
-            try {
-                $object = $converter->expand($className, $value, $options);
-            }
-            catch (ObjectNotConvertibleException $e) {
-                throw new HttpBadRequestException($e->getMessage(), $e);
-            }
-            catch (ObjectNotFoundException $e) {
-                throw new HttpNotFoundException($e->getMessage(), $e);
-            }
-
-            if ($object) {
-                return $object;
-            }
-        }
-
-        throw new HttpInternalServerErrorException('No object converter available for ' . $className);
+        throw $this->invalidScalarParameterException($controller, $annotation, $type);
     }
 
     /**
