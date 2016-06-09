@@ -116,6 +116,10 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
                 return $parameter->getDefaultValue();
             }
 
+            if ($parameter->isVariadic()) {
+                return [];
+            }
+
             throw $this->missingParameterException($controller, $annotation);
         }
 
@@ -128,7 +132,17 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
         $class = $parameter->getClass();
 
         if ($class) {
-            return $this->getObject($class->getName(), $value, $annotation->getOptions());
+            if ($parameter->isVariadic()) {
+                $result = [];
+
+                foreach ($value as $subValue) {
+                    $result[] = $this->getObject($class->getName(), $subValue, $annotation->getOptions());
+                }
+
+                return $result;
+            } else {
+                return $this->getObject($class->getName(), $value, $annotation->getOptions());
+            }
         }
 
         if ($parameter->isArray()) {
