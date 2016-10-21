@@ -17,9 +17,12 @@ interface OnRequestInterface
      * It is allowed to throw HTTP exceptions, and therefore can perform checks common to all
      * controller methods in the class, and redirect / return an HTTP error code if necessary.
      *
+     * It is also allowed to return an HTTP response, in which case the application flow is
+     * short-circuited and the response is returned without the controller being invocated.
+     *
      * @param \Brick\Http\Request $request
      *
-     * @return void
+     * @return \Brick\Http\Response|null
      *
      * @throws \Brick\Http\Exception\HttpException
      */

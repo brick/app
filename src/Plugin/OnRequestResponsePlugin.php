@@ -8,6 +8,7 @@ use Brick\App\Plugin;
 use Brick\App\Controller\Interfaces\OnRequestInterface;
 use Brick\App\Controller\Interfaces\OnResponseInterface;
 use Brick\Event\EventDispatcher;
+use Brick\Http\Response;
 
 /**
  * Calls `onRequest()` and `onResponse()` on controllers implementing OnRequestInterface and OnResponseInterface.
@@ -23,7 +24,11 @@ class OnRequestResponsePlugin implements Plugin
             $controller = $event->getControllerInstance();
 
             if ($controller instanceof OnRequestInterface) {
-                $controller->onRequest($event->getRequest());
+                $response = $controller->onRequest($event->getRequest());
+
+                if ($response instanceof Response) {
+                    $event->setResponse($response);
+                }
             }
         });
 

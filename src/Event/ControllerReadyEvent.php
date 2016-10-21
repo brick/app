@@ -3,6 +3,7 @@
 namespace Brick\App\Event;
 
 use Brick\Http\Request;
+use Brick\Http\Response;
 use Brick\App\RouteMatch;
 
 /**
@@ -40,6 +41,13 @@ final class ControllerReadyEvent
      * @var array
      */
     private $parameters = [];
+
+    /**
+     * An early response to return when a plugin decides to short-circuit the normal application flow.
+     *
+     * @var Response|null
+     */
+    private $response;
 
     /**
      * @param Request     $request    The request.
@@ -103,5 +111,21 @@ final class ControllerReadyEvent
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * @param Response|null $response
+     */
+    public function setResponse(Response $response = null)
+    {
+        $this->response = $response;
+    }
+
+    /**
+     * @return Response|null
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 }

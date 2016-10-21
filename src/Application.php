@@ -216,28 +216,33 @@ class Application implements RequestHandler
         $event->addParameters($match->getFunctionParameters());
 
         $this->eventDispatcher->dispatch(ControllerReadyEvent::class, $event);
-        $this->valueResolver->setParameters($event->getParameters());
 
-        try {
-            $result = $this->injector->invoke($callable);
+        $response = $event->getResponse();
 
-            if ($result instanceof Response) {
-                $response = $result;
-            } else {
-                $event = new NonResponseResultEvent($request, $match, $instance, $result);
-                $this->eventDispatcher->dispatch(NonResponseResultEvent::class, $event);
+        if ($response === null) {
+            $this->valueResolver->setParameters($event->getParameters());
 
-                $response = $event->getResponse();
+            try {
+                $result = $this->injector->invoke($callable);
 
-                if ($response === null) {
-                    throw $this->invalidReturnValue('controller', Response::class, $result);
+                if ($result instanceof Response) {
+                    $response = $result;
+                } else {
+                    $event = new NonResponseResultEvent($request, $match, $instance, $result);
+                    $this->eventDispatcher->dispatch(NonResponseResultEvent::class, $event);
+
+                    $response = $event->getResponse();
+
+                    if ($response === null) {
+                        throw $this->invalidReturnValue('controller', Response::class, $result);
+                    }
                 }
+            } catch (HttpException $e) {
+                $response = $this->handleHttpException($e, $request);
+            } finally {
+                $event = new ControllerInvocatedEvent($request, $match, $instance);
+                $this->eventDispatcher->dispatch(ControllerInvocatedEvent::class, $event);
             }
-        } catch (HttpException $e) {
-            $response = $this->handleHttpException($e, $request);
-        } finally {
-            $event = new ControllerInvocatedEvent($request, $match, $instance);
-            $this->eventDispatcher->dispatch(ControllerInvocatedEvent::class, $event);
         }
 
         $event = new ResponseReceivedEvent($request, $response, $match, $instance);
