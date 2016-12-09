@@ -75,7 +75,7 @@ class ControllerValueResolver implements ValueResolver
         }
 
         $name = $parameter->getName();
-        if (isset($this->parameters[$name])) {
+        if (array_key_exists($name, $this->parameters)) {
             return $this->parameters[$name];
         }
 
