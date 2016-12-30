@@ -7,7 +7,6 @@ use Brick\App\View\View;
 
 /**
  * This view helper allows to render a View from within another View (referred to as a partial view).
- * The rendering of the partial view is done wia a ViewRenderer, which allows to inject dependencies into it.
  */
 trait PartialViewHelper
 {
