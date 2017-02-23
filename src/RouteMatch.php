@@ -75,7 +75,7 @@ class RouteMatch
             throw RoutingException::invalidControllerFunction($e, $function);
         }
 
-        return new self($controller, $functionParameters);
+        return new self($controller, [], $functionParameters);
     }
 
     /**
