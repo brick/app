@@ -4,23 +4,25 @@ namespace Brick\App\Tests;
 
 use Brick\Http\Response;
 
+use PHPUnit\Framework\TestCase;
+
 class ResponseAssertion
 {
     /**
-     * @var \PHPUnit_Framework_TestCase
+     * @var TestCase
      */
     private $testCase;
 
     /**
-     * @var \Brick\Http\Response
+     * @var Response
      */
     private $response;
 
     /**
-     * @param \PHPUnit_Framework_TestCase $testCase
-     * @param \Brick\Http\Response        $response
+     * @param TestCase $testCase
+     * @param Response $response
      */
-    public function __construct(\PHPUnit_Framework_TestCase $testCase, Response $response)
+    public function __construct(TestCase $testCase, Response $response)
     {
         $this->testCase = $testCase;
         $this->response = $response;

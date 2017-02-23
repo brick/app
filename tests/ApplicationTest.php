@@ -2,6 +2,8 @@
 
 namespace Brick\App\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 use Brick\App\Application;
 use Brick\App\Route;
 use Brick\App\RouteMatch;
@@ -9,7 +11,7 @@ use Brick\Http\MessageBodyString;
 use Brick\Http\Request;
 use Brick\Http\Response;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * @param Response $response

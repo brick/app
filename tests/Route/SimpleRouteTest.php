@@ -2,6 +2,8 @@
 
 namespace Brick\App\Tests\Route
 {
+    use PHPUnit\Framework\TestCase;
+
     use Brick\App\Route\SimpleRoute;
     use Brick\App\RouteMatch;
 
@@ -10,7 +12,7 @@ namespace Brick\App\Tests\Route
     /**
      * Tests for class SimpleRoute.
      */
-    class SimpleRouteTest extends \PHPUnit_Framework_TestCase
+    class SimpleRouteTest extends TestCase
     {
         /**
          * @dataProvider providerRoute
