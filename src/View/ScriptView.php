@@ -10,7 +10,7 @@ abstract class ScriptView extends AbstractView
     /**
      * {@inheritdoc}
      */
-    public function render()
+    public function render() : string
     {
         ob_start();
 
@@ -30,5 +30,5 @@ abstract class ScriptView extends AbstractView
      *
      * @return string
      */
-    abstract protected function getScriptPath();
+    abstract protected function getScriptPath() : string;
 }

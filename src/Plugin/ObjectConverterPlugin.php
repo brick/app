@@ -55,7 +55,7 @@ class ObjectConverterPlugin extends AbstractAnnotationPlugin
      *
      * @throws HttpException If the object cannot be instantiated.
      */
-    private function getParameters(ControllerReadyEvent $event)
+    private function getParameters(ControllerReadyEvent $event) : array
     {
         $controller = $event->getRouteMatch()->getControllerReflection();
 

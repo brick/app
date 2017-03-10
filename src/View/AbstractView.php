@@ -19,7 +19,7 @@ abstract class AbstractView implements View
      *
      * @return string
      */
-    public function html(string $text, bool $lineBreaks = false)
+    public function html(string $text, bool $lineBreaks = false) : string
     {
         $html = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 

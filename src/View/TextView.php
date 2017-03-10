@@ -28,7 +28,7 @@ class TextView extends AbstractView
      *
      * @return TextView
      */
-    public static function text(string $text)
+    public static function text(string $text) : self
     {
         return new self($text, true);
     }
@@ -36,7 +36,7 @@ class TextView extends AbstractView
     /**
      * {@inheritdoc}
      */
-    public function render()
+    public function render() : string
     {
         return $this->html;
     }

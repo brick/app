@@ -14,7 +14,7 @@ class RoutingException extends \RuntimeException
      *
      * @return RoutingException
      */
-    public static function invalidControllerClassMethod(\ReflectionException $e, string $class, string $method)
+    public static function invalidControllerClassMethod(\ReflectionException $e, string $class, string $method) : RoutingException
     {
         return new self(sprintf(
             'Cannot find a controller method called %s::%s().',
@@ -29,7 +29,7 @@ class RoutingException extends \RuntimeException
      *
      * @return RoutingException
      */
-    public static function invalidControllerFunction(\ReflectionException $e, $function)
+    public static function invalidControllerFunction(\ReflectionException $e, $function) : RoutingException
     {
         return new self(sprintf(
             'Invalid controller function: function name or closure expected, %s given.',

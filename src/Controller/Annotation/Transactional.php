@@ -44,6 +44,8 @@ class Transactional extends AbstractAnnotation
     /**
      * @param string $isolationLevel
      *
+     * @return void
+     *
      * @throws \RuntimeException
      */
     public function setValue(string $isolationLevel)
@@ -58,7 +60,7 @@ class Transactional extends AbstractAnnotation
     /**
      * @return int
      */
-    public function getIsolationLevel()
+    public function getIsolationLevel() : int
     {
         return $this->isolationLevel;
     }

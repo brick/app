@@ -34,7 +34,7 @@ trait PartialViewHelper
      *
      * @return string The rendered View.
      */
-    final public function partial(View $view)
+    final public function partial(View $view) : string
     {
         if ($this->injector) {
             $this->injector->inject($view);

@@ -29,7 +29,7 @@ final class IncomingRequestEvent
      *
      * @return Request
      */
-    public function getRequest()
+    public function getRequest() : Request
     {
         return $this->request;
     }

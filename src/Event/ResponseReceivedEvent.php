@@ -63,7 +63,7 @@ final class ResponseReceivedEvent
      *
      * @return Request
      */
-    public function getRequest()
+    public function getRequest() : Request
     {
         return $this->request;
     }
@@ -73,7 +73,7 @@ final class ResponseReceivedEvent
      *
      * @return Response
      */
-    public function getResponse()
+    public function getResponse() : Response
     {
         return $this->response;
     }
@@ -83,7 +83,7 @@ final class ResponseReceivedEvent
      *
      * @return RouteMatch
      */
-    public function getRouteMatch()
+    public function getRouteMatch() : RouteMatch
     {
         return $this->routeMatch;
     }

@@ -66,7 +66,7 @@ final class ControllerReadyEvent
      *
      * @return Request
      */
-    public function getRequest()
+    public function getRequest() : Request
     {
         return $this->request;
     }
@@ -76,7 +76,7 @@ final class ControllerReadyEvent
      *
      * @return \Brick\App\RouteMatch
      */
-    public function getRouteMatch()
+    public function getRouteMatch() : RouteMatch
     {
         return $this->routeMatch;
     }
@@ -108,13 +108,15 @@ final class ControllerReadyEvent
      *
      * @return array
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters;
     }
 
     /**
      * @param Response|null $response
+     *
+     * @return void
      */
     public function setResponse(Response $response = null)
     {

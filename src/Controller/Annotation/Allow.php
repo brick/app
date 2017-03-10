@@ -34,7 +34,7 @@ class Allow extends AbstractAnnotation
     /**
      * @return array
      */
-    public function getMethods()
+    public function getMethods() : array
     {
         return $this->methods;
     }

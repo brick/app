@@ -15,7 +15,7 @@ class PostParam extends RequestParam
     /**
      * {@inheritdoc}
      */
-    public function getParameterType()
+    public function getParameterType() : string
     {
         return 'post';
     }
@@ -23,7 +23,7 @@ class PostParam extends RequestParam
     /**
      * {@inheritdoc}
      */
-    public function getRequestParameters(Request $request)
+    public function getRequestParameters(Request $request) : array
     {
         return $request->getPost();
     }

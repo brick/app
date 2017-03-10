@@ -65,7 +65,7 @@ class Application implements RequestHandler
      *
      * @return Application
      */
-    public static function create()
+    public static function create() : Application
     {
         return new Application(
             new DefaultValueResolver(),
@@ -80,7 +80,7 @@ class Application implements RequestHandler
      *
      * @return Application
      */
-    public static function createWithContainer(Container $container)
+    public static function createWithContainer(Container $container) : Application
     {
         return new Application(
             $container->getValueResolver(),
@@ -93,7 +93,7 @@ class Application implements RequestHandler
      *
      * @return Application
      */
-    public function addRoute(Route $route)
+    public function addRoute(Route $route) : Application
     {
         $this->routes[] = $route;
 
@@ -105,7 +105,7 @@ class Application implements RequestHandler
      *
      * @return Application This instance, for chaining.
      */
-    public function addPlugin(Plugin $plugin)
+    public function addPlugin(Plugin $plugin) : Application
     {
         $plugin->register($this->eventDispatcher);
 
@@ -129,7 +129,7 @@ class Application implements RequestHandler
      *
      * @return \Brick\Http\Response
      */
-    public function handle(Request $request)
+    public function handle(Request $request) : Response
     {
         try {
             return $this->handleRequest($request);
@@ -148,7 +148,7 @@ class Application implements RequestHandler
      *
      * @return \Brick\Http\Response
      */
-    private function handleHttpException(HttpException $exception, Request $request)
+    private function handleHttpException(HttpException $exception, Request $request) : Response
     {
         $response = new Response();
 
@@ -171,7 +171,7 @@ class Application implements RequestHandler
      *
      * @return \Brick\Http\Response
      */
-    private function handleUncaughtException(\Throwable $exception, Request $request)
+    private function handleUncaughtException(\Throwable $exception, Request $request) : Response
     {
         $httpException = new HttpInternalServerErrorException('Uncaught exception', $exception);
 
@@ -186,7 +186,7 @@ class Application implements RequestHandler
      * @throws \Brick\Http\Exception\HttpException If a route throws such an exception, or no route matches the request.
      * @throws \UnexpectedValueException           If a route or controller returned an invalid value.
      */
-    private function handleRequest(Request $request)
+    private function handleRequest(Request $request) : Response
     {
         $event = new IncomingRequestEvent($request);
         $this->eventDispatcher->dispatch(IncomingRequestEvent::class, $event);
@@ -261,7 +261,7 @@ class Application implements RequestHandler
      * @throws HttpNotFoundException     If no route matches the request.
      * @throws \UnexpectedValueException If a route returns an invalid value.
      */
-    private function route(Request $request)
+    private function route(Request $request) : RouteMatch
     {
         foreach ($this->routes as $route) {
             try {
@@ -290,7 +290,7 @@ class Application implements RequestHandler
      *
      * @return \UnexpectedValueException
      */
-    private function invalidReturnValue(string $what, string $expected, $actual)
+    private function invalidReturnValue(string $what, string $expected, $actual) : \UnexpectedValueException
     {
         $message = 'Invalid return value from %s: expected %s, got %s.';
         $actual  = is_object($actual) ? get_class($actual) : gettype($actual);

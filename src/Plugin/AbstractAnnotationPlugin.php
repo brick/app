@@ -84,7 +84,7 @@ abstract class AbstractAnnotationPlugin implements Plugin
      *
      * @return bool Whether the annotation is present.
      */
-    protected function hasControllerAnnotation(\ReflectionFunctionAbstract $controller, string $annotationClass)
+    protected function hasControllerAnnotation(\ReflectionFunctionAbstract $controller, string $annotationClass) : bool
     {
         return $this->getControllerAnnotation($controller, $annotationClass) !== null;
     }

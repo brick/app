@@ -15,7 +15,7 @@ class QueryParam extends RequestParam
     /**
      * {@inheritdoc}
      */
-    public function getParameterType()
+    public function getParameterType() : string
     {
         return 'query';
     }
@@ -23,7 +23,7 @@ class QueryParam extends RequestParam
     /**
      * {@inheritdoc}
      */
-    public function getRequestParameters(Request $request)
+    public function getRequestParameters(Request $request) : array
     {
         return $request->getQuery();
     }

@@ -37,7 +37,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @throws HttpException
      */
-    private function getParameters(Request $request, \ReflectionFunctionAbstract $controller)
+    private function getParameters(Request $request, \ReflectionFunctionAbstract $controller) : array
     {
         if ($controller instanceof \ReflectionMethod) {
             $annotations = $this->annotationReader->getMethodAnnotations($controller);
@@ -159,7 +159,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return HttpInternalServerErrorException
      */
-    private function unknownParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation)
+    private function unknownParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation) : HttpInternalServerErrorException
     {
         return new HttpInternalServerErrorException(sprintf(
             '%s() does not have a $%s parameter, please check your annotation.',
@@ -174,7 +174,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return HttpBadRequestException
      */
-    private function missingParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation)
+    private function missingParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation) : HttpBadRequestException
     {
         return new HttpBadRequestException(sprintf(
             '%s() requires a %s parameter "%s" which is missing in the request.',
@@ -190,7 +190,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return HttpBadRequestException
      */
-    private function invalidArrayParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation)
+    private function invalidArrayParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation) : HttpBadRequestException
     {
         return new HttpBadRequestException(sprintf(
             '%s() expects an array for %s parameter "%s" (bound to $%s), string given.',
@@ -208,7 +208,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return HttpBadRequestException
      */
-    private function invalidScalarParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation, string $type)
+    private function invalidScalarParameterException(\ReflectionFunctionAbstract $controller, RequestParam $annotation, string $type) : HttpBadRequestException
     {
         return new HttpBadRequestException(sprintf(
             '%s() received an invalid %s value for %s parameter "%s" (bound to $%s).',
@@ -227,7 +227,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
      *
      * @return HttpInternalServerErrorException
      */
-    private function unsupportedBuiltinType(\ReflectionFunctionAbstract $controller, RequestParam $annotation, string $type)
+    private function unsupportedBuiltinType(\ReflectionFunctionAbstract $controller, RequestParam $annotation, string $type) : HttpInternalServerErrorException
     {
         return new HttpInternalServerErrorException(sprintf(
             '%s() requests an unsupported type (%s) for %s parameter "%s" (bound to $%s).',

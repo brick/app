@@ -39,7 +39,7 @@ final class RouteMatchedEvent
      *
      * @return Request
      */
-    public function getRequest()
+    public function getRequest() : Request
     {
         return $this->request;
     }
@@ -49,7 +49,7 @@ final class RouteMatchedEvent
      *
      * @return RouteMatch
      */
-    public function getRouteMatch()
+    public function getRouteMatch() : RouteMatch
     {
         return $this->routeMatch;
     }

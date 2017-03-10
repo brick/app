@@ -16,7 +16,7 @@ abstract class ClassView extends ScriptView
      *
      * @throws \RuntimeException
      */
-    protected function getScriptPath()
+    protected function getScriptPath() : string
     {
         $class = new \ReflectionClass($this->getClassName());
         $path = $class->getFileName();
@@ -36,7 +36,7 @@ abstract class ClassView extends ScriptView
      *
      * @return string
      */
-    protected function getClassName()
+    protected function getClassName() : string
     {
         return get_called_class();
     }

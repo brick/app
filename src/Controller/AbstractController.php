@@ -21,6 +21,8 @@ abstract class AbstractController
      * @Inject
      *
      * @param Injector $injector
+     *
+     * @return void
      */
     public function setInjector(Injector $injector)
     {
@@ -32,7 +34,7 @@ abstract class AbstractController
      *
      * @return string
      */
-    protected function renderAsString(View $view)
+    protected function renderAsString(View $view) : string
     {
         if ($this->injector) {
             $this->injector->inject($view);
@@ -48,7 +50,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function render(View $view)
+    protected function render(View $view) : Response
     {
         return $this->html($this->renderAsString($view));
     }
@@ -60,7 +62,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function text(string $text)
+    protected function text(string $text) : Response
     {
         return $this->createResponse($text, 'text/plain');
     }
@@ -72,7 +74,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function html(string $html)
+    protected function html(string $html) : Response
     {
         return $this->createResponse($html, 'text/html');
     }
@@ -82,7 +84,7 @@ abstract class AbstractController
      *
      * @return Response
      */
-    protected function xml(string $xml)
+    protected function xml(string $xml) : Response
     {
         return $this->createResponse($xml, 'application/xml');
     }
@@ -95,7 +97,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function json($data, bool $encode = true)
+    protected function json($data, bool $encode = true) : Response
     {
         if ($encode) {
             $data = json_encode($data);
@@ -110,7 +112,7 @@ abstract class AbstractController
      *
      * @return Response
      */
-    private function createResponse(string $data, string $contentType)
+    private function createResponse(string $data, string $contentType) : Response
     {
         return (new Response())
             ->setContent($data)
@@ -123,7 +125,7 @@ abstract class AbstractController
      *
      * @return \Brick\Http\Response
      */
-    protected function redirect(string $uri, int $statusCode = 302)
+    protected function redirect(string $uri, int $statusCode = 302) : Response
     {
         return (new Response())
             ->setStatusCode($statusCode)
@@ -137,7 +139,7 @@ abstract class AbstractController
      *
      * @return string
      */
-    protected function escape(string $text)
+    protected function escape(string $text) : string
     {
         return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     }

@@ -32,7 +32,7 @@ class ConcatView implements View
     /**
      * {@inheritdoc}
      */
-    public function render()
+    public function render() : string
     {
         return $this->partial($this->a) . $this->partial($this->b);
     }

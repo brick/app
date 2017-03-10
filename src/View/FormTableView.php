@@ -41,7 +41,7 @@ class FormTableView implements View
      *
      * @return string
      */
-    private function renderErrors(Base $base)
+    private function renderErrors(Base $base) : string
     {
         if (! $base->hasErrors()) {
             return '';
@@ -67,7 +67,7 @@ class FormTableView implements View
      *
      * @return string
      */
-    private function renderCell(string $tagName, string $html)
+    private function renderCell(string $tagName, string $html) : string
     {
         $td = new Tag($tagName);
         $td->setHtmlContent($html);
@@ -82,7 +82,7 @@ class FormTableView implements View
      *
      * @return string
      */
-    private function renderElementAsRow(Element $element)
+    private function renderElementAsRow(Element $element) : string
     {
         $tr = new Tag('tr');
 
@@ -101,7 +101,7 @@ class FormTableView implements View
      *
      * @throws \RuntimeException
      */
-    private function renderForm(Form $form)
+    private function renderForm(Form $form) : string
     {
         $html = '';
 
@@ -125,7 +125,7 @@ class FormTableView implements View
     /**
      * {@inheritdoc}
      */
-    public function render()
+    public function render() : string
     {
         return
             $this->renderErrors($this->form) .

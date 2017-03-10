@@ -30,7 +30,7 @@ class MagicView extends ScriptView
     /**
      * {@inheritdoc}
      */
-    public function getScriptPath()
+    public function getScriptPath() : string
     {
         return $this->scriptPath;
     }

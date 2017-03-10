@@ -12,5 +12,5 @@ interface View
      *
      * @return string
      */
-    public function render();
+    public function render() : string;
 }

@@ -56,7 +56,7 @@ final class ExceptionCaughtEvent
      *
      * @return HttpException
      */
-    public function getException()
+    public function getException() : HttpException
     {
         return $this->exception;
     }
@@ -66,7 +66,7 @@ final class ExceptionCaughtEvent
      *
      * @return Request
      */
-    public function getRequest()
+    public function getRequest() : Request
     {
         return $this->request;
     }
@@ -78,7 +78,7 @@ final class ExceptionCaughtEvent
      *
      * @return Response
      */
-    public function getResponse()
+    public function getResponse() : Response
     {
         return $this->response;
     }

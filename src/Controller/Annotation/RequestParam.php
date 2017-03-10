@@ -52,7 +52,7 @@ abstract class RequestParam
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -60,7 +60,7 @@ abstract class RequestParam
     /**
      * @return string
      */
-    public function getBindTo()
+    public function getBindTo() : string
     {
         return $this->bindTo;
     }
@@ -68,7 +68,7 @@ abstract class RequestParam
     /**
      * @return array
      */
-    public function getOptions()
+    public function getOptions() : array
     {
         return $this->options;
     }
@@ -76,7 +76,7 @@ abstract class RequestParam
     /**
      * @return string
      */
-    private function getAnnotationName()
+    private function getAnnotationName() : string
     {
         return '@' . (new \ReflectionObject($this))->getShortName();
     }
@@ -86,7 +86,7 @@ abstract class RequestParam
      *
      * @return string
      */
-    abstract public function getParameterType();
+    abstract public function getParameterType() : string;
 
     /**
      * Returns the relevant query/post parameters from the request.
@@ -95,5 +95,5 @@ abstract class RequestParam
      *
      * @return array
      */
-    abstract public function getRequestParameters(Request $request);
+    abstract public function getRequestParameters(Request $request) : array;
 }

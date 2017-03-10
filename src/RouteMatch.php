@@ -46,7 +46,7 @@ class RouteMatch
      *
      * @throws RoutingException If the class or method does not exist.
      */
-    public static function forMethod(string $class, string $method, array $classParameters = [], array $functionParameters = [])
+    public static function forMethod(string $class, string $method, array $classParameters = [], array $functionParameters = []) : RouteMatch
     {
         try {
             $controller = new \ReflectionMethod($class, $method);
@@ -67,7 +67,7 @@ class RouteMatch
      *
      * @throws RoutingException If the function is invalid.
      */
-    public static function forFunction($function, array $functionParameters = [])
+    public static function forFunction($function, array $functionParameters = []) : RouteMatch
     {
         try {
             $controller = new \ReflectionFunction($function);
@@ -81,7 +81,7 @@ class RouteMatch
     /**
      * @return \ReflectionFunctionAbstract
      */
-    public function getControllerReflection()
+    public function getControllerReflection() : \ReflectionFunctionAbstract
     {
         return $this->controller;
     }
@@ -89,7 +89,7 @@ class RouteMatch
     /**
      * @return array
      */
-    public function getClassParameters()
+    public function getClassParameters() : array
     {
         return $this->classParameters;
     }
@@ -97,7 +97,7 @@ class RouteMatch
     /**
      * @return array
      */
-    public function getFunctionParameters()
+    public function getFunctionParameters() : array
     {
         return $this->functionParameters;
     }
