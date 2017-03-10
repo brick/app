@@ -55,4 +55,14 @@ class MagicView extends ScriptView
     {
         $this->parameters[$name] = $value;
     }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function __isset(string $name) : bool
+    {
+        return isset($this->parameters[$name]);
+    }
 }
