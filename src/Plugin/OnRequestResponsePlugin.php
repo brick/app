@@ -37,7 +37,7 @@ class OnRequestResponsePlugin implements Plugin
             $controller = $event->getControllerInstance();
 
             if ($controller instanceof OnResponseInterface) {
-                $controller->onResponse($event->getResponse());
+                $controller->onResponse($event->getRequest(), $event->getResponse());
             }
         });
     }

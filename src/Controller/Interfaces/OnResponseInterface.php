@@ -2,6 +2,7 @@
 
 namespace Brick\App\Controller\Interfaces;
 
+use Brick\Http\Request;
 use Brick\Http\Response;
 
 /**
@@ -17,9 +18,10 @@ use Brick\Http\Response;
 interface OnResponseInterface
 {
     /**
+     * @param \Brick\Http\Request  $request
      * @param \Brick\Http\Response $response
      *
      * @return void
      */
-    public function onResponse(Response $response);
+    public function onResponse(Request $request, Response $response);
 }
