@@ -68,7 +68,47 @@ class SimpleRoute implements Route
 
         $method = $this->capitalize($action) . 'Action';
 
-        return RouteMatch::forMethod($class, $method);
+        $classParameters = $this->getClassParameters($request);
+
+        if ($classParameters === null) {
+            return null;
+        }
+
+        $functionParameters = $this->getFunctionParameters($request);
+
+        if ($functionParameters === null) {
+            return null;
+        }
+
+        return RouteMatch::forMethod($class, $method, $classParameters, $functionParameters);
+    }
+
+    /**
+     * Returns parameters to pass to the controller class, or NULL to skip this route.
+     *
+     * This is designed to be extended.
+     *
+     * @param Request $request
+     *
+     * @return array|null
+     */
+    protected function getClassParameters(Request $request)
+    {
+        return [];
+    }
+
+    /**
+     * Returns parameters to pass to the controller function, or NULL to skip this route.
+     *
+     * This is designed to be extended.
+     *
+     * @param Request $request
+     *
+     * @return array|null
+     */
+    protected function getFunctionParameters(Request $request)
+    {
+        return [];
     }
 
     /**
