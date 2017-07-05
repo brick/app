@@ -199,3 +199,68 @@ Easy as pie! Let's add our plugin to our application:
     $application->addPlugin($plugin);
 
 We just implemented a plugin, available to all controllers in our application, in no time. This implementation is of course still naive, but does what it says on the tin, and is a good starting point for more advanced functionality.
+
+### Sessions
+
+The framework features a powerful alternative to native PHP sessions, allowing synchronized and non-blocking read/write to individual session entries, and supports a pluggable storage mechanism.
+
+#### What's wrong with native PHP sessions?
+
+Native sessions are stored in a single block of data, and **session files are locked for the entire duration of the PHP script**.
+As a consequence, all requests for a single session are serialized: if several requests targeting the same session are received concurrently, they are queued and processed one after the other.
+This is good enough in a traditional page-to-page browsing situation, but may cause bottlenecks when a web page issues potentially concurrent HTTP calls using AJAX.
+
+Brick\App's session manager works differently:
+
+- each key-value pair in the session is stored independently
+- each key-value pair is only loaded when explicitly requested
+- each key-value pair can be read or written without locking using `has()`, `get()`, `set()` and `remove()`
+- when locking is required, a key-value pair can be read and written using the `synchronize()` method:
+
+    $session->synchronize('session-key', function($currentValue) {
+        // ...
+        return $newValue;
+    });
+
+**Only the given key is locked**, and **the lock is released as soon as the function returns.**
+
+#### Installing the session plugin
+
+To store your sessions in the filesystem, alongside traditional PHP sessions, just use:
+
+    use Brick\App\Session\Session;
+    use Brick\App\Plugin\SessionPlugin;
+    
+    $session = Session::create();
+    $app->addPlugin(new SessionPlugin($session));
+
+You can alternatively provide a custom storage adapter and use `new Session($storage)` instead. A filesystem adapter and a database (PDO) adapter are provided; you can also write your own adapter by implementing `SessionStorage`.
+
+#### Using the sessions
+
+If you're using dependency injection in your app, you can have the `Session` object passed to your controller easily.
+Just register the container in your application, and instruct it to resolve sessions:
+
+    use Brick\Di\Container;
+    use Brick\App\Application;
+    use Brick\App\Session\Session;
+    use Brick\App\Plugin\SessionPlugin;
+    
+    // Create a DI container, and use it with our app
+    $container = Container::create();
+    $app = Application::createWithContainer($container);
+    
+    // Create a session, add the session plugin to our app
+    $session = Session::create();
+    $app->addPlugin(new SessionPlugin($session));
+    
+    // Instruct the DI container to resolve the Session object 
+    $container->set(Session::class, $session);
+
+Now the app can resolve your session automatically in your controller functions:
+
+    public function indexAction(Request $request, Session $session)
+    {
+        $userId = $session->get('user-id');
+        // ...
+    }
