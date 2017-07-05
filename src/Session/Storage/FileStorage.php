@@ -25,7 +25,7 @@ class FileStorage implements SessionStorage
     /**
      * @todo Currently unused
      *
-     * @var integer
+     * @var int
      */
     private $mode;
 
@@ -46,7 +46,7 @@ class FileStorage implements SessionStorage
      * This can affect the lifetime of a session: for a 30 minutes session, a grace time of 5 minutes would make
      * the session actually last for between 25 and 30 minutes after the last read.
      *
-     * @var integer
+     * @var int
      */
     private $accessGraceTime = 300;
 
@@ -58,9 +58,9 @@ class FileStorage implements SessionStorage
     /**
      * Class constructor.
      *
-     * @param string  $directory
-     * @param string  $prefix
-     * @param integer $mode
+     * @param string $directory
+     * @param string $prefix
+     * @param int    $mode
      */
     public function __construct($directory, $prefix = '', $mode = 0700)
     {

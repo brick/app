@@ -78,7 +78,7 @@ interface SessionStorage
      * @param string $oldId
      * @param string $newId
      *
-     * @return boolean
+     * @return bool
      */
     public function updateId($oldId, $newId);
 }

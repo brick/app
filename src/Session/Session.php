@@ -49,17 +49,17 @@ class Session implements SessionInterface
     private $cookieParams;
 
     /**
-     * @var integer
+     * @var int
      */
     private $gcDividend = 1;
 
     /**
-     * @var integer
+     * @var int
      */
     private $gcDivisor = 100;
 
     /**
-     * @var integer
+     * @var int
      */
     private $lifetime = 1800;
 
@@ -130,8 +130,8 @@ class Session implements SessionInterface
      *
      * For example, setGcProbability(1, 100) gives a 1% chance for the gc to be triggered.
      *
-     * @param integer $dividend
-     * @param integer $divisor
+     * @param int $dividend
+     * @param int $divisor
      *
      * @return Session
      */
@@ -144,7 +144,7 @@ class Session implements SessionInterface
     }
 
     /**
-     * @param integer $lifetime
+     * @param int $lifetime
      *
      * @return Session
      */
@@ -353,7 +353,7 @@ class Session implements SessionInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function isTimeToCollectGarbage()
     {

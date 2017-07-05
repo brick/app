@@ -147,7 +147,7 @@ class PdoStorage implements SessionStorage
      * @param string $key
      * @param string $value
      *
-     * @return boolean Whether the record exists and was updated.
+     * @return bool Whether the record exists and was updated.
      */
     private function updateRecord($id, $key, $value)
     {
@@ -264,7 +264,7 @@ class PdoStorage implements SessionStorage
      * @param string $query
      * @param array  $parameters
      *
-     * @return boolean
+     * @return bool
      */
     private function executeQuery($query, array $parameters)
     {

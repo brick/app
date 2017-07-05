@@ -14,7 +14,7 @@ interface SessionInterface
      *
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function has($key);
 
