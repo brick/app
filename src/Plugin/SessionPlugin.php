@@ -6,7 +6,7 @@ use Brick\App\Event\IncomingRequestEvent;
 use Brick\App\Event\ResponseReceivedEvent;
 use Brick\App\Plugin;
 use Brick\Event\EventDispatcher;
-use Brick\Session\Session;
+use Brick\App\Session\Session;
 
 /**
  * Integrates session management in the request/response process.
@@ -14,12 +14,12 @@ use Brick\Session\Session;
 class SessionPlugin implements Plugin
 {
     /**
-     * @var \Brick\Session\Session
+     * @var \Brick\App\Session\Session
      */
     private $session;
 
     /**
-     * @param \Brick\Session\Session $session
+     * @param \Brick\App\Session\Session $session
      */
     public function __construct(Session $session)
     {
