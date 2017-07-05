@@ -341,7 +341,7 @@ class Session implements SessionInterface
     }
 
     /**
-     * Generates a unique session id based on the current time, the client IP address, and a random value.
+     * Generates a random session id.
      *
      * The session id is 32 hexadecimal chars long.
      *
@@ -349,34 +349,7 @@ class Session implements SessionInterface
      */
     private function generateId()
     {
-        return md5($this->getRandomBytes(64));
-    }
-
-    /**
-     * @param integer $length The length of the binary string to return.
-     *
-     * @return string A random binary string of the given length.
-     */
-    private function getRandomBytes($length)
-    {
-        if (extension_loaded('openssl')) {
-            $bytes = openssl_random_pseudo_bytes($length);
-            if ($bytes !== false) {
-                return $bytes;
-            }
-        }
-
-        if (file_exists('/dev/urandom')) {
-            return file_get_contents('/dev/urandom', false, null, -1, $length);
-        }
-
-        $bytes = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $bytes .= chr(mt_rand(0x00, 0xff));
-        }
-
-        return $bytes;
+        return bin2hex(random_bytes(16));
     }
 
     /**
