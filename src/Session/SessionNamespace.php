@@ -77,6 +77,6 @@ class SessionNamespace implements SessionInterface
      */
     private function getKey($key)
     {
-        return $this->namespace .  '.' .$key;
+        return $this->namespace .  '.' . $key;
     }
 }

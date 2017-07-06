@@ -79,7 +79,7 @@ class Session implements SessionInterface
      * Class constructor.
      *
      * @param \Brick\App\Session\Storage\SessionStorage $storage
-     * @param \Brick\Packing\ObjectPacker|null      $packer
+     * @param \Brick\Packing\ObjectPacker|null          $packer
      */
     public function __construct(Storage\SessionStorage $storage, ObjectPacker $packer = null)
     {
