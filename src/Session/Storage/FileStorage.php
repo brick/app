@@ -155,9 +155,19 @@ class FileStorage implements SessionStorage
         $files = new RecursiveFileIterator($this->directory);
 
         foreach ($files as $file) {
-            if ($file->isFile() && $file->getATime() < time() - $lifetime) {
-                $this->fs->tryDelete($file);
+            if (! $file->isFile()) {
+                continue;
             }
+
+            if ($file->getATime() >= time() - $lifetime) {
+                continue;
+            }
+
+            if ($this->prefix !== '' && strpos($file->getFilename(), $this->prefix) !== 0) {
+                continue;
+            }
+
+            $this->fs->tryDelete((string) $file);
         }
     }
 
