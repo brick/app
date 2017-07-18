@@ -107,6 +107,10 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
 
         $value = $requestParameters[$parameterName];
 
+        if ($value === '' && $parameter->getClass() && $parameter->allowsNull()) {
+            return null;
+        }
+
         if ($parameter->isArray() && ! is_array($value)) {
             throw $this->invalidArrayParameterException($controller, $annotation);
         }
