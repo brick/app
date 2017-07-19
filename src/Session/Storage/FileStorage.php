@@ -110,7 +110,6 @@ class FileStorage implements SessionStorage
             /** @var File $file */
             $file = $lockContext;
         } else {
-            $this->fs->tryCreateDirectory($this->getPath($id));
             $file = $this->openFile($id, $key);
             $file->lock();
         }
@@ -143,7 +142,11 @@ class FileStorage implements SessionStorage
      */
     public function clear($id)
     {
-        $this->fs->tryDelete($this->getPath($id));
+        $files = glob($this->directory . DIRECTORY_SEPARATOR . $this->prefix . $id . '_*');
+
+        foreach ($files as $file) {
+            unlink($file);
+        }
     }
 
     /**
@@ -176,10 +179,17 @@ class FileStorage implements SessionStorage
      */
     public function updateId($oldId, $newId)
     {
-        return $this->fs->tryMove(
-            $this->getPath($oldId),
-            $this->getPath($newId)
-        );
+        $prefix = $this->directory . DIRECTORY_SEPARATOR . $this->prefix;
+        $prefixOldId = $prefix . $oldId;
+        $prefixNewId = $prefix . $newId;
+        $prefixOldIdLength = strlen($prefixOldId);
+
+        $files = glob($prefixOldId . '_*');
+
+        foreach ($files as $file) {
+            $newFile = $prefixNewId . substr($file, $prefixOldIdLength);
+            rename($file, $newFile);
+        }
     }
 
     /**
@@ -215,14 +225,8 @@ class FileStorage implements SessionStorage
      *
      * @return string
      */
-    private function getPath($id, $key = null)
+    private function getPath($id, $key)
     {
-        $directoryPath = $this->directory . DIRECTORY_SEPARATOR . $this->prefix . $this->sanitize($id);
-
-        if ($key === null) {
-            return $directoryPath;
-        }
-
-        return $directoryPath . DIRECTORY_SEPARATOR . $this->sanitize($key);
+        return $this->directory . DIRECTORY_SEPARATOR . $this->prefix . $this->sanitize($id) . '_' . $this->sanitize($key);
     }
 }
