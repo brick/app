@@ -64,6 +64,11 @@ class Session implements SessionInterface
     private $lifetime = 1800;
 
     /**
+     * @var int
+     */
+    private $idLength = 26;
+
+    /**
      * @var array
      */
     private static $defaultCookieParams = [
@@ -151,6 +156,25 @@ class Session implements SessionInterface
     public function setLifetime($lifetime)
     {
         $this->lifetime = $lifetime;
+
+        return $this;
+    }
+
+    /**
+     * Sets the length of the session id.
+     *
+     * The default length of 26 is short enough and allows for 4e46 combinations,
+     * which makes it very secure and highly unlikely to get a collision.
+     *
+     * Do not change this value unless you have a very good reason to do so.
+     *
+     * @param int $length
+     *
+     * @return Session
+     */
+    public function setIdLength($length)
+    {
+        $this->idLength = $length;
 
         return $this;
     }
@@ -341,15 +365,21 @@ class Session implements SessionInterface
     }
 
     /**
-     * Generates a random session id.
-     *
-     * The session id is 32 hexadecimal chars long.
+     * Generates a random, alphanumeric session id.
      *
      * @return string
      */
     private function generateId()
     {
-        return bin2hex(random_bytes(16));
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        $id = '';
+
+        for ($i = 0; $i < $this->idLength; $i++) {
+            $id .= $chars[random_int(0, 61)];
+        }
+
+        return $id;
     }
 
     /**
