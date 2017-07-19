@@ -204,24 +204,9 @@ class FileStorage implements SessionStorage
      */
     private function sanitize($fileName)
     {
-        $charBlacklist = '\/:*?"<>|';
-        $escapeChar = '%';
-
-        $result = '';
-        $length = strlen($fileName);
-
-        for ($i = 0; $i < $length; $i++) {
-            $char = $fileName[$i];
-            $ord = ord($char);
-
-            if ($ord <= 32 || $ord >= 127 || strpos($charBlacklist, $char) !== false) {
-                $result .= $escapeChar . bin2hex($char);
-            } else {
-                $result .= $char;
-            }
-        }
-
-        return $result;
+        return preg_replace_callback('/[^A-Za-z0-9\-_]/', function ($matches) {
+            return '.' . bin2hex($matches[0]);
+        }, $fileName);
     }
 
     /**
