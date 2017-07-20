@@ -188,18 +188,6 @@ class FileStorage implements SessionStorage
     }
 
     /**
-     * @param string $fileName
-     *
-     * @return string
-     */
-    private function sanitize($fileName)
-    {
-        return preg_replace_callback('/[^A-Za-z0-9\-_]/', function ($matches) {
-            return '.' . bin2hex($matches[0]);
-        }, $fileName);
-    }
-
-    /**
      * @param string $id
      * @param string $key
      *
@@ -207,6 +195,13 @@ class FileStorage implements SessionStorage
      */
     private function getPath($id, $key)
     {
-        return $this->directory . DIRECTORY_SEPARATOR . $this->prefix . $id . '_' . $this->sanitize($key);
+        // Sanitize the session key: it may contain characters that could conflict with the filesystem.
+        // We only allow the resulting file name to contain ASCII letters & digits, dashes, underscores and dots.
+        // All other chars are hex-encoded, dot is used as an escape character.
+        $key = preg_replace_callback('/[^A-Za-z0-9\-_]/', function ($matches) {
+            return '.' . bin2hex($matches[0]);
+        }, $key);
+
+        return $this->directory . DIRECTORY_SEPARATOR . $this->prefix . $id . '_' . $key;
     }
 }
