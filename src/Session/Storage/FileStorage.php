@@ -18,13 +18,6 @@ class FileStorage implements SessionStorage
     private $prefix;
 
     /**
-     * @todo Currently unused
-     *
-     * @var int
-     */
-    private $mode;
-
-    /**
      * The grace time during which the last access time of the session file is not updated.
      *
      * On filesystems mounted with the noatime option, the access time of the session file is not updated when the file
@@ -50,13 +43,11 @@ class FileStorage implements SessionStorage
      *
      * @param string $directory
      * @param string $prefix
-     * @param int    $mode
      */
-    public function __construct($directory, $prefix = '', $mode = 0700)
+    public function __construct($directory, $prefix = '')
     {
         $this->directory = $directory;
         $this->prefix    = $prefix;
-        $this->mode      = $mode;
     }
 
     /**
