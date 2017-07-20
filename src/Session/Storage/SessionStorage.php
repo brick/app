@@ -49,6 +49,8 @@ interface SessionStorage
     /**
      * Removes a specific key from the storage.
      *
+     * Removing a non-existent key is a valid operation and must not throw an exception.
+     *
      * @param string $id
      * @param string $key
      *

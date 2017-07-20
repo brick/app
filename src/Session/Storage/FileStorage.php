@@ -2,11 +2,6 @@
 
 namespace Brick\App\Session\Storage;
 
-use Brick\FileSystem\File;
-use Brick\FileSystem\FileSystem;
-use Brick\FileSystem\Path;
-use Brick\FileSystem\RecursiveFileIterator;
-
 /**
  * File storage engine for storing sessions on the filesystem.
  */
@@ -51,11 +46,6 @@ class FileStorage implements SessionStorage
     private $accessGraceTime = 300;
 
     /**
-     * @var \Brick\FileSystem\FileSystem
-     */
-    private $fs;
-
-    /**
      * Class constructor.
      *
      * @param string $directory
@@ -67,7 +57,6 @@ class FileStorage implements SessionStorage
         $this->directory = $directory;
         $this->prefix    = $prefix;
         $this->mode      = $mode;
-        $this->fs        = new FileSystem();
     }
 
     /**
@@ -75,27 +64,28 @@ class FileStorage implements SessionStorage
      */
     public function read($id, $key, & $lockContext)
     {
-        $path = new Path($this->getPath($id, $key));
+        $path = $this->getPath($id, $key);
 
-        if (! $path->exists()) {
+        if (! file_exists($path)) {
             return null;
         }
 
-        if ($path->getFileInfo()->getATime() < time() - $this->accessGraceTime) {
-            $path->touch();
+        if (fileatime($path) < time() - $this->accessGraceTime) {
+            touch($path);
         }
 
-        $file = $this->openFile($id, $key);
+        $fp = fopen($path, 'cb+');
+        flock($fp, LOCK_EX);
 
-        $file->lock($lockContext);
-        $data = $file->read();
+        $data = stream_get_contents($fp);
 
         if ($lockContext) {
-            // Keep the file locked and store the file object.
-            $lockContext = $file;
+            // Keep the file open & locked, and remember the resource.
+            $lockContext = $fp;
         } else {
-            // Unlock immediately and discard the file object.
-            $file->unlock();
+            // Unlock immediately and close the file.
+            flock($fp, LOCK_UN);
+            fclose($fp);
         }
 
         return $data;
@@ -107,17 +97,17 @@ class FileStorage implements SessionStorage
     public function write($id, $key, $value, $lockContext)
     {
         if ($lockContext) {
-            /** @var File $file */
-            $file = $lockContext;
+            $fp = $lockContext;
         } else {
-            $file = $this->openFile($id, $key);
-            $file->lock();
+            $fp = fopen($this->getPath($id, $key), 'cb+');
+            flock($fp, LOCK_EX);
         }
 
-        $file->truncate(0);
-        $file->seek(0);
-        $file->write($value);
-        $file->unlock();
+        ftruncate($fp, 0);
+        fseek($fp, 0);
+        fwrite($fp, $value);
+        flock($fp, LOCK_UN);
+        fclose($fp);
     }
 
     /**
@@ -125,8 +115,10 @@ class FileStorage implements SessionStorage
      */
     public function unlock($lockContext)
     {
-        /** @var File $lockContext */
-        $lockContext->unlock();
+        $fp = $lockContext;
+
+        flock($fp, LOCK_UN);
+        fclose($fp);
     }
 
     /**
@@ -134,7 +126,11 @@ class FileStorage implements SessionStorage
      */
     public function remove($id, $key)
     {
-        $this->fs->tryDelete($this->getPath($id, $key));
+        $path = $this->getPath($id, $key);
+
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 
     /**
@@ -154,8 +150,7 @@ class FileStorage implements SessionStorage
      */
     public function expire($lifetime)
     {
-        /** @var \SplFileInfo[] $files */
-        $files = new RecursiveFileIterator($this->directory);
+        $files = new \DirectoryIterator($this->directory);
 
         foreach ($files as $file) {
             if (! $file->isFile()) {
@@ -170,7 +165,7 @@ class FileStorage implements SessionStorage
                 continue;
             }
 
-            $this->fs->tryDelete((string) $file);
+            unlink((string) $file);
         }
     }
 
@@ -190,21 +185,6 @@ class FileStorage implements SessionStorage
             $newFile = $prefixNewId . substr($file, $prefixOldIdLength);
             rename($file, $newFile);
         }
-    }
-
-    /**
-     * Opens the session file for reading and writing, pointer at the beginning.
-     *
-     * @param string $id
-     * @param string $key
-     *
-     * @return \Brick\FileSystem\File
-     *
-     * @throws \Brick\FileSystem\FileSystemException
-     */
-    private function openFile($id, $key)
-    {
-        return new File($this->getPath($id, $key), 'cb+');
     }
 
     /**
