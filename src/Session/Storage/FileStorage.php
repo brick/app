@@ -156,7 +156,7 @@ class FileStorage implements SessionStorage
                 continue;
             }
 
-            unlink((string) $file);
+            unlink($file->getPathname());
         }
     }
 
