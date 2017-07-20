@@ -176,6 +176,8 @@ class FileStorage implements SessionStorage
             $newFile = $prefixNewId . substr($file, $prefixOldIdLength);
             rename($file, $newFile);
         }
+
+        return true;
     }
 
     /**
