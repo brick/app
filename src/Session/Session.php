@@ -189,13 +189,41 @@ class Session implements SessionInterface
     public function handleRequest(Request $request)
     {
         $sessionId = $request->getCookie($this->cookieParams['name']);
-        $this->id = ($sessionId !== null) ? $sessionId : $this->generateId();
+
+        if ($sessionId !== null && $this->checkSessionId($sessionId)) {
+            $this->id = $sessionId;
+        } else {
+            $this->id = $this->generateId();
+        }
 
         if ($this->isTimeToCollectGarbage()) {
             $this->collectGarbage();
         }
 
         $this->data = [];
+    }
+
+    /**
+     * Checks the validity of a session ID sent in a cookie.
+     *
+     * This is a security measure to avoid forged session cookies,
+     * that could be used for example to hack session adapters.
+     *
+     * @param string $id
+     *
+     * @return bool
+     */
+    private function checkSessionId($id)
+    {
+        if (preg_match('/^[A-Za-z0-9]+$/', $id) !== 1) {
+            return false;
+        }
+
+        if (strlen($id) !== $this->idLength) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
