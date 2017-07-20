@@ -207,6 +207,6 @@ class FileStorage implements SessionStorage
      */
     private function getPath($id, $key)
     {
-        return $this->directory . DIRECTORY_SEPARATOR . $this->prefix . $this->sanitize($id) . '_' . $this->sanitize($key);
+        return $this->directory . DIRECTORY_SEPARATOR . $this->prefix . $id . '_' . $this->sanitize($key);
     }
 }
