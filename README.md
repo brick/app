@@ -1,10 +1,13 @@
 Brick\App
 =========
 
+<img src="https://raw.githubusercontent.com/brick/brick/master/logo.png" alt="" align="left" height="64">
+
 A web application framework.
 
 [![Build Status](https://secure.travis-ci.org/brick/app.svg?branch=master)](http://travis-ci.org/brick/app)
 [![Coverage Status](https://coveralls.io/repos/brick/app/badge.svg?branch=master)](https://coveralls.io/r/brick/app?branch=master)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
 Installation
 ------------
