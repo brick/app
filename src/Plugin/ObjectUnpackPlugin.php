@@ -3,39 +3,36 @@
 namespace Brick\App\Plugin;
 
 use Brick\App\Event\ControllerReadyEvent;
+use Brick\App\ObjectPacker\PackedObject;
 use Brick\App\Plugin;
+use Brick\App\ObjectPacker\Exception\ObjectNotConvertibleException;
+use Brick\App\ObjectPacker\Exception\ObjectNotFoundException;
+use Brick\App\ObjectPacker\ObjectPacker;
 use Brick\Event\EventDispatcher;
 use Brick\Http\Exception\HttpException;
 use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
-use Brick\ObjectConverter\Exception\ObjectNotConvertibleException;
-use Brick\ObjectConverter\Exception\ObjectNotFoundException;
-use Brick\ObjectConverter\ObjectConverter;
 
 /**
- * Automatically converts type-hinted objects in controller parameters.
+ * Automatically converts type-hinted objects in controller parameters, from their string or array representation.
  *
  * The original parameter values can come from routers or other plugins.
  * When using parameters from plugins such as RequestParamPlugin, these plugins must be registered before this one.
  */
-class ObjectConverterPlugin extends AbstractAnnotationPlugin
+class ObjectUnpackPlugin implements Plugin
 {
     /**
-     * @var \Brick\ObjectConverter\ObjectConverter[]
+     * @var \Brick\App\ObjectPacker\ObjectPacker
      */
-    private $objectConverters = [];
+    private $objectPacker;
 
     /**
-     * @param ObjectConverter $converter
-     *
-     * @return static
+     * @param ObjectPacker $objectPacker
      */
-    public function addObjectConverter(ObjectConverter $converter)
+    public function __construct(ObjectPacker $objectPacker)
     {
-        $this->objectConverters[] = $converter;
-
-        return $this;
+        $this->objectPacker = $objectPacker;
     }
 
     /**
@@ -86,17 +83,19 @@ class ObjectConverterPlugin extends AbstractAnnotationPlugin
         $class = $parameter->getClass();
 
         if ($class) {
+            $className = $class->getName();
+
             if ($parameter->isVariadic()) {
                 $result = [];
 
                 foreach ($value as $subValue) {
-                    $result[] = $this->getObject($class->getName(), $subValue);
+                    $result[] = $this->getObject($className, $subValue);
                 }
 
                 return $result;
-            } else {
-                return $this->getObject($class->getName(), $value);
             }
+
+            return $this->getObject($className, $value);
         }
 
         return $value;
@@ -110,24 +109,24 @@ class ObjectConverterPlugin extends AbstractAnnotationPlugin
      *
      * @throws HttpException If the object cannot be instantiated.
      */
-    private function getObject($className, $value)
+    private function getObject(string $className, $value)
     {
-        foreach ($this->objectConverters as $converter) {
-            try {
-                $object = $converter->expand($className, $value);
-            }
-            catch (ObjectNotConvertibleException $e) {
-                throw new HttpBadRequestException($e->getMessage(), $e);
-            }
-            catch (ObjectNotFoundException $e) {
-                throw new HttpNotFoundException($e->getMessage(), $e);
-            }
+        $packedObject = new PackedObject($className, $value);
 
-            if ($object) {
-                return $object;
-            }
+        try {
+            $object = $this->objectPacker->unpack($packedObject);
+        }
+        catch (ObjectNotConvertibleException $e) {
+            throw new HttpBadRequestException($e->getMessage(), $e);
+        }
+        catch (ObjectNotFoundException $e) {
+            throw new HttpNotFoundException($e->getMessage(), $e);
         }
 
-        throw new HttpInternalServerErrorException('No object converter available for ' . $className);
+        if ($object === null) {
+            throw new HttpInternalServerErrorException('No object packer available for ' . $className);
+        }
+
+        return $object;
     }
 }

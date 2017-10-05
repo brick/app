@@ -2,7 +2,7 @@
 
 namespace Brick\App\View\Helper;
 
-use Brick\UrlBuilder\UrlBuilder;
+use Brick\App\UrlBuilder;
 
 /**
  * This view helper allows to build URLs view parameters in views.
@@ -10,14 +10,14 @@ use Brick\UrlBuilder\UrlBuilder;
 trait UrlBuilderHelper
 {
     /**
-     * @var \Brick\UrlBuilder\UrlBuilder|null
+     * @var \Brick\App\UrlBuilder|null
      */
     private $builder;
 
     /**
      * @Brick\Di\Annotation\Inject
      *
-     * @param \Brick\UrlBuilder\UrlBuilder $builder
+     * @param \Brick\App\UrlBuilder $builder
      *
      * @return void
      */

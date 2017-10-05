@@ -6,9 +6,8 @@ use Brick\Http\Request;
 use Brick\Http\Response;
 use Brick\Http\Cookie;
 
-use Brick\Packing\Packer;
-use Brick\Packing\ObjectPacker;
-use Brick\Packing\NullObjectPacker;
+use Brick\App\ObjectPacker\Packer;
+use Brick\App\ObjectPacker\ObjectPacker;
 
 /**
  * Persists data between HTTP requests.
@@ -23,9 +22,9 @@ class Session implements SessionInterface
     private $storage;
 
     /**
-     * The object packer.
+     * The object packer, if any.
      *
-     * @var \Brick\Packing\Packer
+     * @var \Brick\App\ObjectPacker\Packer|null
      */
     private $packer;
 
@@ -83,14 +82,17 @@ class Session implements SessionInterface
     /**
      * Class constructor.
      *
-     * @param \Brick\App\Session\Storage\SessionStorage $storage
-     * @param \Brick\Packing\ObjectPacker|null          $packer
+     * @param Storage\SessionStorage $storage
+     * @param ObjectPacker|null      $objectPacker
      */
-    public function __construct(Storage\SessionStorage $storage, ObjectPacker $packer = null)
+    public function __construct(Storage\SessionStorage $storage, ObjectPacker $objectPacker = null)
     {
         $this->storage      = $storage;
-        $this->packer       = new Packer($packer ?: new NullObjectPacker());
         $this->cookieParams = self::$defaultCookieParams;
+
+        if ($objectPacker !== null) {
+            $this->packer = new Packer($objectPacker);
+        }
     }
 
     /**
@@ -272,7 +274,7 @@ class Session implements SessionInterface
         $value = $this->storage->read($id, $key, $lockContext);
 
         if ($value !== null) {
-            $value = $this->packer->unserialize($value);
+            $value = $this->unserialize($value);
         }
 
         return $this->data[$key] = $value;
@@ -290,7 +292,7 @@ class Session implements SessionInterface
         }
 
         $id = $this->getId();
-        $serialized = $this->packer->serialize($value);
+        $serialized = $this->serialize($value);
         $this->storage->write($id, $key, $serialized, false);
 
         $this->data[$key] = $value;
@@ -317,10 +319,10 @@ class Session implements SessionInterface
         $serialized = $this->storage->read($id, $key, $lockContext);
 
         try {
-            $value = ($serialized !== null) ? $this->packer->unserialize($serialized) : null;
+            $value = ($serialized !== null) ? $this->unserialize($serialized) : null;
             $value = $function($value);
 
-            $serialized = $this->packer->serialize($value);
+            $serialized = $this->serialize($value);
         } catch (\Exception $e) {
             $this->storage->unlock($lockContext);
 
@@ -416,5 +418,35 @@ class Session implements SessionInterface
     private function isTimeToCollectGarbage()
     {
         return rand(0, $this->gcDivisor - 1) < $this->gcDividend;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    private function serialize($value) : string
+    {
+        if ($this->packer !== null) {
+            $this->packer->pack($value);
+        }
+
+        return serialize($value);
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return mixed
+     */
+    private function unserialize(string $data)
+    {
+        $value = unserialize($data);
+
+        if ($this->packer !== null) {
+            return $this->packer->unpack($value);
+        }
+
+        return $value;
     }
 }
