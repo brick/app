@@ -20,7 +20,6 @@
         "brick/reflection": "0.2.*"
     },
     "require-dev": {
-        "brick/brick": "dev-master",
         "brick/form": "dev-master",
         "doctrine/dbal": "2.*",
         "phpunit/phpunit": "6.*",
