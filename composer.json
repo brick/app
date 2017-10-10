@@ -20,7 +20,7 @@
         "brick/reflection": "0.2.*"
     },
     "require-dev": {
-        "brick/form": "dev-master",
+        "brick/form": "0.1.*",
         "doctrine/annotations": "1.*",
         "doctrine/dbal": "2.*",
         "phpunit/phpunit": "6.*",
@@ -29,6 +29,7 @@
     "suggest": {
         "doctrine/annotations": "To use the annotation-based plugins",
         "doctrine/dbal": "To use the TransactionalPlugin",
+        "brick/form": "To use FormView and FormTableView"
     },
     "autoload": {
         "psr-4": {
