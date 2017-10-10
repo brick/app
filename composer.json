@@ -21,9 +21,13 @@
     },
     "require-dev": {
         "brick/form": "dev-master",
+        "doctrine/annotations": "1.*",
         "doctrine/dbal": "2.*",
         "phpunit/phpunit": "6.*",
         "satooshi/php-coveralls": "1.*"
+    },
+    "suggest": {
+        "doctrine/annotations": "To use the annotation-based plugins"
     },
     "autoload": {
         "psr-4": {
