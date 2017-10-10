@@ -28,9 +28,7 @@ abstract class AbstractAnnotationPlugin implements Plugin
      */
     public function __construct(Reader $annotationReader)
     {
-        AnnotationRegistry::registerLoader(function($class) {
-            return class_exists($class);
-        });
+        AnnotationRegistry::registerLoader('class_exists');
 
         $this->annotationReader = $annotationReader;
         $this->reflectionTools  = new ReflectionTools();
