@@ -3,7 +3,6 @@
 namespace Brick\App\Plugin;
 
 use Brick\App\Event\ControllerReadyEvent;
-use Brick\App\Plugin;
 use Brick\App\Controller\Annotation\RequestParam;
 use Brick\Event\EventDispatcher;
 use Brick\Http\Exception\HttpException;

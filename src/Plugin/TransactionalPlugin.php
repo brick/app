@@ -4,7 +4,6 @@ namespace Brick\App\Plugin;
 
 use Brick\App\Event\ControllerInvocatedEvent;
 use Brick\App\Event\RouteMatchedEvent;
-use Brick\App\Plugin;
 use Brick\App\Controller\Annotation\Transactional;
 use Brick\Event\EventDispatcher;
 use Brick\App\RouteMatch;

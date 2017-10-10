@@ -3,7 +3,6 @@
 namespace Brick\App\View\Helper;
 
 use Brick\Translation\Translator;
-use Brick\Locale\Locale;
 
 /**
  * Translator view helper.
