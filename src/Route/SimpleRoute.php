@@ -64,7 +64,9 @@ class SimpleRoute implements Route
 
         if ($action === 'index') {
             return null;
-        } elseif ($action === '') {
+        }
+
+        if ($action === '') {
             $action = 'index';
         }
 
