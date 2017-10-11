@@ -12,7 +12,7 @@ use Brick\Http\Request;
 interface Route
 {
     /**
-     * Attemps to match the given request to a controller.
+     * Attempts to match the given request to a controller.
      *
      * @param \Brick\Http\Request $request The request to match.
      *
