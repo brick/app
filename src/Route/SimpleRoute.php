@@ -44,11 +44,11 @@ class SimpleRoute implements Route
     {
         $path = $request->getPath();
 
-        if ($path == '') {
+        if ($path === '') {
             return null;
         }
 
-        if ($path[0] != '/') {
+        if ($path[0] !== '/') {
             return null;
         }
 
@@ -62,9 +62,9 @@ class SimpleRoute implements Route
 
         $class = $this->routes[$prefix];
 
-        if ($action == 'index') {
+        if ($action === 'index') {
             return null;
-        } elseif ($action == '') {
+        } elseif ($action === '') {
             $action = 'index';
         }
 

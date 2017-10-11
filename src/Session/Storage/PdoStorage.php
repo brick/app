@@ -167,7 +167,7 @@ class PdoStorage implements SessionStorage
         $statement = $this->pdo->prepare($query);
         $statement->execute([$value, $time = time(), $time, $id, $key]);
 
-        return $statement->rowCount() != 0;
+        return $statement->rowCount() !== 0;
     }
 
     /**
@@ -273,6 +273,6 @@ class PdoStorage implements SessionStorage
         $statement = $this->pdo->prepare($query);
         $statement->execute($parameters);
 
-        return $statement->rowCount() != 0;
+        return $statement->rowCount() !== 0;
     }
 }

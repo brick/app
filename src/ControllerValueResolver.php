@@ -72,7 +72,7 @@ class ControllerValueResolver implements ValueResolver
     public function getParameterValue(\ReflectionParameter $parameter)
     {
         $class = $parameter->getClass();
-        if ($class && $class->getName() == Request::class) {
+        if ($class && $class->getName() === Request::class) {
             return $this->request;
         }
 
@@ -90,7 +90,7 @@ class ControllerValueResolver implements ValueResolver
     public function getPropertyValue(\ReflectionProperty $property)
     {
         $class = $this->reflectionTools->getPropertyClass($property);
-        if ($class == Request::class) {
+        if ($class === Request::class) {
             return $this->request;
         }
 
