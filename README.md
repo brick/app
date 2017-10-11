@@ -178,7 +178,53 @@ interface Plugin
 }
 ```
 
-Just one method to implement. This method allows you to register your plugin inside the application's event dispatcher, that is, tell the application which events it wants to receive. Each event is represented by a class in the `Brick\App\Event` namespace.
+Just one method to implement. This method allows you to register your plugin inside the application's event dispatcher, that is, tell the application which events it wants to receive. Here is an overview of the events dispatched by the application.
+
+#### IncomingRequestEvent
+
+This event is dispatched as soon as the application receives a Request.
+
+This event contains the `Request` object.
+
+#### RouteMatchedEvent
+
+This event is dispatched after the router has returned a match. If no match is found, the request handling is interrupted, and `ExceptionCaughtEvent` is dispatched with an `HttpNotFoundException`.
+
+This event contains the `Request` and the `RouteMatch` objects.
+
+#### ControllerReadyEvent
+
+This event is dispatched when the controller is ready to be invoked. If the controller is a class method, the class will have been instantiated and this controller instance is made available to the event.
+
+This event contains the `Request` and the `RouteMatch` objects, and the controller instance *if* the controller is a class method.
+
+#### NonResponseResultEvent
+
+This event is dispatched if the controller does not return a `Response` object. This event provides an opportunity for plugins to transform an arbitrary controller result into a `Response` object. For example, it could be used to JSON-encode the controller return value and wrap it into a `Response` object with the proper Content-Type header.
+
+This event contains the `Request` and the `RouteMatch` objects, the controller instance *if* the controller is a class method, and the return value of the controller.
+
+#### ControllerInvocatedEvent
+
+This event is dispatched after controller invocation, regardless of whether an exception was thrown or not.
+
+This event contains the `Request` and the `RouteMatch` objects, and the controller instance *if* the controller is a class method.
+
+#### ResponseReceivedEvent
+
+This event is dispatched after the controller response has been received. If an `HttpException` is caught during the controller method invocation, the exception it is converted to a `Response`, and this event is dispatched as well. Other exceptions break the application flow and don't trigger this event.
+
+This event contains the `Request`, `Response` and `RouteMatch` objects, and the controller instance *if* the controller is a class method.
+
+#### ExceptionCaughtEvent
+
+This event is dispatched if an exception is caught. If the exception is not an `HttpException`, it is wrapped in an `HttpInternalServerErrorException` first, so that this event always receives an `HttpException`. A default response is created to display the details of the exception.
+
+This event provides an opportunity to modify the default response to present a customized error message to the client.
+
+This event contains the `HttpException`, `Request` and `Response` objects.
+
+---
 
 We can see that the two events that are called immediately before and after the controller is invoked are:
 
@@ -202,7 +248,7 @@ class TransactionPlugin implements Plugin
         $this->pdo = $pdo;
     }
 
-    public function register(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, function() {
             $this->pdo->beginTransaction();
