@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brick\App\Route;
 
 use Brick\App\RouteMatch;
