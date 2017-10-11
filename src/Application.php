@@ -55,7 +55,7 @@ class Application implements RequestHandler
      * @param ValueResolver   $resolver
      * @param InjectionPolicy $policy
      */
-    public function __construct(ValueResolver $resolver, InjectionPolicy $policy)
+    private function __construct(ValueResolver $resolver, InjectionPolicy $policy)
     {
         $this->valueResolver   = new ControllerValueResolver($resolver);
         $this->injector        = new Injector($this->valueResolver, $policy);
@@ -63,31 +63,25 @@ class Application implements RequestHandler
     }
 
     /**
-     * Creates a simple application.
+     * Creates an application.
+     *
+     * If a dependency injection container is provided, it is used to automatically inject dependencies in controllers.
+     *
+     * @param Container|null $container
      *
      * @return Application
      */
-    public static function create() : Application
+    public static function create(Container $container = null) : Application
     {
-        return new Application(
-            new DefaultValueResolver(),
-            new InjectionPolicy\NullPolicy()
-        );
-    }
+        if ($container !== null) {
+            $valueResolver   = $container->getValueResolver();
+            $injectionPolicy = $container->getInjectionPolicy();
+        } else {
+            $valueResolver   = new DefaultValueResolver();
+            $injectionPolicy = new InjectionPolicy\NullPolicy();
+        }
 
-    /**
-     * Creates an application using the given dependency injection container.
-     *
-     * @param Container $container
-     *
-     * @return Application
-     */
-    public static function createWithContainer(Container $container) : Application
-    {
-        return new Application(
-            $container->getValueResolver(),
-            $container->getInjectionPolicy()
-        );
+        return new Application($valueResolver, $injectionPolicy);
     }
 
     /**

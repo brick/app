@@ -324,7 +324,7 @@ use Brick\App\Plugin\SessionPlugin;
 
 // Create a DI container, and use it with our app
 $container = Container::create();
-$app = Application::createWithContainer($container);
+$app = Application::create($container);
 
 // Create a session, add the session plugin to our app
 $session = Session::create();
