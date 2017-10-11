@@ -37,7 +37,7 @@ class TransactionalPlugin extends AbstractAnnotationPlugin
     /**
      * {@inheritdoc}
      */
-    public function register(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(RouteMatchedEvent::class, function (RouteMatchedEvent $event) {
             $annotation = $this->getTransactionalAnnotation($event->getRouteMatch());
@@ -68,7 +68,7 @@ class TransactionalPlugin extends AbstractAnnotationPlugin
      *
      * @todo add support for annotations on functions when Doctrine will handle them
      */
-    private function getTransactionalAnnotation(RouteMatch $routeMatch)
+    private function getTransactionalAnnotation(RouteMatch $routeMatch) : ?Transactional
     {
         $method = $routeMatch->getControllerReflection();
 

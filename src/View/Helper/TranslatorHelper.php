@@ -21,7 +21,7 @@ trait TranslatorHelper
      *
      * @return void
      */
-    final public function setTranslator(Translator $translator)
+    final public function setTranslator(Translator $translator) : void
     {
         $this->translator = $translator;
     }

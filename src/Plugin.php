@@ -16,5 +16,5 @@ interface Plugin
      *
      * @return void
      */
-    public function register(EventDispatcher $dispatcher);
+    public function register(EventDispatcher $dispatcher) : void;
 }

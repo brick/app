@@ -111,7 +111,7 @@ final class NonResponseResultEvent
      *
      * @return void
      */
-    public function setResponse(Response $response)
+    public function setResponse(Response $response) : void
     {
         $this->response = $response;
     }
@@ -121,7 +121,7 @@ final class NonResponseResultEvent
      *
      * @return Response|null
      */
-    public function getResponse()
+    public function getResponse() : ?Response
     {
         return $this->response;
     }

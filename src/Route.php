@@ -18,5 +18,5 @@ interface Route
      *
      * @throws \Brick\Http\Exception\HttpException A route is allowed to throw HTTP exceptions.
      */
-    public function match(Request $request);
+    public function match(Request $request) : ?RouteMatch;
 }

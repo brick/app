@@ -22,7 +22,7 @@ trait PartialViewHelper
      *
      * @return void
      */
-    final public function setInjector(Injector $injector)
+    final public function setInjector(Injector $injector) : void
     {
         $this->injector = $injector;
     }

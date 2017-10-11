@@ -62,7 +62,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function read($id, $key, & $lockContext)
+    public function read(string $id, string $key, & $lockContext) : ?string
     {
         if ($lockContext) {
             $this->pdo->beginTransaction();
@@ -103,7 +103,7 @@ class PdoStorage implements SessionStorage
      *
      * @return void
      */
-    private function touch($id, $key)
+    private function touch(string $id, string $key) : void
     {
         $query = sprintf('
             UPDATE %s SET %s = ? WHERE %s = ? AND %s = ?',
@@ -120,7 +120,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function write($id, $key, $value, $lockContext)
+    public function write(string $id, string $key, string $value, $lockContext) : void
     {
         $this->updateRecord($id, $key, $value) || $this->insertRecord($id, $key, $value);
 
@@ -132,7 +132,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function unlock($lockContext)
+    public function unlock($lockContext) : void
     {
         $this->pdo->rollBack();
     }
@@ -149,7 +149,7 @@ class PdoStorage implements SessionStorage
      *
      * @return bool Whether the record exists and was updated.
      */
-    private function updateRecord($id, $key, $value)
+    private function updateRecord(string $id, string $key, string $value) : bool
     {
         $query = sprintf(
             'UPDATE %s SET %s = ?, %s = CASE WHEN %s = ? THEN %s + 1 ELSE ? END WHERE %s = ? AND %s = ?',
@@ -177,7 +177,7 @@ class PdoStorage implements SessionStorage
      *
      * @return void
      */
-    private function insertRecord($id, $key, $value)
+    private function insertRecord(string $id, string $key, string $value) : void
     {
         $query = sprintf(
             'INSERT INTO %s (%s, %s, %s, %s) VALUES(?, ?, ?, ?)',
@@ -195,7 +195,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function remove($id, $key)
+    public function remove(string $id, string $key) : void
     {
         $query = sprintf(
             'DELETE FROM %s WHERE %s = ? AND %s = ?',
@@ -211,7 +211,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function clear($id)
+    public function clear(string $id) : void
     {
         $query = sprintf(
             'DELETE FROM %s WHERE %s = ?',
@@ -226,7 +226,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function expire($lifetime)
+    public function expire(int $lifetime) : void
     {
         $query = sprintf(
             'DELETE FROM %s WHERE %s < ?',
@@ -241,7 +241,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function updateId($oldId, $newId)
+    public function updateId(string $oldId, string $newId) : bool
     {
         $query = sprintf(
             'UPDATE %s SET %s = ?, %s = ? WHERE %s = ?',
@@ -266,7 +266,7 @@ class PdoStorage implements SessionStorage
      *
      * @return bool
      */
-    private function executeQuery($query, array $parameters)
+    private function executeQuery(string $query, array $parameters) : bool
     {
         $statement = $this->pdo->prepare($query);
         $statement->execute($parameters);

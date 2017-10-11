@@ -29,7 +29,7 @@ class SessionPlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function register(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(IncomingRequestEvent::class, function(IncomingRequestEvent $event) {
             $this->session->handleRequest($event->getRequest());

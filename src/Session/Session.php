@@ -102,7 +102,7 @@ class Session implements SessionInterface
      *
      * @throws \RuntimeException
      */
-    public static function create()
+    public static function create() : Session
     {
         $directory = session_save_path();
         $storage = new Storage\FileStorage($directory);
@@ -115,7 +115,7 @@ class Session implements SessionInterface
      *
      * @return SessionNamespace
      */
-    public function getNamespace($namespace)
+    public function getNamespace(string $namespace) : SessionNamespace
     {
         return new SessionNamespace($this, $namespace);
     }
@@ -125,7 +125,7 @@ class Session implements SessionInterface
      *
      * @return Session
      */
-    public function setCookieParams(array $params)
+    public function setCookieParams(array $params) : Session
     {
         $this->cookieParams = $params + $this->cookieParams;
 
@@ -142,7 +142,7 @@ class Session implements SessionInterface
      *
      * @return Session
      */
-    public function setGcProbability($dividend, $divisor)
+    public function setGcProbability(int $dividend, int $divisor) : Session
     {
         $this->gcDividend = $dividend;
         $this->gcDivisor = $divisor;
@@ -155,7 +155,7 @@ class Session implements SessionInterface
      *
      * @return Session
      */
-    public function setLifetime($lifetime)
+    public function setLifetime(int $lifetime) : Session
     {
         $this->lifetime = $lifetime;
 
@@ -174,7 +174,7 @@ class Session implements SessionInterface
      *
      * @return Session
      */
-    public function setIdLength($length)
+    public function setIdLength(int $length) : Session
     {
         $this->idLength = $length;
 
@@ -188,7 +188,7 @@ class Session implements SessionInterface
      *
      * @return void
      */
-    public function handleRequest(Request $request)
+    public function handleRequest(Request $request) : void
     {
         $sessionId = $request->getCookie($this->cookieParams['name']);
 
@@ -215,7 +215,7 @@ class Session implements SessionInterface
      *
      * @return bool
      */
-    private function checkSessionId($id)
+    private function checkSessionId(string $id) : bool
     {
         if (preg_match('/^[A-Za-z0-9]+$/', $id) !== 1) {
             return false;
@@ -235,7 +235,7 @@ class Session implements SessionInterface
      *
      * @return void
      */
-    public function handleResponse(Response $response)
+    public function handleResponse(Response $response) : void
     {
         $lifetime = $this->cookieParams['lifetime'];
         $expires = ($lifetime == 0) ? 0 : time() + $lifetime;
@@ -255,7 +255,7 @@ class Session implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has(string $key) : bool
     {
         return $this->get($key) !== null;
     }
@@ -263,7 +263,7 @@ class Session implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (isset($this->data[$key])) {
             return $this->data[$key];
@@ -283,7 +283,7 @@ class Session implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set(string $key, $value) : void
     {
         if ($value === null) {
             $this->remove($key);
@@ -301,7 +301,7 @@ class Session implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($key)
+    public function remove(string $key) : void
     {
         $id = $this->getId();
         $this->storage->remove($id, $key);
@@ -312,7 +312,7 @@ class Session implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function synchronize($key, callable $function)
+    public function synchronize(string $key, callable $function)
     {
         $id = $this->getId();
         $lockContext = true;
@@ -337,7 +337,7 @@ class Session implements SessionInterface
     /**
      * @return Session
      */
-    public function clear()
+    public function clear() : Session
     {
         $id = $this->getId();
         $this->storage->clear($id);
@@ -358,7 +358,7 @@ class Session implements SessionInterface
      *
      * @return Session
      */
-    public function regenerateId()
+    public function regenerateId() : Session
     {
         $id = $this->generateId();
 
@@ -382,7 +382,7 @@ class Session implements SessionInterface
      *
      * @throws \RuntimeException
      */
-    private function getId()
+    private function getId() : string
     {
         if ($this->id === null) {
             throw new \RuntimeException(
@@ -399,7 +399,7 @@ class Session implements SessionInterface
      *
      * @return string
      */
-    private function generateId()
+    private function generateId() : string
     {
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -415,7 +415,7 @@ class Session implements SessionInterface
     /**
      * @return bool
      */
-    private function isTimeToCollectGarbage()
+    private function isTimeToCollectGarbage() : bool
     {
         return rand(0, $this->gcDivisor - 1) < $this->gcDividend;
     }

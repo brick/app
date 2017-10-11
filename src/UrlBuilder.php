@@ -37,7 +37,7 @@ class UrlBuilder
      *
      * @throws \RuntimeException If an unsupported object is given as a parameter.
      */
-    public function buildUrl(string $url, array $parameters = [])
+    public function buildUrl(string $url, array $parameters = []) : string
     {
         if (count($parameters)) {
             foreach ($parameters as $key => $value) {

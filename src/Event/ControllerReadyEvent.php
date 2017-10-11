@@ -51,7 +51,7 @@ final class ControllerReadyEvent
 
     /**
      * @param Request     $request    The request.
-     * @param \Brick\App\RouteMatch  $routeMatch The route match.
+     * @param RouteMatch  $routeMatch The route match.
      * @param object|null $instance   The controller instance.
      */
     public function __construct(Request $request, RouteMatch $routeMatch, $instance)
@@ -98,7 +98,7 @@ final class ControllerReadyEvent
      *
      * @return void
      */
-    public function addParameters(array $parameters)
+    public function addParameters(array $parameters) : void
     {
         $this->parameters = $parameters + $this->parameters;
     }
@@ -118,7 +118,7 @@ final class ControllerReadyEvent
      *
      * @return void
      */
-    public function setResponse(Response $response = null)
+    public function setResponse(Response $response = null) : void
     {
         $this->response = $response;
     }
@@ -126,7 +126,7 @@ final class ControllerReadyEvent
     /**
      * @return Response|null
      */
-    public function getResponse()
+    public function getResponse() : ?Response
     {
         return $this->response;
     }

@@ -21,7 +21,7 @@ trait UrlBuilderHelper
      *
      * @return void
      */
-    final public function setUrlBuilder(UrlBuilder $builder)
+    final public function setUrlBuilder(UrlBuilder $builder) : void
     {
         $this->builder = $builder;
     }

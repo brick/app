@@ -117,7 +117,7 @@ class Application implements RequestHandler
      *
      * @return void
      */
-    public function run()
+    public function run() : void
     {
         $request = Request::getCurrent();
         $response = $this->handle($request);

@@ -18,7 +18,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
     /**
      * {@inheritdoc}
      */
-    public function register(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, function(ControllerReadyEvent $event) {
             $event->addParameters($this->getParameters(

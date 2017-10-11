@@ -24,7 +24,7 @@ class CatchAllRoute implements Route
     /**
      * {@inheritdoc}
      */
-    public function match(Request $request)
+    public function match(Request $request) : ?RouteMatch
     {
         return $this->routeMatch;
     }

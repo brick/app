@@ -2,6 +2,7 @@
 
 namespace Brick\App\Route;
 
+use Brick\App\RouteMatch;
 use Brick\Http\Request;
 use Brick\App\Route;
 
@@ -38,7 +39,7 @@ class PrefixRoute implements Route
     /**
      * {@inheritdoc}
      */
-    public function match(Request $request)
+    public function match(Request $request) : ?RouteMatch
     {
         $path = $request->getPath();
 

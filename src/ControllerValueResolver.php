@@ -47,7 +47,7 @@ class ControllerValueResolver implements ValueResolver
      *
      * @return void
      */
-    public function setRequest(Request $request)
+    public function setRequest(Request $request) : void
     {
         $this->request = $request;
     }
@@ -59,7 +59,7 @@ class ControllerValueResolver implements ValueResolver
      *
      * @return void
      */
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters) : void
     {
         $this->parameters = $parameters;
     }

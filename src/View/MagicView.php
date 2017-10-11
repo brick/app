@@ -51,7 +51,7 @@ class MagicView extends ScriptView
      *
      * @return void
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, $value) : void
     {
         $this->parameters[$name] = $value;
     }

@@ -16,7 +16,7 @@ interface SessionInterface
      *
      * @return bool
      */
-    public function has($key);
+    public function has(string $key) : bool;
 
     /**
      * Reads a key from the session.
@@ -25,7 +25,7 @@ interface SessionInterface
      *
      * @return mixed The value, null if the key does not exist.
      */
-    public function get($key);
+    public function get(string $key);
 
     /**
      * Writes a key/value pair to the session.
@@ -35,7 +35,7 @@ interface SessionInterface
      *
      * @return void
      */
-    public function set($key, $value);
+    public function set(string $key, $value) : void;
 
     /**
      * Removes a key from the session.
@@ -44,7 +44,7 @@ interface SessionInterface
      *
      * @return void
      */
-    public function remove($key);
+    public function remove(string $key) : void;
 
     /**
      * Performs a synchronized read & write of a session key.
@@ -56,5 +56,5 @@ interface SessionInterface
      *
      * @return mixed The return value of the function.
      */
-    public function synchronize($key, callable $function);
+    public function synchronize(string $key, callable $function);
 }

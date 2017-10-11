@@ -19,7 +19,7 @@ interface SessionStorage
      *
      * @return string|null The value read, or null if the key does not exist.
      */
-    public function read($id, $key, & $lockContext);
+    public function read(string $id, string $key, & $lockContext) : ?string;
 
     /**
      * Writes a specific key to the storage.
@@ -32,7 +32,7 @@ interface SessionStorage
      *
      * @return void
      */
-    public function write($id, $key, $value, $lockContext);
+    public function write(string $id, string $key, string $value, $lockContext) : void;
 
     /**
      * Unlocks the resources locked by an aborted synchronized read-write.
@@ -44,7 +44,7 @@ interface SessionStorage
      *
      * @return void
      */
-    public function unlock($lockContext);
+    public function unlock($lockContext) : void;
 
     /**
      * Removes a specific key from the storage.
@@ -56,7 +56,7 @@ interface SessionStorage
      *
      * @return void
      */
-    public function remove($id, $key);
+    public function remove(string $id, string $key) : void;
 
     /**
      * Removes all the keys from the storage for the given session id.
@@ -65,7 +65,7 @@ interface SessionStorage
      *
      * @return void
      */
-    public function clear($id);
+    public function clear(string $id) : void;
 
     /**
      * Removes all entries that have not been accessed for more than the given number of seconds.
@@ -74,7 +74,7 @@ interface SessionStorage
      *
      * @return void
      */
-    public function expire($lifetime);
+    public function expire(int $lifetime) : void;
 
     /**
      * @param string $oldId
@@ -82,5 +82,5 @@ interface SessionStorage
      *
      * @return bool
      */
-    public function updateId($oldId, $newId);
+    public function updateId(string $oldId, string $newId) : bool;
 }

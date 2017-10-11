@@ -38,7 +38,7 @@ class SimpleRoute implements Route
     /**
      * {@inheritdoc}
      */
-    public function match(Request $request)
+    public function match(Request $request) : ?RouteMatch
     {
         $path = $request->getPath();
 
@@ -92,7 +92,7 @@ class SimpleRoute implements Route
      *
      * @return array|null
      */
-    protected function getClassParameters(Request $request)
+    protected function getClassParameters(Request $request) : ?array
     {
         return [];
     }
@@ -106,7 +106,7 @@ class SimpleRoute implements Route
      *
      * @return array|null
      */
-    protected function getFunctionParameters(Request $request)
+    protected function getFunctionParameters(Request $request) : ?array
     {
         return [];
     }
@@ -118,7 +118,7 @@ class SimpleRoute implements Route
      *
      * @return string
      */
-    private function capitalize(string $name)
+    private function capitalize(string $name) : string
     {
         return preg_replace_callback('/\-([a-z])/', function (array $matches) {
             return strtoupper($matches[1]);

@@ -66,7 +66,7 @@ class ApplicationTest extends TestCase
 
 class HelloRoute implements Route
 {
-    public function match(Request $request)
+    public function match(Request $request) : ?RouteMatch
     {
         if ($request->getPath() === '/a') {
             return RouteMatch::forFunction(function() {

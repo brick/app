@@ -18,7 +18,7 @@ class OnRequestResponsePlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function register(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, function(ControllerReadyEvent $event) {
             $controller = $event->getControllerInstance();

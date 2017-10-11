@@ -24,7 +24,7 @@ abstract class AbstractController
      *
      * @return void
      */
-    public function setInjector(Injector $injector)
+    public function setInjector(Injector $injector) : void
     {
         $this->injector = $injector;
     }

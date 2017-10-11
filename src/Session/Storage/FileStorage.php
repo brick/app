@@ -44,7 +44,7 @@ class FileStorage implements SessionStorage
      * @param string $directory
      * @param string $prefix
      */
-    public function __construct($directory, $prefix = '')
+    public function __construct(string $directory, string $prefix = '')
     {
         $this->directory = $directory;
         $this->prefix    = $prefix;
@@ -53,7 +53,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function read($id, $key, & $lockContext)
+    public function read(string $id, string $key, & $lockContext) : ?string
     {
         $path = $this->getPath($id, $key);
 
@@ -85,7 +85,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function write($id, $key, $value, $lockContext)
+    public function write(string $id, string $key, string $value, $lockContext) : void
     {
         if ($lockContext) {
             $fp = $lockContext;
@@ -104,7 +104,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function unlock($lockContext)
+    public function unlock($lockContext) : void
     {
         $fp = $lockContext;
 
@@ -115,7 +115,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function remove($id, $key)
+    public function remove(string $id, string $key) : void
     {
         $path = $this->getPath($id, $key);
 
@@ -127,7 +127,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function clear($id)
+    public function clear(string $id) : void
     {
         $files = glob($this->directory . DIRECTORY_SEPARATOR . $this->prefix . $id . '_*');
 
@@ -139,7 +139,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function expire($lifetime)
+    public function expire(int $lifetime) : void
     {
         $files = new \DirectoryIterator($this->directory);
 
@@ -163,7 +163,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function updateId($oldId, $newId)
+    public function updateId(string $oldId, string $newId) : bool
     {
         $prefix = $this->directory . DIRECTORY_SEPARATOR . $this->prefix;
         $prefixOldId = $prefix . $oldId;
@@ -186,7 +186,7 @@ class FileStorage implements SessionStorage
      *
      * @return string
      */
-    private function getPath($id, $key)
+    private function getPath(string $id, string $key) : string
     {
         // Sanitize the session key: it may contain characters that could conflict with the filesystem.
         // We only allow the resulting file name to contain ASCII letters & digits, dashes, underscores and dots.

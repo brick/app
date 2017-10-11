@@ -24,7 +24,7 @@ class SessionNamespace implements SessionInterface
      * @param Session $session
      * @param string  $namespace
      */
-    public function __construct(Session $session, $namespace)
+    public function __construct(Session $session, string $namespace)
     {
         $this->session   = $session;
         $this->namespace = $namespace;
@@ -33,7 +33,7 @@ class SessionNamespace implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has(string $key) : bool
     {
         return $this->session->has($this->getKey($key));
     }
@@ -41,7 +41,7 @@ class SessionNamespace implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function get($key)
+    public function get(string $key)
     {
         return $this->session->get($this->getKey($key));
     }
@@ -49,7 +49,7 @@ class SessionNamespace implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set(string $key, $value) : void
     {
         $this->session->set($this->getKey($key), $value);
     }
@@ -57,7 +57,7 @@ class SessionNamespace implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($key)
+    public function remove(string $key) : void
     {
         $this->session->remove($this->getKey($key));
     }
@@ -65,7 +65,7 @@ class SessionNamespace implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function synchronize($key, callable $function)
+    public function synchronize(string $key, callable $function)
     {
         return $this->session->synchronize($this->getKey($key), $function);
     }
@@ -75,7 +75,7 @@ class SessionNamespace implements SessionInterface
      *
      * @return string
      */
-    private function getKey($key)
+    private function getKey(string $key) : string
     {
         return $this->namespace .  '.' . $key;
     }
