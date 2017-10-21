@@ -196,11 +196,10 @@ class Application implements RequestHandler
         $instance = null;
 
         $this->valueResolver->setRequest($request);
-        $this->valueResolver->setParameters($match->getClassParameters());
 
         if ($controllerReflection instanceof \ReflectionMethod) {
             $className = $controllerReflection->getDeclaringClass()->getName();
-            $instance = $this->injector->instantiate($className);
+            $instance = $this->injector->instantiate($className, $match->getClassParameters());
             $callable = $controllerReflection->getClosure($instance);
         } elseif ($controllerReflection instanceof \ReflectionFunction) {
             $callable = $controllerReflection->getClosure();
@@ -216,10 +215,8 @@ class Application implements RequestHandler
         $response = $event->getResponse();
 
         if ($response === null) {
-            $this->valueResolver->setParameters($event->getParameters());
-
             try {
-                $result = $this->injector->invoke($callable);
+                $result = $this->injector->invoke($callable, $event->getParameters());
 
                 if ($result instanceof Response) {
                     $response = $result;

@@ -26,7 +26,7 @@ class RouteMatch
 
     /**
      * @param \ReflectionFunctionAbstract $controller         A reflection of the controller.
-     * @param array                       $classParameters    An associative array of parameters matched from the request to resolve the controller class.
+     * @param array                       $classParameters    An associative array of parameters matched from the request to resolve the controller class constructor parameters.
      * @param array                       $functionParameters An associative array of parameters matched from the request to resolve the controller function parameters.
      */
     public function __construct(\ReflectionFunctionAbstract $controller, array $classParameters = [], array $functionParameters = [])

@@ -24,11 +24,6 @@ class ControllerValueResolver implements ValueResolver
     private $request = null;
 
     /**
-     * @var array
-     */
-    private $parameters = [];
-
-    /**
      * @var \Brick\Reflection\ReflectionTools
      */
     private $reflectionTools;
@@ -55,18 +50,6 @@ class ControllerValueResolver implements ValueResolver
     }
 
     /**
-     * Sets key-value pairs to resolve the controller parameters.
-     *
-     * @param array $parameters
-     *
-     * @return void
-     */
-    public function setParameters(array $parameters) : void
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getParameterValue(\ReflectionParameter $parameter)
@@ -74,11 +57,6 @@ class ControllerValueResolver implements ValueResolver
         $class = $parameter->getClass();
         if ($class && $class->getName() === Request::class) {
             return $this->request;
-        }
-
-        $name = $parameter->getName();
-        if (array_key_exists($name, $this->parameters)) {
-            return $this->parameters[$name];
         }
 
         return $this->fallbackResolver->getParameterValue($parameter);
@@ -92,11 +70,6 @@ class ControllerValueResolver implements ValueResolver
         $class = $this->reflectionTools->getPropertyClass($property);
         if ($class === Request::class) {
             return $this->request;
-        }
-
-        $name = $property->getName();
-        if (isset($this->parameters[$name])) {
-            return $this->parameters[$name];
         }
 
         return $this->fallbackResolver->getPropertyValue($property);
