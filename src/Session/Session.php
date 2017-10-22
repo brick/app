@@ -84,32 +84,21 @@ class Session implements SessionInterface
     /**
      * Class constructor.
      *
-     * @param Storage\SessionStorage $storage
-     * @param ObjectPacker|null      $objectPacker
+     * @param Storage\SessionStorage $storage      The session storage, or null to use a default file storage.
+     * @param ObjectPacker|null      $objectPacker An optional object packer to use when serializing the session data.
      */
-    public function __construct(Storage\SessionStorage $storage, ObjectPacker $objectPacker = null)
+    public function __construct(Storage\SessionStorage $storage = null, ObjectPacker $objectPacker = null)
     {
+        if ($storage === null) {
+            $storage = new Storage\FileStorage(session_save_path());
+        }
+
         $this->storage      = $storage;
         $this->cookieParams = self::$defaultCookieParams;
 
         if ($objectPacker !== null) {
             $this->packer = new Packer($objectPacker);
         }
-    }
-
-    /**
-     * Creates a session with default parameters, with a local filesystem storage.
-     *
-     * @return Session
-     *
-     * @throws \RuntimeException
-     */
-    public static function create() : Session
-    {
-        $directory = session_save_path();
-        $storage = new Storage\FileStorage($directory);
-
-        return new Session($storage);
     }
 
     /**

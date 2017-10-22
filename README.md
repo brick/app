@@ -305,7 +305,7 @@ To store your sessions in the filesystem, alongside traditional PHP sessions, ju
 use Brick\App\Session\Session;
 use Brick\App\Plugin\SessionPlugin;
 
-$session = Session::create();
+$session = new Session();
 $app->addPlugin(new SessionPlugin($session));
 ```
 
