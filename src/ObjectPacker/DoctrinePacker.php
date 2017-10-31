@@ -52,7 +52,13 @@ class DoctrinePacker implements ObjectPacker
      */
     public function unpack(PackedObject $packedObject)
     {
-        return $this->em->getReference($packedObject->getClass(), $packedObject->getData());
+        $class = $packedObject->getClass();
+
+        if ($this->em->getMetadataFactory()->isTransient($class)) {
+            return null;
+        }
+
+        return $this->em->getReference($class, $packedObject->getData());
     }
 
     /**
