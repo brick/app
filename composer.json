@@ -23,6 +23,7 @@
     "require-dev": {
         "brick/form": "0.1.*",
         "doctrine/annotations": "1.*",
+        "doctrine/orm": "2.*",
         "doctrine/dbal": "2.*",
         "phpunit/phpunit": "6.*",
         "satooshi/php-coveralls": "1.*"
@@ -30,6 +31,7 @@
     "suggest": {
         "doctrine/annotations": "To use the annotation-based plugins",
         "doctrine/dbal": "To use the TransactionalPlugin",
+        "doctrine/orm": "To use the DoctrineObjectPacker",
         "brick/form": "To use FormView and FormTableView"
     },
     "autoload": {
