@@ -17,7 +17,7 @@ class AllowPlugin extends AbstractAnnotationPlugin
     /**
      * {@inheritdoc}
      */
-    public function register(EventDispatcher $dispatcher)
+    public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(RouteMatchedEvent::class, function(RouteMatchedEvent $event) {
             $controller = $event->getRouteMatch()->getControllerReflection();
