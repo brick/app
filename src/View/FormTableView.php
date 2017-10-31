@@ -9,7 +9,7 @@ use Brick\Form\Form;
 use Brick\Form\Element;
 use Brick\Form\Group;
 
-use Brick\Html\ContainerTag as Tag;
+use Brick\Html\Tag;
 
 /**
  * Renders a form in a table.
