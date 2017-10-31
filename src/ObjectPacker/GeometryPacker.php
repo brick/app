@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brick\App\ObjectPacker;
 
 use Brick\Geo\Geometry;
@@ -8,7 +10,7 @@ use Brick\Geo\Exception\GeometryException;
 /**
  * Handles conversion between geometry objects and strings.
  */
-class GeometryObjectPacker implements ObjectPacker
+class GeometryPacker implements ObjectPacker
 {
     /**
      * The default SRID to assign to the geometry when reading WKT.

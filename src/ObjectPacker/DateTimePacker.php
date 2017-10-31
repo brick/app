@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brick\App\ObjectPacker;
 
 use Brick\DateTime\Duration;
@@ -15,7 +17,7 @@ use Brick\DateTime\ZonedDateTime;
 /**
  * Handles conversion between date-time objects and strings.
  */
-class DateTimeObjectPacker implements ObjectPacker
+class DateTimePacker implements ObjectPacker
 {
     /**
      * {@inheritdoc}

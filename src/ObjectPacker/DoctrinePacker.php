@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Brick\App\ObjectPacker;
 
 use Doctrine\ORM\EntityManager;
@@ -8,7 +10,7 @@ use Doctrine\ORM\Proxy\Proxy;
 /**
  * Doctrine implementation of the ObjectPacker.
  */
-class DoctrineObjectPacker implements ObjectPacker
+class DoctrinePacker implements ObjectPacker
 {
     /**
      * @var \Doctrine\ORM\EntityManager
