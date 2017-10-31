@@ -14,7 +14,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "brick/di": "0.1.*",
+        "brick/di": "0.2.*",
         "brick/event": "0.1.*",
         "brick/html": "0.1.*",
         "brick/http": "0.1.*",
