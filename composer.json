@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "brick/form": "0.1.*",
+        "brick/date-time": "0.1.*",
         "doctrine/annotations": "1.*",
         "doctrine/orm": "2.*",
         "doctrine/dbal": "2.*",
@@ -32,6 +33,7 @@
         "doctrine/annotations": "To use the annotation-based plugins",
         "doctrine/dbal": "To use the TransactionalPlugin",
         "doctrine/orm": "To use the DoctrineObjectPacker",
+        "brick/date-time": "To use the DateTimeObjectPacker",
         "brick/form": "To use FormView and FormTableView"
     },
     "autoload": {
