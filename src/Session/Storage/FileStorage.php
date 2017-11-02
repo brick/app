@@ -20,7 +20,7 @@ class FileStorage implements SessionStorage
     private $prefix;
 
     /**
-     * The grace time during which the last access time of the session file is not updated.
+     * The grace time during which the last access time of the session file is not updated, in seconds.
      *
      * On filesystems mounted with the noatime option, the access time of the session file is not updated when the file
      * is read. Filesystems mounted with the relatime option exhibit the same problem, as the access time is not updated
