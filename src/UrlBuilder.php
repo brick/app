@@ -29,8 +29,8 @@ class UrlBuilder
      * If the URL already contains query parameters, they will be merged, the parameters passed to the method
      * having precedence over the original query parameters.
      *
-     * If any of the method parameters is an object, it will be replaced by its identity, as provided
-     * by the ObjectConverter implementation.
+     * If any of the method parameters is an object, it will be replaced by its packed representation,
+     * as provided by the ObjectPacker implementation.
      *
      * @param string $url
      * @param array  $parameters
@@ -51,7 +51,7 @@ class UrlBuilder
                     $packedObject = $this->objectPacker->pack($value);
 
                     if ($packedObject === null) {
-                        throw new \RuntimeException('Cannot convert object ' . get_class($value));
+                        throw new \RuntimeException('Cannot pack object ' . get_class($value));
                     }
 
                     $parameters[$key] = $packedObject->getData();
