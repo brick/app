@@ -419,7 +419,7 @@ class Session implements SessionInterface
     private function serialize($value) : string
     {
         if ($this->packer !== null) {
-            $this->packer->pack($value);
+            $value = $this->packer->pack($value);
         }
 
         return serialize($value);
