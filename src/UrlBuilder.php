@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace Brick\App;
 
+use Brick\App\ObjectPacker\NullPacker;
 use Brick\App\ObjectPacker\ObjectPacker;
 
 class UrlBuilder
 {
     /**
-     * @var \Brick\App\ObjectPacker\ObjectPacker
+     * @var ObjectPacker
      */
     private $objectPacker;
 
     /**
      * Class constructor.
      *
-     * @param ObjectPacker $objectPacker
+     * @param ObjectPacker|null $objectPacker
      */
-    public function __construct(ObjectPacker $objectPacker)
+    public function __construct(ObjectPacker $objectPacker = null)
     {
+        if ($objectPacker === null) {
+            $objectPacker = new NullPacker();
+        }
+
         $this->objectPacker = $objectPacker;
     }
 
