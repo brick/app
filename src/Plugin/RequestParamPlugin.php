@@ -95,7 +95,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
                 return $parameter->getDefaultValue();
             }
 
-            if ($parameter->allowsNull()) {
+            if ($parameter->hasType() && $parameter->allowsNull()) {
                 return null;
             }
 
