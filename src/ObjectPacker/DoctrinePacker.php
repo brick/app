@@ -40,8 +40,14 @@ class DoctrinePacker implements ObjectPacker
 
         $identity = $uow->getEntityIdentifier($object);
 
-        if (count($identity) === 0) {
+        $count = count($identity);
+
+        if ($count === 0) {
             return null;
+        }
+
+        if ($count === 1) {
+            $identity = reset($identity);
         }
 
         return new PackedObject($this->getClass($object), $identity);
