@@ -41,7 +41,7 @@ class UrlBuilder
      */
     public function buildUrl(string $url, array $parameters = []) : string
     {
-        if (count($parameters)) {
+        if ($parameters) {
             foreach ($parameters as $key => $value) {
                 if ($value === null) {
                     unset($parameters[$key]);
@@ -67,7 +67,7 @@ class UrlBuilder
             $url = substr($url, 0, $pos);
         }
 
-        if (count($parameters)) {
+        if ($parameters) {
             return $url . '?' . http_build_query($parameters);
         }
 
