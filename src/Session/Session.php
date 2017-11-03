@@ -314,7 +314,7 @@ class Session implements SessionInterface
             $value = $function($value);
 
             $serialized = $this->serialize($value);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->storage->unlock($lock);
 
             throw $e;
