@@ -64,9 +64,9 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function read(string $id, string $key, & $lockContext) : ?string
+    public function read(string $id, string $key, Lock $lock = null) : ?string
     {
-        if ($lockContext) {
+        if ($lock) {
             $this->pdo->beginTransaction();
         }
 
@@ -122,11 +122,11 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function write(string $id, string $key, string $value, $lockContext) : void
+    public function write(string $id, string $key, string $value, Lock $lock = null) : void
     {
         $this->updateRecord($id, $key, $value) || $this->insertRecord($id, $key, $value);
 
-        if ($lockContext) {
+        if ($lock) {
             $this->pdo->commit();
         }
     }
@@ -134,7 +134,7 @@ class PdoStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function unlock($lockContext) : void
+    public function unlock(Lock $lock) : void
     {
         $this->pdo->rollBack();
     }

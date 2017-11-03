@@ -55,7 +55,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function read(string $id, string $key, & $lockContext) : ?string
+    public function read(string $id, string $key, Lock $lock = null) : ?string
     {
         $path = $this->getPath($id, $key);
 
@@ -72,9 +72,9 @@ class FileStorage implements SessionStorage
 
         $data = stream_get_contents($fp);
 
-        if ($lockContext) {
+        if ($lock) {
             // Keep the file open & locked, and remember the resource.
-            $lockContext = $fp;
+            $lock->setContext($fp);
         } else {
             // Unlock immediately and close the file.
             flock($fp, LOCK_UN);
@@ -87,10 +87,10 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function write(string $id, string $key, string $value, $lockContext) : void
+    public function write(string $id, string $key, string $value, Lock $lock = null) : void
     {
-        if ($lockContext) {
-            $fp = $lockContext;
+        if ($lock) {
+            $fp = $lock->getContext();
         } else {
             $fp = fopen($this->getPath($id, $key), 'cb+');
             flock($fp, LOCK_EX);
@@ -106,9 +106,9 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function unlock($lockContext) : void
+    public function unlock(Lock $lock) : void
     {
-        $fp = $lockContext;
+        $fp = $lock->getContext();
 
         flock($fp, LOCK_UN);
         fclose($fp);

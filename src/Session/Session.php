@@ -10,6 +10,7 @@ use Brick\Http\Cookie;
 
 use Brick\App\ObjectPacker\Packer;
 use Brick\App\ObjectPacker\ObjectPacker;
+use Brick\App\Session\Storage\Lock;
 
 /**
  * Persists data between HTTP requests.
@@ -261,8 +262,7 @@ class Session implements SessionInterface
         }
 
         $id = $this->getId();
-        $lockContext = false;
-        $value = $this->storage->read($id, $key, $lockContext);
+        $value = $this->storage->read($id, $key);
 
         if ($value !== null) {
             $value = $this->unserialize($value);
@@ -284,7 +284,7 @@ class Session implements SessionInterface
 
         $id = $this->getId();
         $serialized = $this->serialize($value);
-        $this->storage->write($id, $key, $serialized, false);
+        $this->storage->write($id, $key, $serialized);
 
         $this->data[$key] = $value;
     }
@@ -306,8 +306,8 @@ class Session implements SessionInterface
     public function synchronize(string $key, callable $function)
     {
         $id = $this->getId();
-        $lockContext = true;
-        $serialized = $this->storage->read($id, $key, $lockContext);
+        $lock = new Lock();
+        $serialized = $this->storage->read($id, $key, $lock);
 
         try {
             $value = ($serialized !== null) ? $this->unserialize($serialized) : null;
@@ -315,12 +315,12 @@ class Session implements SessionInterface
 
             $serialized = $this->serialize($value);
         } catch (\Exception $e) {
-            $this->storage->unlock($lockContext);
+            $this->storage->unlock($lock);
 
             throw $e;
         }
 
-        $this->storage->write($id, $key, $serialized, $lockContext);
+        $this->storage->write($id, $key, $serialized, $lock);
 
         return $this->data[$key] = $value;
     }

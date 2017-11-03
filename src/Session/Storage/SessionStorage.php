@@ -12,41 +12,40 @@ interface SessionStorage
     /**
      * Reads a specific key from the storage.
      *
-     * @param string $id          The session id.
-     * @param string $key         The key to read from.
-     * @param mixed  $lockContext Boolean representing whether to keep a lock on the key for later writing.
-     *                            Can be overridden by a storage-specific variable to keep track of the lock.
-     *                            This variable will be passed as is to the subsequent call to write().
-     *                            Must only be overridden when true.
+     * @param string    $id   The session id.
+     * @param string    $key  The key to read from.
+     * @param Lock|null $lock If not null, a lock must be acquired on the key for later writing.
+     *                        A storage-specific context can be stored in the Lock object to keep track of the lock.
+     *                        The same Lock object will be passed to the subsequent call to `write()` or `unlock()`.
      *
      * @return string|null The value read, or null if the key does not exist.
      */
-    public function read(string $id, string $key, & $lockContext) : ?string;
+    public function read(string $id, string $key, Lock $lock = null) : ?string;
 
     /**
      * Writes a specific key to the storage.
      *
-     * @param string $id          The session id.
-     * @param string $key         The key to write to.
-     * @param string $value       The value to write.
-     * @param mixed  $lockContext The lock context as set by read().
-     *                            If not false, the context must be unlocked by this method.
+     * @param string    $id    The session id.
+     * @param string    $key   The key to write to.
+     * @param string    $value The value to write.
+     * @param Lock|null $lock  If not null, a lock set by `read()` is held on the key, and must be freed after writing.
+     *                         The Lock object may contain a context set by `read()`.
      *
      * @return void
      */
-    public function write(string $id, string $key, string $value, $lockContext) : void;
+    public function write(string $id, string $key, string $value, Lock $lock = null) : void;
 
     /**
      * Unlocks the resources locked by an aborted synchronized read-write.
      *
-     * In normal conditions, read() is called then write().
-     * If an exception occurs, read() is called then unlock().
+     * In normal conditions, `read()` is called then `write()`.
+     * If an exception occurs, `read()` is called then `unlock()`.
      *
-     * @param mixed $lockContext The lock context as set by read().
+     * @param Lock $lock The lock object, that may contain a context set by `read()`.
      *
      * @return void
      */
-    public function unlock($lockContext) : void;
+    public function unlock(Lock $lock) : void;
 
     /**
      * Removes a specific key from the storage.
