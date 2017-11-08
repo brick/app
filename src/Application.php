@@ -21,8 +21,8 @@ use Brick\Http\Exception\HttpException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
 use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Request;
+use Brick\Http\RequestHandler;
 use Brick\Http\Response;
-use Brick\Http\Server\RequestHandler;
 
 /**
  * The web application kernel.
