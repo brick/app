@@ -197,7 +197,7 @@ First let's have a look at the `Plugin` interface:
 ```php
 interface Plugin
 {
-    public function register(EventDispatcher $dispatcher);
+    public function register(EventDispatcher $dispatcher) : void;
 }
 ```
 
