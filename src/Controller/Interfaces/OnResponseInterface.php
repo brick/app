@@ -16,6 +16,8 @@ use Brick\Http\Response;
  * or if an HttpException has been thrown. If any other exception is thrown, onResponse() will *not* be called.
  *
  * This interface requires the `OnRequestResponsePlugin`.
+ *
+ * @deprecated use OnBeforeAfterPlugin
  */
 interface OnResponseInterface
 {

@@ -14,6 +14,8 @@ use Brick\Http\Response;
 
 /**
  * Calls `onRequest()` and `onResponse()` on controllers implementing OnRequestInterface and OnResponseInterface.
+ *
+ * @deprecated use OnBeforeAfterPlugin
  */
 class OnRequestResponsePlugin implements Plugin
 {
