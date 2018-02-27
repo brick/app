@@ -27,7 +27,7 @@
         "doctrine/annotations": "1.*",
         "doctrine/orm": "2.*",
         "doctrine/dbal": "2.*",
-        "phpunit/phpunit": "6.*",
+        "phpunit/phpunit": "7.*",
         "satooshi/php-coveralls": "1.*"
     },
     "suggest": {
