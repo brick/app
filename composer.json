@@ -40,7 +40,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Brick\\App\\": "src/",
+            "Brick\\App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Brick\\App\\Tests\\": "tests/"
         }
     }
