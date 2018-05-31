@@ -28,7 +28,7 @@
         "doctrine/orm": "2.*",
         "doctrine/dbal": "2.*",
         "phpunit/phpunit": "7.*",
-        "satooshi/php-coveralls": "2.*"
+        "php-coveralls/php-coveralls": "2.*"
     },
     "suggest": {
         "doctrine/annotations": "To use the annotation-based plugins",
