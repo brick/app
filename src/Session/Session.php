@@ -36,7 +36,7 @@ class Session implements SessionInterface
      *
      * @var string|null
      */
-    private $id = null;
+    private $id;
 
     /**
      * A local cache of the data loaded from the storage.
@@ -408,7 +408,7 @@ class Session implements SessionInterface
      */
     private function isTimeToCollectGarbage() : bool
     {
-        return rand(0, $this->gcDivisor - 1) < $this->gcDividend;
+        return random_int(0, $this->gcDivisor - 1) < $this->gcDividend;
     }
 
     /**
