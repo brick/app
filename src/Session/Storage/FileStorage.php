@@ -67,7 +67,7 @@ class FileStorage implements SessionStorage
             touch($path);
         }
 
-        $fp = fopen($path, 'cb+');
+        $fp = fopen($path, $lock ? 'cb+' : 'rb');
         flock($fp, LOCK_EX);
 
         $data = stream_get_contents($fp);
