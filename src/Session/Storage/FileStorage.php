@@ -89,19 +89,22 @@ class FileStorage implements SessionStorage
      */
     public function write(string $id, string $key, string $value, Lock $lock = null) : void
     {
-        $fp = ($lock ? $lock->getContext() : null);
+        if ($lock) {
+            $fp = $lock->getContext();
 
-        if ($fp === null) {
-            $fp = fopen($this->getPath($id, $key), 'wb');
-            flock($fp, LOCK_EX);
-        } else {
-            ftruncate($fp, 0);
-            fseek($fp, 0);
+            if ($fp !== null) {
+                ftruncate($fp, 0);
+                fseek($fp, 0);
+                fwrite($fp, $value);
+                flock($fp, LOCK_UN);
+                fclose($fp);
+
+                return;
+            }
         }
 
-        fwrite($fp, $value);
-        flock($fp, LOCK_UN);
-        fclose($fp);
+        $path = $this->getPath($id, $key);
+        file_put_contents($path, $value, LOCK_EX);
     }
 
     /**
