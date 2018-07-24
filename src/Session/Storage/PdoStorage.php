@@ -89,9 +89,11 @@ class PdoStorage implements SessionStorage
             return null;
         }
 
-        // Only update the last access time if it's older than the imprecision allowed.
-        if (time() - $data[1] > $this->options['last-access-grace']) {
-            $this->touch($id, $key);
+        if (! $lock) {
+            // Only update the last access time if it's older than the imprecision allowed.
+            if (time() - $data[1] > $this->options['last-access-grace']) {
+                $this->touch($id, $key);
+            }
         }
 
         return $data[0];
