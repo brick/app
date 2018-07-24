@@ -114,8 +114,10 @@ class FileStorage implements SessionStorage
     {
         $fp = $lock->getContext();
 
-        flock($fp, LOCK_UN);
-        fclose($fp);
+        if ($fp !== null) {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+        }
     }
 
     /**
