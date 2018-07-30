@@ -38,13 +38,11 @@ class CookieSession extends Session
     /**
      * @param array $params
      *
-     * @return Session
+     * @return void
      */
-    public function setCookieParams(array $params) : Session
+    public function setCookieParams(array $params) : void
     {
         $this->cookieParams = $params + $this->cookieParams;
-
-        return $this;
     }
 
     /**
@@ -91,13 +89,11 @@ class CookieSession extends Session
      *
      * @param int $length
      *
-     * @return Session
+     * @return void
      */
-    public function setIdLength(int $length) : Session
+    public function setIdLength(int $length) : void
     {
         $this->idLength = $length;
-
-        return $this;
     }
 
     /**
