@@ -103,19 +103,22 @@ class CookieSession extends Session
      * further limit the risks of session fixation attacks.
      *
      * Not all storage engines support id regeneration.
-     * If the storage engine does not support regeneration, this method will do nothing.
+     * If the storage engine supports regeneration, this method returns true.
+     * If the storage engine does not support regeneration, this method will do nothing and return false.
      *
-     * @return Session
+     * @return bool
      */
-    public function regenerateId() : Session
+    public function regenerateId() : bool
     {
         $id = $this->generateId();
 
         if ($this->storage->updateId($this->id, $id)) {
             $this->id = $id;
+
+            return true;
         }
 
-        return $this;
+        return false;
     }
 
     /**
