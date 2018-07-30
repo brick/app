@@ -26,7 +26,7 @@ or manually define the following requirement in your `composer.json` file:
 ```json
 {
     "require": {
-        "brick/app": "0.1.*"
+        "brick/app": "0.2.*"
     }
 }
 ```
@@ -46,7 +46,7 @@ The current releases are numbered `0.x.y`. When a non-breaking change is introdu
 
 **When a breaking change is introduced, a new `0.x` version cycle is always started.**
 
-It is therefore safe to lock your project to a given release cycle, such as `0.1.*`.
+It is therefore safe to lock your project to a given release cycle, such as `0.2.*`.
 
 If you need to upgrade to a newer release cycle, check the [release history](https://github.com/brick/app/releases)
 for a list of changes introduced by each further `0.x.0` version.
@@ -325,14 +325,14 @@ Brick\App's session manager works differently:
 To store your sessions in the filesystem, alongside traditional PHP sessions, just use:
 
 ```php
-use Brick\App\Session\Session;
+use Brick\App\Session\CookieSession;
 use Brick\App\Plugin\SessionPlugin;
 
-$session = new Session();
+$session = new CookieSession();
 $app->addPlugin(new SessionPlugin($session));
 ```
 
-You can alternatively provide a custom storage adapter and use `new Session($storage)` instead. A filesystem adapter and a database (PDO) adapter are provided; you can also write your own adapter by implementing `SessionStorage`.
+You can alternatively provide a custom storage adapter and use `new CookieSession($storage)` instead. A filesystem adapter and a database (PDO) adapter are provided; you can also write your own adapter by implementing `SessionStorage`.
 
 #### Using the sessions
 
@@ -342,6 +342,7 @@ Just register the container in your application, and instruct it to resolve sess
 ```php
 use Brick\Di\Container;
 use Brick\App\Application;
+use Brick\App\Session\CookieSession;
 use Brick\App\Session\Session;
 use Brick\App\Plugin\SessionPlugin;
 
@@ -350,7 +351,7 @@ $container = Container::create();
 $app = Application::create($container);
 
 // Create a session, add the session plugin to our app
-$session = Session::create();
+$session = new CookieSession();
 $app->addPlugin(new SessionPlugin($session));
 
 // Instruct the DI container to resolve the Session object 
