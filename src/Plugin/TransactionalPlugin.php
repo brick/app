@@ -55,7 +55,7 @@ class TransactionalPlugin extends AbstractAnnotationPlugin
 
             if ($annotation) {
                 if ($this->connection->isTransactionActive()) {
-                    $this->connection->rollback();
+                    $this->connection->rollBack();
                 }
             }
         });
