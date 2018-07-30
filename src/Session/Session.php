@@ -97,26 +97,22 @@ abstract class Session implements SessionInterface
      * @param int $dividend
      * @param int $divisor
      *
-     * @return Session
+     * @return void
      */
-    public function setGcProbability(int $dividend, int $divisor) : Session
+    public function setGcProbability(int $dividend, int $divisor) : void
     {
         $this->gcDividend = $dividend;
         $this->gcDivisor = $divisor;
-
-        return $this;
     }
 
     /**
      * @param int $lifetime
      *
-     * @return Session
+     * @return void
      */
-    public function setLifetime(int $lifetime) : Session
+    public function setLifetime(int $lifetime) : void
     {
         $this->lifetime = $lifetime;
-
-        return $this;
     }
 
     /**
@@ -244,16 +240,14 @@ abstract class Session implements SessionInterface
     }
 
     /**
-     * @return Session
+     * @return void
      */
-    public function clear() : Session
+    public function clear() : void
     {
         $id = $this->getId();
         $this->storage->clear($id);
 
         $this->data = [];
-
-        return $this;
     }
 
     /**
