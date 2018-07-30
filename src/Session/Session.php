@@ -6,7 +6,6 @@ namespace Brick\App\Session;
 
 use Brick\Http\Request;
 use Brick\Http\Response;
-use Brick\Http\Cookie;
 
 use Brick\App\ObjectPacker\Packer;
 use Brick\App\ObjectPacker\ObjectPacker;
