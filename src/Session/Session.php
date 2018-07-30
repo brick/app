@@ -15,14 +15,14 @@ use Brick\App\Session\Storage\Lock;
 /**
  * Persists data between HTTP requests.
  */
-class Session implements SessionInterface
+abstract class Session implements SessionInterface
 {
     /**
      * The session storage mechanism.
      *
      * @var \Brick\App\Session\Storage\SessionStorage
      */
-    private $storage;
+    protected $storage;
 
     /**
      * The object packer, if any.
@@ -36,7 +36,7 @@ class Session implements SessionInterface
      *
      * @var string|null
      */
-    private $id;
+    protected $id;
 
     /**
      * A local cache of the data loaded from the storage.
@@ -44,11 +44,6 @@ class Session implements SessionInterface
      * @var array
      */
     private $data = [];
-
-    /**
-     * @var array
-     */
-    private $cookieParams;
 
     /**
      * @var int
@@ -66,23 +61,6 @@ class Session implements SessionInterface
     private $lifetime = 1800;
 
     /**
-     * @var int
-     */
-    private $idLength = 26;
-
-    /**
-     * @var array
-     */
-    private static $defaultCookieParams = [
-        'name'      => 'SID', // The cookie name.
-        'lifetime'  => 0,     // The cookie lifetime in seconds, or 0 to use a browser session cookie.
-        'path'      => '/',
-        'domain'    => null,
-        'secure'    => false,
-        'http-only' => true
-    ];
-
-    /**
      * Class constructor.
      *
      * @param Storage\SessionStorage $storage      The session storage, or null to use a default file storage.
@@ -94,8 +72,7 @@ class Session implements SessionInterface
             $storage = new Storage\FileStorage(session_save_path());
         }
 
-        $this->storage      = $storage;
-        $this->cookieParams = self::$defaultCookieParams;
+        $this->storage = $storage;
 
         if ($objectPacker !== null) {
             $this->packer = new Packer($objectPacker);
@@ -110,18 +87,6 @@ class Session implements SessionInterface
     public function getNamespace(string $namespace) : SessionNamespace
     {
         return new SessionNamespace($this, $namespace);
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return Session
-     */
-    public function setCookieParams(array $params) : Session
-    {
-        $this->cookieParams = $params + $this->cookieParams;
-
-        return $this;
     }
 
     /**
@@ -155,25 +120,6 @@ class Session implements SessionInterface
     }
 
     /**
-     * Sets the length of the session id.
-     *
-     * The default length of 26 is short enough and allows for 4e46 combinations,
-     * which makes it very secure and highly unlikely to get a collision.
-     *
-     * Do not change this value unless you have a very good reason to do so.
-     *
-     * @param int $length
-     *
-     * @return Session
-     */
-    public function setIdLength(int $length) : Session
-    {
-        $this->idLength = $length;
-
-        return $this;
-    }
-
-    /**
      * Reads the session cookie from the request.
      *
      * @param \Brick\Http\Request $request
@@ -182,42 +128,12 @@ class Session implements SessionInterface
      */
     public function handleRequest(Request $request) : void
     {
-        $sessionId = $request->getCookie($this->cookieParams['name']);
-
-        if ($sessionId !== null && $this->checkSessionId($sessionId)) {
-            $this->id = $sessionId;
-        } else {
-            $this->id = $this->generateId();
-        }
+        $this->data = [];
+        $this->readSessionId($request);
 
         if ($this->isTimeToCollectGarbage()) {
             $this->collectGarbage();
         }
-
-        $this->data = [];
-    }
-
-    /**
-     * Checks the validity of a session ID sent in a cookie.
-     *
-     * This is a security measure to avoid forged session cookies,
-     * that could be used for example to hack session adapters.
-     *
-     * @param string $id
-     *
-     * @return bool
-     */
-    private function checkSessionId(string $id) : bool
-    {
-        if (preg_match('/^[A-Za-z0-9]+$/', $id) !== 1) {
-            return false;
-        }
-
-        if (strlen($id) !== $this->idLength) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -229,20 +145,22 @@ class Session implements SessionInterface
      */
     public function handleResponse(Response $response) : void
     {
-        $lifetime = $this->cookieParams['lifetime'];
-        $expires = ($lifetime == 0) ? 0 : time() + $lifetime;
-
-        $cookie = new Cookie($this->cookieParams['name'], $this->id);
-
-        $cookie
-            ->setExpires($expires)
-            ->setPath($this->cookieParams['path'])
-            ->setDomain($this->cookieParams['domain'])
-            ->setSecure($this->cookieParams['secure'])
-            ->setHttpOnly($this->cookieParams['http-only']);
-
-        $response->setCookie($cookie);
+        $this->writeSessionId($response);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return void
+     */
+    abstract protected function readSessionId(Request $request) : void;
+
+    /**
+     * @param Response $response
+     *
+     * @return void
+     */
+    abstract protected function writeSessionId(Response $response) : void;
 
     /**
      * {@inheritdoc}
@@ -339,28 +257,6 @@ class Session implements SessionInterface
     }
 
     /**
-     * Regenerates the session id.
-     *
-     * This is a useful security measure that can be used after user login to even
-     * further limit the risks of session fixation attacks.
-     *
-     * Not all storage engines support id regeneration.
-     * If the storage engine does not support regeneration, this method will do nothing.
-     *
-     * @return Session
-     */
-    public function regenerateId() : Session
-    {
-        $id = $this->generateId();
-
-        if ($this->storage->updateId($this->id, $id)) {
-            $this->id = $id;
-        }
-
-        return $this;
-    }
-
-    /**
      * @return void
      */
     public function collectGarbage()
@@ -383,24 +279,6 @@ class Session implements SessionInterface
         }
 
         return $this->id;
-    }
-
-    /**
-     * Generates a random, alphanumeric session id.
-     *
-     * @return string
-     */
-    private function generateId() : string
-    {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        $id = '';
-
-        for ($i = 0; $i < $this->idLength; $i++) {
-            $id .= $chars[random_int(0, 61)];
-        }
-
-        return $id;
     }
 
     /**
