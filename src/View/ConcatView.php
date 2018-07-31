@@ -5,30 +5,23 @@ declare(strict_types=1);
 namespace Brick\App\View;
 
 /**
- * Concatenates two views.
+ * Concatenates several views.
  */
 class ConcatView implements View
 {
     use Helper\PartialViewHelper;
 
     /**
-     * @var \Brick\App\View\View
+     * @var \Brick\App\View\View[]
      */
-    private $a;
+    private $views;
 
     /**
-     * @var \Brick\App\View\View
+     * @param \Brick\App\View\View ...$views
      */
-    private $b;
-
-    /**
-     * @param \Brick\App\View\View $a
-     * @param \Brick\App\View\View $b
-     */
-    public function __construct(View $a, View $b)
+    public function __construct(View ...$views)
     {
-        $this->a = $a;
-        $this->b = $b;
+        $this->views = $views;
     }
 
     /**
@@ -36,6 +29,12 @@ class ConcatView implements View
      */
     public function render() : string
     {
-        return $this->partial($this->a) . $this->partial($this->b);
+        $result = '';
+
+        foreach ($this->views as $view) {
+            $result .= $this->partial($view);
+        }
+
+        return $result;
     }
 }
