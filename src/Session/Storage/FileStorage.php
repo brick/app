@@ -199,7 +199,7 @@ class FileStorage implements SessionStorage
         // Sanitize the session key: it may contain characters that could conflict with the filesystem.
         // We only allow the resulting file name to contain ASCII letters & digits, dashes, underscores and dots.
         // All other chars are hex-encoded, dot is used as an escape character.
-        $key = preg_replace_callback('/[^A-Za-z0-9\-_]/', function ($matches) {
+        $key = preg_replace_callback('/[^A-Za-z0-9\-_]/', static function ($matches) {
             return '.' . bin2hex($matches[0]);
         }, $key);
 
