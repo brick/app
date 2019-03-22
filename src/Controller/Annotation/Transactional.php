@@ -33,10 +33,8 @@ class Transactional extends AbstractAnnotation
 
     /**
      * Maps the isolation level strings to constants.
-     *
-     * @var array
      */
-    private static $isolationLevels = [
+    private const ISOLATION_LEVELS = [
         'READ UNCOMMITTED' => Connection::TRANSACTION_READ_UNCOMMITTED,
         'READ COMMITTED'   => Connection::TRANSACTION_READ_COMMITTED,
         'REPEATABLE READ'  => Connection::TRANSACTION_REPEATABLE_READ,
@@ -52,11 +50,11 @@ class Transactional extends AbstractAnnotation
      */
     public function setValue(string $isolationLevel) : void
     {
-        if (! isset(self::$isolationLevels[$isolationLevel])) {
+        if (! isset(self::ISOLATION_LEVELS[$isolationLevel])) {
             throw new \RuntimeException('Invalid transaction isolation level: ' . $isolationLevel);
         }
 
-        $this->isolationLevel = self::$isolationLevels[$isolationLevel];
+        $this->isolationLevel = self::ISOLATION_LEVELS[$isolationLevel];
     }
 
     /**
