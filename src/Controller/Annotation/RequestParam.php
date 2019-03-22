@@ -9,40 +9,34 @@ use Brick\Http\Request;
 /**
  * Base class for QueryParam and PostParam.
  */
-abstract class RequestParam
+abstract class RequestParam extends AbstractAnnotation
 {
     /**
+     * The query or post parameter name.
+     *
      * @var string
      */
     private $name;
 
     /**
-     * @var string
+     * The variable to bind to, or null if same as $name.
+     *
+     * @var string|null
      */
     private $bindTo;
 
     /**
-     * Class constructor.
-     *
      * @param array $values
-     *
-     * @throws \RuntimeException
      */
     public function __construct(array $values)
     {
-        if (isset($values['name'])) {
-            $name = $values['name'];
-        } elseif (isset($values['value'])) {
-            $name = $values['value'];
-        } else {
-            throw new \RuntimeException($this->getAnnotationName() . ' requires a parameter name.');
-        }
-
-        $this->name = $name;
-        $this->bindTo = isset($values['bindTo']) ? $values['bindTo'] : $name;
+        $this->name   = $this->getRequiredString($values, 'name', true);
+        $this->bindTo = $this->getOptionalString($values, 'bindTo');
     }
 
     /**
+     * Returns the query or post parameter name.
+     *
      * @return string
      */
     public function getName() : string
@@ -51,19 +45,13 @@ abstract class RequestParam
     }
 
     /**
+     * Returns the variable to bind to.
+     *
      * @return string
      */
     public function getBindTo() : string
     {
-        return $this->bindTo;
-    }
-
-    /**
-     * @return string
-     */
-    private function getAnnotationName() : string
-    {
-        return '@' . (new \ReflectionObject($this))->getShortName();
+        return $this->bindTo ?? $this->name;
     }
 
     /**

@@ -20,16 +20,16 @@ final class Allow extends AbstractAnnotation
     /**
      * The HTTP method(s) the controller action accepts.
      *
-     * @var array
+     * @var string[]
      */
-    private $methods = [];
+    private $methods;
 
     /**
-     * @param string|array $methods
+     * @param array $values
      */
-    public function setValue($methods)
+    public function __construct(array $values)
     {
-        $this->methods = is_array($methods) ? $methods : [$methods];
+        $this->methods = $this->getRequiredStringArray($values, 'methods', true);
     }
 
     /**

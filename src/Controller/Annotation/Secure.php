@@ -22,10 +22,18 @@ namespace Brick\App\Controller\Annotation;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-final class Secure
+final class Secure extends AbstractAnnotation
 {
     /**
      * @var string
      */
     public $hsts;
+
+    /**
+     * @param array $values
+     */
+    public function __construct(array $values)
+    {
+        $this->hsts = $this->getRequiredString($values, 'hsts', true);
+    }
 }

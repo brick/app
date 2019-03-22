@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Brick\App\Controller\Annotation;
 
-use Doctrine\Common\Annotations\Annotation\Required;
-
 /**
  * Defines a route on a controller.
  *
@@ -17,12 +15,10 @@ use Doctrine\Common\Annotations\Annotation\Required;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-final class Route
+final class Route extends AbstractAnnotation
 {
     /**
      * The path, with optional {named} parameters.
-     *
-     * @Required
      *
      * @var string
      */
@@ -36,7 +32,7 @@ final class Route
      *
      * @var string[]
      */
-    public $patterns = [];
+    public $patterns;
 
     /**
      * The list of HTTP methods (e.g. GET or POST) this route is valid for.
@@ -46,5 +42,15 @@ final class Route
      *
      * @var string[]
      */
-    public $methods = [];
+    public $methods;
+
+    /**
+     * @param array $values
+     */
+    public function __construct(array $values)
+    {
+        $this->path     = $this->getRequiredString($values, 'path', true);
+        $this->patterns = $this->getOptionalStringArray($values, 'patterns');
+        $this->methods  = $this->getOptionalStringArray($values, 'methods');
+    }
 }
