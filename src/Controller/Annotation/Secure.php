@@ -22,7 +22,7 @@ namespace Brick\App\Controller\Annotation;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class Secure
+final class Secure
 {
     /**
      * @var string

@@ -12,7 +12,7 @@ use Brick\Http\Request;
  * @Annotation
  * @Target("METHOD")
  */
-class QueryParam extends RequestParam
+final class QueryParam extends RequestParam
 {
     /**
      * {@inheritdoc}

@@ -15,7 +15,7 @@ namespace Brick\App\Controller\Annotation;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class Allow extends AbstractAnnotation
+final class Allow extends AbstractAnnotation
 {
     /**
      * The HTTP method(s) the controller action accepts.

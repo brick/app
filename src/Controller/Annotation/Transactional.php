@@ -22,7 +22,7 @@ use Doctrine\DBAL\Connection;
  * @Annotation
  * @Target("METHOD")
  */
-class Transactional extends AbstractAnnotation
+final class Transactional extends AbstractAnnotation
 {
     /**
      * The transaction isolation level.
