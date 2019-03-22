@@ -42,13 +42,13 @@ class RouteMatch
      * @param string $class
      * @param string $method
      * @param array  $classParameters
-     * @param array  $functionParameters
+     * @param array  $methodParameters
      *
      * @return RouteMatch The route match.
      *
      * @throws RoutingException If the class or method does not exist.
      */
-    public static function forMethod(string $class, string $method, array $classParameters = [], array $functionParameters = []) : RouteMatch
+    public static function forMethod(string $class, string $method, array $classParameters = [], array $methodParameters = []) : RouteMatch
     {
         try {
             $controller = new \ReflectionMethod($class, $method);
@@ -56,7 +56,7 @@ class RouteMatch
             throw RoutingException::invalidControllerClassMethod($e, $class, $method);
         }
 
-        return new RouteMatch($controller, $classParameters, $functionParameters);
+        return new RouteMatch($controller, $classParameters, $methodParameters);
     }
 
     /**
