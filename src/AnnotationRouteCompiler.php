@@ -11,7 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 /**
  * Compiles Route annotations into an array to be provided to the AnnotationRoute.
  *
- * The result array is a map of regexp to [className, methodName, classParameterNames, methodParameterNames].
+ * The result is a list of [regexp, httpMethods, className, methodName, classParameterNames, methodParameterNames].
  */
 class AnnotationRouteCompiler
 {
@@ -67,17 +67,7 @@ class AnnotationRouteCompiler
                         $methodParameterNames = $annotation->getParameterNames();
                         $httpMethods = $annotation->getMethods();
 
-                        if (isset($result[$regexp])) {
-                            throw new \LogicException(sprintf(
-                                'Conflicting routes found in %s::%s() and %s::%s().',
-                                $result[$regexp][0],
-                                $result[$regexp][1],
-                                $className,
-                                $methodName
-                            ));
-                        }
-
-                        $result[$regexp] = [$className, $methodName, $classParameterNames, $methodParameterNames, $httpMethods];
+                        $result[] = [$regexp, $httpMethods, $className, $methodName, $classParameterNames, $methodParameterNames];
                     }
                 }
             }

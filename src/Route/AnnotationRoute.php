@@ -38,13 +38,17 @@ class AnnotationRoute implements Route
         $path = $request->getPath();
         $httpMethod = $request->getMethod();
 
-        foreach ($this->routes as $regexp => $values) {
+        foreach ($this->routes as $values) {
+            [$regexp] = $values;
+
             if (preg_match($regexp, $path, $matches) === 1) {
-                [$className, $methodName, $classParameterNames, $methodParameterNames, $httpMethods] = $values;
+                [, $httpMethods] = $values;
 
                 if ($httpMethods && ! in_array($httpMethod, $httpMethods, true)) {
                     continue;
                 }
+
+                [, , $className, $methodName, $classParameterNames, $methodParameterNames] = $values;
 
                 $classParameters = [];
                 $methodParameters = [];
