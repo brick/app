@@ -165,7 +165,7 @@ class Index
     /**
      * @QueryParam("name")
      */
-    public function helloAction($name)
+    public function helloAction(string $name)
     {
         return new Response('Hello, ' . $name);
     }
