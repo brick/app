@@ -30,6 +30,16 @@ class Route
     private $parameterNames = [];
 
     /**
+     * A map of parameter name to regexp patterns.
+     *
+     * The pattern defaults to [^\/]+, but can be overridden here.
+     * NO CAPTURING PARENTHESES MUST BE USED INSIDE THESE PATTERNS.
+     *
+     * @var string[]
+     */
+    private $patterns = [];
+
+    /**
      * The list of HTTP methods (e.g. GET or POST) this route is valid for.
      *
      * If this list is empty, all methods are allowed.
@@ -61,11 +71,25 @@ class Route
 
             foreach ($params['methods'] as $method) {
                 if (! is_string($method)) {
-                    throw new \LogicException('@Route.methods must be an array of strings.');
+                    throw new \LogicException('@Route.methods must only contain strings.');
                 }
             }
 
             $this->methods = $params['methods'];
+        }
+
+        if (isset($params['patterns'])) {
+            if (! is_array($params['patterns'])) {
+                throw new \LogicException('@Route.patterns must be an array of strings.');
+            }
+
+            foreach ($params['patterns'] as $pattern) {
+                if (! is_string($pattern)) {
+                    throw new \LogicException('@Route.patterns must only contain strings.');
+                }
+            }
+
+            $this->patterns = $params['patterns'];
         }
 
         $this->regexp = preg_replace_callback('/\{([^\}]+)\}|(.+?)/', function(array $matches) : string {
@@ -73,10 +97,23 @@ class Route
                 return preg_quote($matches[2], '/');
             }
 
-            $this->parameterNames[] = $matches[1];
+            $parameterName = $matches[1];
+            $this->parameterNames[] = $parameterName;
 
-            return '([^\/]+)';
+            if (isset($this->patterns[$parameterName])) {
+                $pattern = $this->patterns[$parameterName];
+            } else {
+                $pattern = '[^\/]+';
+            }
+
+            return '(' . $pattern. ')';
         }, $path);
+
+        foreach ($this->patterns as $parameterName => $pattern) {
+            if (! in_array($parameterName, $this->parameterNames, true)) {
+                throw new \LogicException(sprintf('Pattern does not match any parameter: "%s".', $parameterName));
+            }
+        }
     }
 
     /**
