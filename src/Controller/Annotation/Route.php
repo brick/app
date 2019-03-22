@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Brick\App\Controller\Annotation;
 
+use Doctrine\Common\Annotations\Annotation\Required;
+
 /**
  * Defines a route on a controller.
  *
@@ -15,19 +17,16 @@ namespace Brick\App\Controller\Annotation;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class Route
+final class Route
 {
     /**
+     * The path, with optional {named} parameters.
+     *
+     * @Required
+     *
      * @var string
      */
-    private $regexp;
-
-    /**
-     * The list of parameter names.
-     *
-     * @var string[]
-     */
-    private $parameterNames = [];
+    public $path;
 
     /**
      * A map of parameter name to regexp patterns.
@@ -37,7 +36,7 @@ class Route
      *
      * @var string[]
      */
-    private $patterns = [];
+    public $patterns = [];
 
     /**
      * The list of HTTP methods (e.g. GET or POST) this route is valid for.
@@ -47,96 +46,5 @@ class Route
      *
      * @var string[]
      */
-    private $methods = [];
-
-    /**
-     * @param array $params
-     */
-    public function __construct(array $params)
-    {
-        if (! isset($params['value'])) {
-            throw new \LogicException('@Route requires a path.');
-        }
-
-        $path = $params['value'];
-
-        if (! is_string($path)) {
-            throw new \LogicException('@Route path must be a string.');
-        }
-
-        if (isset($params['methods'])) {
-            if (! is_array($params['methods'])) {
-                throw new \LogicException('@Route.methods must be an array of strings.');
-            }
-
-            foreach ($params['methods'] as $method) {
-                if (! is_string($method)) {
-                    throw new \LogicException('@Route.methods must only contain strings.');
-                }
-            }
-
-            $this->methods = $params['methods'];
-        }
-
-        if (isset($params['patterns'])) {
-            if (! is_array($params['patterns'])) {
-                throw new \LogicException('@Route.patterns must be an array of strings.');
-            }
-
-            foreach ($params['patterns'] as $pattern) {
-                if (! is_string($pattern)) {
-                    throw new \LogicException('@Route.patterns must only contain strings.');
-                }
-            }
-
-            $this->patterns = $params['patterns'];
-        }
-
-        $this->regexp = preg_replace_callback('/\{([^\}]+)\}|(.+?)/', function(array $matches) : string {
-            if (isset($matches[2])) {
-                return preg_quote($matches[2], '/');
-            }
-
-            $parameterName = $matches[1];
-            $this->parameterNames[] = $parameterName;
-
-            if (isset($this->patterns[$parameterName])) {
-                $pattern = $this->patterns[$parameterName];
-            } else {
-                $pattern = '[^\/]+';
-            }
-
-            return '(' . $pattern. ')';
-        }, $path);
-
-        foreach ($this->patterns as $parameterName => $pattern) {
-            if (! in_array($parameterName, $this->parameterNames, true)) {
-                throw new \LogicException(sprintf('Pattern does not match any parameter: "%s".', $parameterName));
-            }
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getRegexp() : string
-    {
-        return $this->regexp;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getParameterNames() : array
-    {
-        return $this->parameterNames;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getMethods() : array
-    {
-        return $this->methods;
-    }
+    public $methods = [];
 }
