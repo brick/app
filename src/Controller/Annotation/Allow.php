@@ -9,7 +9,6 @@ namespace Brick\App\Controller\Annotation;
  *
  * Can be used on a controller class (will apply to all controller methods), or on a single method.
  * When used on both, the method annotation will take precedence over the class annotation.
- * If the annotation
  *
  * This annotation requires the `AllowPlugin`.
  *
