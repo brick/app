@@ -103,4 +103,40 @@ class RouteMatch
     {
         return $this->functionParameters;
     }
+
+    /**
+     * Returns a copy of this RouteMatch, with additional class parameters.
+     *
+     * Parameters with the same name will override current parameters.
+     * This RouteMatch instance is immutable, and unaffected by this method call.
+     *
+     * @param array $parameters An associative array of class parameters.
+     *
+     * @return RouteMatch
+     */
+    public function withClassParameters(array $parameters) : RouteMatch
+    {
+        $routeMatch = clone $this;
+        $routeMatch->classParameters = $parameters + $this->classParameters;
+
+        return $routeMatch;
+    }
+
+    /**
+     * Returns a copy of this RouteMatch, with additional function parameters.
+     *
+     * Parameters with the same name will override current parameters.
+     * This RouteMatch instance is immutable, and unaffected by this method call.
+     *
+     * @param array $parameters An associative array of function parameters.
+     *
+     * @return RouteMatch
+     */
+    public function withFunctionParameters(array $parameters) : RouteMatch
+    {
+        $routeMatch = clone $this;
+        $routeMatch->functionParameters = $parameters + $this->functionParameters;
+
+        return $routeMatch;
+    }
 }
