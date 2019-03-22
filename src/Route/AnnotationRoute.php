@@ -36,10 +36,15 @@ class AnnotationRoute implements Route
     public function match(Request $request) : ?RouteMatch
     {
         $path = $request->getPath();
+        $httpMethod = $request->getMethod();
 
         foreach ($this->routes as $regexp => $values) {
             if (preg_match($regexp, $path, $matches) === 1) {
-                [$className, $methodName, $classParameterNames, $methodParameterNames] = $values;
+                [$className, $methodName, $classParameterNames, $methodParameterNames, $httpMethods] = $values;
+
+                if ($httpMethods && ! in_array($httpMethod, $httpMethods, true)) {
+                    continue;
+                }
 
                 $classParameters = [];
                 $methodParameters = [];

@@ -65,6 +65,7 @@ class AnnotationRouteCompiler
                     if ($annotation instanceof Route) {
                         $regexp = '/^' . $prefixRegexp . $annotation->getRegexp() . '$/';
                         $methodParameterNames = $annotation->getParameterNames();
+                        $httpMethods = $annotation->getMethods();
 
                         if (isset($result[$regexp])) {
                             throw new \LogicException(sprintf(
@@ -76,7 +77,7 @@ class AnnotationRouteCompiler
                             ));
                         }
 
-                        $result[$regexp] = [$className, $methodName, $classParameterNames, $methodParameterNames];
+                        $result[$regexp] = [$className, $methodName, $classParameterNames, $methodParameterNames, $httpMethods];
                     }
                 }
             }

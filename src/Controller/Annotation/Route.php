@@ -23,9 +23,21 @@ class Route
     private $regexp;
 
     /**
+     * The list of parameter names.
+     *
      * @var string[]
      */
     private $parameterNames = [];
+
+    /**
+     * The list of HTTP methods (e.g. GET or POST) this route is valid for.
+     *
+     * If this list is empty, all methods are allowed.
+     * Note that this property is only valid on controller methods, and ignored on controller classes.
+     *
+     * @var string[]
+     */
+    private $methods = [];
 
     /**
      * @param array $params
@@ -40,6 +52,20 @@ class Route
 
         if (! is_string($path)) {
             throw new \LogicException('@Route path must be a string.');
+        }
+
+        if (isset($params['methods'])) {
+            if (! is_array($params['methods'])) {
+                throw new \LogicException('@Route.methods must be an array of strings.');
+            }
+
+            foreach ($params['methods'] as $method) {
+                if (! is_string($method)) {
+                    throw new \LogicException('@Route.methods must be an array of strings.');
+                }
+            }
+
+            $this->methods = $params['methods'];
         }
 
         $this->regexp = preg_replace_callback('/\{([^\}]+)\}|(.+?)/', function(array $matches) : string {
@@ -67,5 +93,13 @@ class Route
     public function getParameterNames() : array
     {
         return $this->parameterNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getMethods() : array
+    {
+        return $this->methods;
     }
 }
