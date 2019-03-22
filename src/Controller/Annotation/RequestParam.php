@@ -22,11 +22,6 @@ abstract class RequestParam
     private $bindTo;
 
     /**
-     * @var array
-     */
-    private $options;
-
-    /**
      * Class constructor.
      *
      * @param array $values
@@ -45,10 +40,6 @@ abstract class RequestParam
 
         $this->name = $name;
         $this->bindTo = isset($values['bindTo']) ? $values['bindTo'] : $name;
-
-        unset($values['name'], $values['value'], $values['bindTo']);
-
-        $this->options = $values;
     }
 
     /**
@@ -65,14 +56,6 @@ abstract class RequestParam
     public function getBindTo() : string
     {
         return $this->bindTo;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions() : array
-    {
-        return $this->options;
     }
 
     /**
