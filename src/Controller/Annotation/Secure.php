@@ -25,7 +25,7 @@ namespace Brick\App\Controller\Annotation;
 final class Secure extends AbstractAnnotation
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $hsts;
 
@@ -34,6 +34,6 @@ final class Secure extends AbstractAnnotation
      */
     public function __construct(array $values)
     {
-        $this->hsts = $this->getRequiredString($values, 'hsts', true);
+        $this->hsts = $this->getOptionalString($values, 'hsts', true);
     }
 }

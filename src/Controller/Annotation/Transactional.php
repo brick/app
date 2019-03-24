@@ -46,13 +46,15 @@ final class Transactional extends AbstractAnnotation
      */
     public function __construct(array $values)
     {
-        $isolationLevel = $this->getRequiredString($values, 'isolationLevel', true);
+        $isolationLevel = $this->getOptionalString($values, 'isolationLevel', true);
 
-        if (! isset(self::ISOLATION_LEVELS[$isolationLevel])) {
-            throw new \LogicException('Invalid transaction isolation level: ' . $isolationLevel);
+        if ($isolationLevel !== null) {
+            if (! isset(self::ISOLATION_LEVELS[$isolationLevel])) {
+                throw new \LogicException('Invalid transaction isolation level: ' . $isolationLevel);
+            }
+
+            $this->isolationLevel = self::ISOLATION_LEVELS[$isolationLevel];
         }
-
-        $this->isolationLevel = self::ISOLATION_LEVELS[$isolationLevel];
     }
 
     /**
