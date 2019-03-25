@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Brick\App;
 
 use Brick\App\Controller\Annotation\Route;
-
 use Doctrine\Common\Annotations\Reader;
+use TypeError;
 
 /**
  * Compiles Route annotations into an array to be provided to the AnnotationRoute.
@@ -23,13 +23,27 @@ class AnnotationRouteCompiler
     private $annotationReader;
 
     /**
+     * @var string[]
+     */
+    private $defaultMethods;
+
+    /**
      * AnnotationRouteCompiler constructor.
      *
-     * @param Reader $annotationReader The annotation reader.
+     * @param Reader   $annotationReader The annotation reader.
+     * @param string[] $defaultMethods   The HTTP methods allowed by default, if the annotation does not provide them.
+     *                                   Defaults to ANY.
      */
-    public function __construct(Reader $annotationReader)
+    public function __construct(Reader $annotationReader, array $defaultMethods = [])
     {
+        foreach ($defaultMethods as $method) {
+            if (! is_string($method)) {
+                throw new TypeError(sprintf('Default HTTP methods must be an array of string, %s found in array.', gettype($method)));
+            }
+        }
+
         $this->annotationReader = $annotationReader;
+        $this->defaultMethods   = $defaultMethods;
     }
 
     /**
@@ -66,6 +80,10 @@ class AnnotationRouteCompiler
 
                         $pathRegexp = '/^' . $prefixRegexp . $regexp . '$/';
                         $httpMethods = $annotation->methods;
+
+                        if (! $httpMethods) {
+                            $httpMethods = $this->defaultMethods;
+                        }
 
                         $result[] = [
                             $pathRegexp,
