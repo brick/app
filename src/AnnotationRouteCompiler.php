@@ -28,6 +28,13 @@ class AnnotationRouteCompiler
     private $defaultMethods;
 
     /**
+     * An array of [path, HTTP methods, controller class, controller method] arrays.
+     *
+     * @var array
+     */
+    private $routes = [];
+
+    /**
      * AnnotationRouteCompiler constructor.
      *
      * @param Reader   $annotationReader The annotation reader.
@@ -60,11 +67,13 @@ class AnnotationRouteCompiler
         foreach ($classNames as $className) {
             $reflectionClass = new \ReflectionClass($className);
 
+            $prefixPath = '';
             $prefixRegexp = '';
             $classParameterNames = [];
 
             foreach ($this->annotationReader->getClassAnnotations($reflectionClass) as $annotation) {
                 if ($annotation instanceof Route) {
+                    $prefixPath = $annotation->path;
                     [$prefixRegexp, $classParameterNames] = $this->processAnnotation($annotation);
 
                     break;
@@ -85,6 +94,13 @@ class AnnotationRouteCompiler
                             $httpMethods = $this->defaultMethods;
                         }
 
+                        $this->routes[] = [
+                            $prefixPath . $annotation->path,
+                            $annotation->methods,
+                            $className,
+                            $methodName
+                        ];
+
                         $result[] = [
                             $pathRegexp,
                             $httpMethods,
@@ -98,7 +114,22 @@ class AnnotationRouteCompiler
             }
         }
 
+        // Sort routes by path & methods
+        sort($this->routes);
+
         return $result;
+    }
+
+    /**
+     * Returns an array of [path, HTTP methods, controller class, controller method] arrays.
+     *
+     * This array is only available after compile() has been executed.
+     *
+     * @return array
+     */
+    public function getRoutes() : array
+    {
+        return $this->routes;
     }
 
     /**
