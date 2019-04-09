@@ -31,11 +31,27 @@ abstract class Session implements SessionInterface
     private $packer;
 
     /**
-     * The session id, or null if the session has not been read yet.
+     * The session id, or null if not available yet.
+     *
+     * The session id may not be available if the session id has not been read from the request yet, or if the request
+     * is not associated with a session AND no data has been written to the session yet.
+     *
+     * If other words, for a request that is not associated with a session, the session id is created just in time when
+     * a write occurs, to avoid sending a cookie with a ghost session id that would not map to an actual entry in the
+     * session storage.
      *
      * @var string|null
      */
-    protected $id;
+    protected $id = null;
+
+    /**
+     * Whether we're in the middle of a request/response cycle.
+     *
+     * i.e. handleRequest() has been called, handleResponse() has not yet been called.
+     *
+     * @var bool
+     */
+    protected $inRequest = false;
 
     /**
      * A local cache of the data loaded from the storage.
@@ -123,12 +139,14 @@ abstract class Session implements SessionInterface
      */
     public function handleRequest(Request $request) : void
     {
-        $this->data = [];
+        $this->reset();
         $this->readSessionId($request);
 
         if ($this->isTimeToCollectGarbage()) {
             $this->collectGarbage();
         }
+
+        $this->inRequest = true;
     }
 
     /**
@@ -140,7 +158,16 @@ abstract class Session implements SessionInterface
      */
     public function handleResponse(Response $response) : void
     {
+        if ($this->id === null) {
+            // The request was not associated with an existing session, and no session writes occurred.
+            // Sending a session cookie is unnecessary.
+            return;
+        }
+
+        // Note: we re-send the session cookie even if it was part of the request, to refresh the expiration time.
+
         $this->writeSessionId($response);
+        $this->reset();
     }
 
     /**
@@ -156,6 +183,16 @@ abstract class Session implements SessionInterface
      * @return void
      */
     abstract protected function writeSessionId(Response $response) : void;
+
+    /**
+     * Generates a random session id.
+     *
+     * This is only relevant to cookie sessions.
+     * IP sessions should throw an exeption here, as this method should never be called.
+     *
+     * @return string
+     */
+    abstract protected function generateSessionId() : string;
 
     /**
      * {@inheritdoc}
@@ -174,7 +211,12 @@ abstract class Session implements SessionInterface
             return $this->data[$key];
         }
 
-        $id = $this->getId();
+        $id = $this->getOptionalId();
+
+        if ($id === null) {
+            return null;
+        }
+
         $value = $this->storage->read($id, $key);
 
         if ($value !== null) {
@@ -207,7 +249,12 @@ abstract class Session implements SessionInterface
      */
     public function remove(string $key) : void
     {
-        $id = $this->getId();
+        $id = $this->getOptionalId();
+
+        if ($id === null) {
+            return;
+        }
+
         $this->storage->remove($id, $key);
 
         unset($this->data[$key]);
@@ -243,7 +290,12 @@ abstract class Session implements SessionInterface
      */
     public function clear() : void
     {
-        $id = $this->getId();
+        $id = $this->getOptionalId();
+
+        if ($id === null) {
+            return;
+        }
+
         $this->storage->clear($id);
 
         $this->data = [];
@@ -258,20 +310,42 @@ abstract class Session implements SessionInterface
     }
 
     /**
+     * @return string|null
+     */
+    private function getOptionalId() : ?string
+    {
+        $this->checkInRequest();
+
+        return $this->id;
+    }
+
+    /**
      * @return string
-     *
-     * @throws \RuntimeException
      */
     private function getId() : string
     {
+        $this->checkInRequest();
+
         if ($this->id === null) {
+            $this->id = $this->generateSessionId();
+        }
+
+        return $this->id;
+    }
+
+    /**
+     * @return void
+     *
+     * @throws \RuntimeException
+     */
+    private function checkInRequest() : void
+    {
+        if (! $this->inRequest) {
             throw new \RuntimeException(
                 'Trying to access a Session object that has not yet been loaded. ' .
                 'This most likely means that you have not added the SessionPlugin to your application.'
             );
         }
-
-        return $this->id;
     }
 
     /**
@@ -310,5 +384,17 @@ abstract class Session implements SessionInterface
         }
 
         return $value;
+    }
+
+    /**
+     * Resets the session status.
+     *
+     * @return void
+     */
+    private function reset() : void
+    {
+        $this->id = null;
+        $this->data = [];
+        $this->inRequest = false;
     }
 }

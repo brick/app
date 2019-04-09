@@ -54,8 +54,6 @@ class CookieSession extends Session
 
         if ($sessionId !== null && $this->checkSessionId($sessionId)) {
             $this->id = $sessionId;
-        } else {
-            $this->id = $this->generateId();
         }
     }
 
@@ -77,6 +75,22 @@ class CookieSession extends Session
             ->setHttpOnly($this->cookieParams['http-only']);
 
         $response->setCookie($cookie);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function generateSessionId() : string
+    {
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        $id = '';
+
+        for ($i = 0; $i < $this->idLength; $i++) {
+            $id .= $chars[random_int(0, 61)];
+        }
+
+        return $id;
     }
 
     /**
@@ -110,7 +124,7 @@ class CookieSession extends Session
      */
     public function regenerateId() : bool
     {
-        $id = $this->generateId();
+        $id = $this->generateSessionId();
 
         if ($this->storage->updateId($this->id, $id)) {
             $this->id = $id;
@@ -119,24 +133,6 @@ class CookieSession extends Session
         }
 
         return false;
-    }
-
-    /**
-     * Generates a random, alphanumeric session id.
-     *
-     * @return string
-     */
-    private function generateId() : string
-    {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        $id = '';
-
-        for ($i = 0; $i < $this->idLength; $i++) {
-            $id .= $chars[random_int(0, 61)];
-        }
-
-        return $id;
     }
 
     /**

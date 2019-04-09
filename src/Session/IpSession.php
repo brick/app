@@ -26,4 +26,12 @@ class IpSession extends Session
     protected function writeSessionId(Response $response) : void
     {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function generateSessionId() : string
+    {
+        throw new \LogicException('IP session id is always set, this method should never be called.');
+    }
 }
