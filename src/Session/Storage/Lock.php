@@ -11,23 +11,5 @@ class Lock
      *
      * @var mixed
      */
-    private $context;
-
-    /**
-     * @return mixed
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @param mixed $context
-     *
-     * @return void
-     */
-    public function setContext($context) : void
-    {
-        $this->context = $context;
-    }
+    public $context;
 }

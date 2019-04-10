@@ -74,7 +74,7 @@ class FileStorage implements SessionStorage
 
         if ($lock) {
             // Keep the file open & locked, and remember the resource.
-            $lock->setContext($fp);
+            $lock->context = $fp;
         } else {
             // Unlock immediately and close the file.
             flock($fp, LOCK_UN);
@@ -90,7 +90,7 @@ class FileStorage implements SessionStorage
     public function write(string $id, string $key, string $value, Lock $lock = null) : void
     {
         if ($lock) {
-            $fp = $lock->getContext();
+            $fp = $lock->context;
 
             if ($fp !== null) {
                 ftruncate($fp, 0);
@@ -112,7 +112,7 @@ class FileStorage implements SessionStorage
      */
     public function unlock(Lock $lock) : void
     {
-        $fp = $lock->getContext();
+        $fp = $lock->context;
 
         if ($fp !== null) {
             flock($fp, LOCK_UN);
