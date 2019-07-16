@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Brick\App\ObjectPacker;
 
+use Brick\DateTime\DateTimeException;
 use Brick\DateTime\Duration;
 use Brick\DateTime\LocalDate;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\LocalTime;
-use Brick\DateTime\Parser\DateTimeParseException;
 use Brick\DateTime\TimeZoneOffset;
 use Brick\DateTime\TimeZoneRegion;
 use Brick\DateTime\YearMonth;
@@ -93,7 +93,7 @@ class DateTimePacker implements ObjectPacker
                 case ZonedDateTime::class:
                     return ZonedDateTime::parse($data);
             }
-        } catch (DateTimeParseException $e) {
+        } catch (DateTimeException $e) {
             throw new Exception\ObjectNotConvertibleException($e->getMessage(), 0, $e);
         }
 
