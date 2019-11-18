@@ -126,7 +126,7 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
             return $value;
         }
 
-        $type = (string) $type;
+        $type = $type->getName();
 
         if ($value === '') {
             if ($parameter->isDefaultValueAvailable()) {
