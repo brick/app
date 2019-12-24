@@ -22,7 +22,7 @@ composer require brick/app
 Requirements
 ------------
 
-This library requires PHP 7.1 or later.
+This library requires PHP 7.2 or later.
 
 
 Project status & release process
@@ -34,7 +34,7 @@ The current releases are numbered `0.x.y`. When a non-breaking change is introdu
 
 **When a breaking change is introduced, a new `0.x` version cycle is always started.**
 
-It is therefore safe to lock your project to a given release cycle, such as `0.2.*`.
+It is therefore safe to lock your project to a given release cycle, such as `0.6.*`.
 
 If you need to upgrade to a newer release cycle, check the [release history](https://github.com/brick/app/releases)
 for a list of changes introduced by each further `0.x.0` version.
