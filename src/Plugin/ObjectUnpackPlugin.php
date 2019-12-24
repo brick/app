@@ -111,7 +111,7 @@ class ObjectUnpackPlugin implements Plugin
      *
      * @throws HttpException If the object cannot be instantiated.
      */
-    private function getObject(string $className, $value)
+    private function getObject(string $className, $value) : object
     {
         $packedObject = new PackedObject($className, $value);
 

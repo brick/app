@@ -50,7 +50,7 @@ abstract class AbstractAnnotationPlugin implements Plugin
      *
      * @return object|null The annotation, or null if not found.
      */
-    protected function getControllerAnnotation(\ReflectionFunctionAbstract $controller, string $annotationClass)
+    protected function getControllerAnnotation(\ReflectionFunctionAbstract $controller, string $annotationClass) : ?object
     {
         if ($controller instanceof \ReflectionMethod) {
             $annotations = $this->annotationReader->getMethodAnnotations($controller);

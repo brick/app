@@ -13,8 +13,8 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1",
-        "brick/di": "~0.2.0",
+        "php": ">=7.2",
+        "brick/di": "~0.3.0",
         "brick/event": "~0.1.0",
         "brick/html": "~0.1.0",
         "brick/http": "~0.2.0",

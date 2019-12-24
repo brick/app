@@ -52,5 +52,5 @@ interface ObjectPacker
      * @throws ObjectNotConvertibleException If the class name is supported, but the representation is not valid.
      * @throws ObjectNotFoundException       If the class name is supported, but the object cannot be found.
      */
-    public function unpack(PackedObject $packedObject);
+    public function unpack(PackedObject $packedObject) : ?object;
 }

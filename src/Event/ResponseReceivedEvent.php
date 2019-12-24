@@ -95,7 +95,7 @@ final class ResponseReceivedEvent
      *
      * @return object|null
      */
-    public function getControllerInstance()
+    public function getControllerInstance() : ?object
     {
         return $this->instance;
     }

@@ -43,7 +43,7 @@ class PackerChain implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function unpack(PackedObject $packedObject)
+    public function unpack(PackedObject $packedObject) : ?object
     {
         foreach ($this->objectPackers as $objectPacker) {
             $object = $objectPacker->unpack($packedObject);

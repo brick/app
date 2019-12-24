@@ -91,7 +91,7 @@ final class NonResponseResultEvent
      *
      * @return object|null
      */
-    public function getControllerInstance()
+    public function getControllerInstance() : ?object
     {
         return $this->instance;
     }

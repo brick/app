@@ -62,7 +62,7 @@ class DateTimePacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function unpack(PackedObject $packedObject)
+    public function unpack(PackedObject $packedObject) : ?object
     {
         $class = $packedObject->getClass();
         $data  = $packedObject->getData();
