@@ -58,7 +58,7 @@ final class NonResponseResultEvent
      * @param object|null $instance   The controller instance.
      * @param mixed       $result     The controller result.
      */
-    public function __construct(Request $request, RouteMatch $routeMatch, $instance, $result)
+    public function __construct(Request $request, RouteMatch $routeMatch, ?object $instance, $result)
     {
         $this->request    = $request;
         $this->routeMatch = $routeMatch;

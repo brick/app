@@ -40,7 +40,7 @@ interface ObjectPacker
      *
      * @throws ObjectNotConvertibleException If the object is supported, but is not convertible for some reason.
      */
-    public function pack($object) : ?PackedObject;
+    public function pack(object $object) : ?PackedObject;
 
     /**
      * Unpacks an object from its flattened representation.

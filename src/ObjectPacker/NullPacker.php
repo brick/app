@@ -12,7 +12,7 @@ class NullPacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function pack($object) : ?PackedObject
+    public function pack(object $object) : ?PackedObject
     {
         return null;
     }

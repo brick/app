@@ -30,7 +30,7 @@ class GeometryPacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function pack($object) : ?PackedObject
+    public function pack(object $object) : ?PackedObject
     {
         if ($object instanceof Geometry) {
             return new PackedObject(Geometry::class, $object->asText());

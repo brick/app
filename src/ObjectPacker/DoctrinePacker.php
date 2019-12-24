@@ -30,7 +30,7 @@ class DoctrinePacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function pack($object) : ?PackedObject
+    public function pack(object $object) : ?PackedObject
     {
         $uow = $this->em->getUnitOfWork();
 
@@ -72,7 +72,7 @@ class DoctrinePacker implements ObjectPacker
      *
      * @return string
      */
-    private function getClass($entity) : string
+    private function getClass(object $entity) : string
     {
         return ($entity instanceof Proxy) ? get_parent_class($entity) : get_class($entity);
     }

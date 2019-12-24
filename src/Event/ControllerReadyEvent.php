@@ -56,7 +56,7 @@ final class ControllerReadyEvent
      * @param RouteMatch  $routeMatch The route match.
      * @param object|null $instance   The controller instance.
      */
-    public function __construct(Request $request, RouteMatch $routeMatch, $instance)
+    public function __construct(Request $request, RouteMatch $routeMatch, ?object $instance)
     {
         $this->request    = $request;
         $this->routeMatch = $routeMatch;
