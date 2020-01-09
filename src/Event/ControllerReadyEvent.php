@@ -120,7 +120,7 @@ final class ControllerReadyEvent
      *
      * @return void
      */
-    public function setResponse(Response $response = null) : void
+    public function setResponse(?Response $response = null) : void
     {
         $this->response = $response;
     }

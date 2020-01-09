@@ -19,7 +19,7 @@ class UrlBuilder
      *
      * @param ObjectPacker|null $objectPacker
      */
-    public function __construct(ObjectPacker $objectPacker = null)
+    public function __construct(?ObjectPacker $objectPacker = null)
     {
         if ($objectPacker === null) {
             $objectPacker = new NullPacker();

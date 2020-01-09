@@ -20,7 +20,7 @@ interface SessionStorage
      *
      * @return string|null The value read, or null if the key does not exist.
      */
-    public function read(string $id, string $key, Lock $lock = null) : ?string;
+    public function read(string $id, string $key, ?Lock $lock = null) : ?string;
 
     /**
      * Writes a specific key to the storage.
@@ -33,7 +33,7 @@ interface SessionStorage
      *
      * @return void
      */
-    public function write(string $id, string $key, string $value, Lock $lock = null) : void;
+    public function write(string $id, string $key, string $value, ?Lock $lock = null) : void;
 
     /**
      * Unlocks the resources locked by an aborted synchronized read-write.

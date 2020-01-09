@@ -81,7 +81,7 @@ abstract class Session implements SessionInterface
      * @param Storage\SessionStorage $storage      The session storage, or null to use a default file storage.
      * @param ObjectPacker|null      $objectPacker An optional object packer to use when serializing the session data.
      */
-    public function __construct(Storage\SessionStorage $storage = null, ObjectPacker $objectPacker = null)
+    public function __construct(?Storage\SessionStorage $storage = null, ?ObjectPacker $objectPacker = null)
     {
         if ($storage === null) {
             $storage = new Storage\FileStorage(session_save_path());

@@ -55,7 +55,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function read(string $id, string $key, Lock $lock = null) : ?string
+    public function read(string $id, string $key, ?Lock $lock = null) : ?string
     {
         $path = $this->getPath($id, $key);
 
@@ -87,7 +87,7 @@ class FileStorage implements SessionStorage
     /**
      * {@inheritdoc}
      */
-    public function write(string $id, string $key, string $value, Lock $lock = null) : void
+    public function write(string $id, string $key, string $value, ?Lock $lock = null) : void
     {
         if ($lock) {
             $fp = $lock->context;

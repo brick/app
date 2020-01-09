@@ -71,7 +71,7 @@ class Application implements RequestHandler
      *
      * @return Application
      */
-    public static function create(Container $container = null) : Application
+    public static function create(?Container $container = null) : Application
     {
         if ($container !== null) {
             $valueResolver   = $container->getValueResolver();
