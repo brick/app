@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Brick\App\Controller;
 
 use Brick\App\View\View;
-use Brick\Di\Annotation\Inject;
-use Brick\Di\Injector;
+use Brick\DI\Inject;
+use Brick\DI\Injector;
 use Brick\Http\Response;
 
 /**
@@ -15,17 +15,16 @@ use Brick\Http\Response;
 abstract class AbstractController
 {
     /**
-     * @var \Brick\Di\Injector|null
+     * @var \Brick\DI\Injector|null
      */
     private $injector = null;
 
     /**
-     * @Inject
-     *
      * @param Injector $injector
      *
      * @return void
      */
+    #[Inject]
     public function setInjector(Injector $injector) : void
     {
         $this->injector = $injector;

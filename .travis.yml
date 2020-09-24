@@ -1,21 +1,20 @@
 language: php
 
 php:
-  - 7.2
-  - 7.3
-  - 7.4
-
-matrix:
-  include:
-    - php: 7.2.0
-      env: dependencies=lowest
+  - nightly
 
 before_script:
-  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest; else composer update; fi;
+  - |
+    # not all dependencies advertise PHP 8 support yet
+    composer config platform.php 7.4.0
+  - composer install --ignore-platform-reqs
 
 script:
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
-after_script:
-  - vendor/bin/php-coveralls -v
+# php-coveralls does not support PHP 8 yet:
+# https://github.com/php-coveralls/php-coveralls/issues/281
+
+#after_script:
+#  - vendor/bin/php-coveralls -v

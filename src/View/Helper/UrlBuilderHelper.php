@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brick\App\View\Helper;
 
 use Brick\App\UrlBuilder;
+use Brick\DI\Inject;
 
 /**
  * This view helper allows to build URLs view parameters in views.
@@ -17,12 +18,11 @@ trait UrlBuilderHelper
     private $builder;
 
     /**
-     * @Brick\Di\Annotation\Inject
-     *
      * @param \Brick\App\UrlBuilder $builder
      *
      * @return void
      */
+    #[Inject]
     final public function setUrlBuilder(UrlBuilder $builder) : void
     {
         $this->builder = $builder;

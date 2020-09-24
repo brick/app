@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Brick\App\View\Helper;
 
-use Brick\Di\Injector;
+use Brick\DI\Inject;
+use Brick\DI\Injector;
 use Brick\App\View\View;
 
 /**
@@ -13,17 +14,16 @@ use Brick\App\View\View;
 trait PartialViewHelper
 {
     /**
-     * @var \Brick\Di\Injector|null
+     * @var \Brick\DI\Injector|null
      */
     private $injector;
 
     /**
-     * @Brick\Di\Annotation\Inject
-     *
-     * @param \Brick\Di\Injector $injector
+     * @param \Brick\DI\Injector $injector
      *
      * @return void
      */
+    #[Inject]
     final public function setInjector(Injector $injector) : void
     {
         $this->injector = $injector;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Brick\App;
 
 use Brick\Http\Request;
-use Brick\Di\ValueResolver;
+use Brick\DI\ValueResolver;
 use Brick\Reflection\ReflectionTools;
 
 /**
@@ -14,7 +14,7 @@ use Brick\Reflection\ReflectionTools;
 class ControllerValueResolver implements ValueResolver
 {
     /**
-     * @var \Brick\Di\ValueResolver
+     * @var \Brick\DI\ValueResolver
      */
     private $fallbackResolver;
 
@@ -29,7 +29,7 @@ class ControllerValueResolver implements ValueResolver
     private $reflectionTools;
 
     /**
-     * @param \Brick\Di\ValueResolver $fallbackResolver
+     * @param \Brick\DI\ValueResolver $fallbackResolver
      */
     public function __construct(ValueResolver $fallbackResolver)
     {
@@ -52,7 +52,7 @@ class ControllerValueResolver implements ValueResolver
     /**
      * {@inheritdoc}
      */
-    public function getParameterValue(\ReflectionParameter $parameter)
+    public function getParameterValue(\ReflectionParameter $parameter) : mixed
     {
         $class = $parameter->getClass();
         if ($class && $class->getName() === Request::class) {
@@ -65,7 +65,7 @@ class ControllerValueResolver implements ValueResolver
     /**
      * {@inheritdoc}
      */
-    public function getPropertyValue(\ReflectionProperty $property)
+    public function getPropertyValue(\ReflectionProperty $property) : mixed
     {
         $class = $this->reflectionTools->getPropertyClass($property);
         if ($class === Request::class) {

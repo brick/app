@@ -12,11 +12,11 @@ use Brick\App\Event\NonResponseResultEvent;
 use Brick\App\Event\ResponseReceivedEvent;
 use Brick\App\Event\RouteMatchedEvent;
 use Brick\Event\EventDispatcher;
-use Brick\Di\Injector;
-use Brick\Di\InjectionPolicy;
-use Brick\Di\ValueResolver;
-use Brick\Di\Container;
-use Brick\Di\ValueResolver\DefaultValueResolver;
+use Brick\DI\Injector;
+use Brick\DI\InjectionPolicy;
+use Brick\DI\ValueResolver;
+use Brick\DI\Container;
+use Brick\DI\ValueResolver\DefaultValueResolver;
 use Brick\Http\Exception\HttpException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
 use Brick\Http\Exception\HttpNotFoundException;
@@ -30,7 +30,7 @@ use Brick\Http\Response;
 class Application implements RequestHandler
 {
     /**
-     * @var \Brick\Di\Injector
+     * @var \Brick\DI\Injector
      */
     private $injector;
 
