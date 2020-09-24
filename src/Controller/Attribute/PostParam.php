@@ -2,29 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Brick\App\Controller\Annotation;
+namespace Brick\App\Controller\Attribute;
 
+use Attribute;
 use Brick\Http\Request;
 
 /**
- * This annotation requires the `RequestParamPlugin`.
- *
- * @Annotation
- * @Target("METHOD")
+ * This attribute requires the `RequestParamPlugin`.
  */
+#[Attribute]
 final class PostParam extends RequestParam
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getParameterType() : string
     {
         return 'post';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRequestParameters(Request $request) : array
     {
         return $request->getPost();

@@ -9,21 +9,19 @@ use Brick\App\RouteMatch;
 use Brick\Http\Request;
 
 /**
- * An annotation-based route implementation.
+ * An attribute-based route implementation.
  */
-class AnnotationRoute implements Route
+class AttributeRoute implements Route
 {
     /**
      * A map of regexp to [className, methodName, classParameterNames, methodParameterNames].
-     *
-     * @var array
      */
-    private $routes;
+    private array $routes;
 
     /**
-     * AnnotationRoute constructor.
+     * AttributeRoute constructor.
      *
-     * @param array $routes An array of routes built by AnnotationRouteCompiler::compile().
+     * @param array $routes An array of routes built by AttributeRouteCompiler::compile().
      */
     public function __construct(array $routes)
     {

@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Brick\App\Controller\Annotation;
+namespace Brick\App\Controller\Attribute;
 
+use Attribute;
 use Doctrine\DBAL\Connection;
+use LogicException;
 
 /**
  * Wraps the controller into a database transaction.
@@ -17,17 +19,13 @@ use Doctrine\DBAL\Connection;
  * If the controller does not explicitly commit the transaction,
  * it will be rolled back automatically when the controller returns.
  *
- * This annotation requires the `TransactionalPlugin`.
- *
- * @Annotation
- * @Target("METHOD")
+ * This attribute requires the `TransactionalPlugin`.
  */
-final class Transactional extends AbstractAnnotation
+#[Attribute]
+final class Transactional
 {
     /**
      * The transaction isolation level.
-     *
-     * @var int
      */
     private $isolationLevel = Connection::TRANSACTION_SERIALIZABLE;
 
@@ -41,25 +39,17 @@ final class Transactional extends AbstractAnnotation
         'SERIALIZABLE'     => Connection::TRANSACTION_SERIALIZABLE
     ];
 
-    /**
-     * @param array $values
-     */
-    public function __construct(array $values)
+    public function __construct(int|null $isolationLevel = null)
     {
-        $isolationLevel = $this->getOptionalString($values, 'isolationLevel', true);
-
         if ($isolationLevel !== null) {
             if (! isset(self::ISOLATION_LEVELS[$isolationLevel])) {
-                throw new \LogicException('Invalid transaction isolation level: ' . $isolationLevel);
+                throw new LogicException('Invalid transaction isolation level: ' . $isolationLevel);
             }
 
             $this->isolationLevel = self::ISOLATION_LEVELS[$isolationLevel];
         }
     }
 
-    /**
-     * @return int
-     */
     public function getIsolationLevel() : int
     {
         return $this->isolationLevel;

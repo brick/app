@@ -157,7 +157,7 @@ That's it. Let's update our `helloAction()` once again to use this new functiona
 ```php
 namespace MyApp\Controller;
 
-use Brick\App\Controller\Annotation\QueryParam;
+use Brick\App\Controller\Attribute\QueryParam;
 use Brick\Http\Response;
 
 class Index

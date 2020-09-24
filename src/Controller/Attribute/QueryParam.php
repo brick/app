@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Brick\App\Controller\Annotation;
+namespace Brick\App\Controller\Attribute;
 
+use Attribute;
 use Brick\Http\Request;
 
 /**
- * This annotation requires the `RequestParamPlugin`.
- *
- * @Annotation
- * @Target("METHOD")
+ * This attribute requires the `RequestParamPlugin`.
  */
+#[Attribute]
 final class QueryParam extends RequestParam
 {
     /**
