@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Brick\App\Controller\Attribute;
 
 use Attribute;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\TransactionIsolationLevel;
 use LogicException;
 
 /**
@@ -14,7 +14,7 @@ use LogicException;
  * This further allows to group external database reads (user authentication, ...) within the same transaction
  * as the one used by the controller.
  *
- * The supported isolation levels are SERIALIZABLE, REPEATABLE_READ, READ_COMMITTED, READ_UNCOMMITTED.
+ * The supported isolation levels are SERIALIZABLE, REPEATABLE_READ, READ COMMITTED, READ UNCOMMITTED.
  *
  * If the controller does not explicitly commit the transaction,
  * it will be rolled back automatically when the controller returns.
@@ -27,16 +27,16 @@ final class Transactional
     /**
      * The transaction isolation level.
      */
-    private $isolationLevel = Connection::TRANSACTION_SERIALIZABLE;
+    private $isolationLevel = TransactionIsolationLevel::SERIALIZABLE;
 
     /**
      * Maps the isolation level strings to constants.
      */
     private const ISOLATION_LEVELS = [
-        'READ UNCOMMITTED' => Connection::TRANSACTION_READ_UNCOMMITTED,
-        'READ COMMITTED'   => Connection::TRANSACTION_READ_COMMITTED,
-        'REPEATABLE READ'  => Connection::TRANSACTION_REPEATABLE_READ,
-        'SERIALIZABLE'     => Connection::TRANSACTION_SERIALIZABLE
+        'READ UNCOMMITTED' => TransactionIsolationLevel::READ_UNCOMMITTED,
+        'READ COMMITTED'   => TransactionIsolationLevel::READ_COMMITTED,
+        'REPEATABLE READ'  => TransactionIsolationLevel::REPEATABLE_READ,
+        'SERIALIZABLE'     => TransactionIsolationLevel::SERIALIZABLE
     ];
 
     public function __construct(int|null $isolationLevel = null)
