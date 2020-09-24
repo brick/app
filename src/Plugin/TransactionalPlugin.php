@@ -38,7 +38,7 @@ class TransactionalPlugin extends AbstractAttributePlugin
             $attribute = $this->getTransactionalAttribute($event->getRouteMatch());
 
             if ($attribute) {
-                $this->connection->setTransactionIsolation($attribute->getIsolationLevel());
+                $this->connection->setTransactionIsolation($attribute->isolationLevel);
                 $this->connection->beginTransaction();
             }
         });

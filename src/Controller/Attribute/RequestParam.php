@@ -14,33 +14,17 @@ abstract class RequestParam
     /**
      * The query or post parameter name.
      */
-    private string $name;
+    public string $name;
 
     /**
-     * The variable to bind to, or null if same as $name.
+     * The variable name to bind to.
      */
-    private string|null $bindTo;
+    public string $bindTo;
 
     public function __construct(string $name, string|null $bindTo = null)
     {
         $this->name   = $name;
-        $this->bindTo = $bindTo;
-    }
-
-    /**
-     * Returns the query or post parameter name.
-     */
-    public function getName() : string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Returns the variable to bind to.
-     */
-    public function getBindTo() : string
-    {
-        return $this->bindTo ?? $this->name;
+        $this->bindTo = $bindTo ?? $name;
     }
 
     /**

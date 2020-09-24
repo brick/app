@@ -22,7 +22,7 @@ final class Allow
      *
      * @var string[]
      */
-    private array $methods;
+    public array $methods;
 
     /**
      * @param string ...$methods
@@ -30,13 +30,5 @@ final class Allow
     public function __construct(string ...$methods)
     {
         $this->methods = $methods;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getMethods() : array
-    {
-        return $this->methods;
     }
 }

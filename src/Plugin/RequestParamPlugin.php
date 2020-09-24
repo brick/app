@@ -46,7 +46,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         $result = [];
 
         foreach ($requestParamAttributes as $attribute) {
-            $result[$attribute->getBindTo()] = $this->getParameter(
+            $result[$attribute->bindTo] = $this->getParameter(
                 $attribute,
                 $controller,
                 $parameters,
@@ -70,8 +70,8 @@ class RequestParamPlugin extends AbstractAttributePlugin
     private function getParameter(RequestParam $attribute, \ReflectionFunctionAbstract $controller, array $parameters, Request $request) : mixed
     {
         $requestParameters = $attribute->getRequestParameters($request);
-        $parameterName = $attribute->getName();
-        $bindTo = $attribute->getBindTo();
+        $parameterName = $attribute->name;
+        $bindTo = $attribute->bindTo;
 
         if (! isset($parameters[$bindTo])) {
             throw $this->unknownParameterException($controller, $attribute);
@@ -158,7 +158,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         return new HttpInternalServerErrorException(sprintf(
             '%s() does not have a $%s parameter, please check your attribute.',
             $this->reflectionTools->getFunctionName($controller),
-            $attribute->getBindTo()
+            $attribute->bindTo
         ));
     }
 
@@ -174,7 +174,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
             '%s() requires a %s parameter "%s" which is missing in the request.',
             $this->reflectionTools->getFunctionName($controller),
             $attribute->getParameterType(),
-            $attribute->getName()
+            $attribute->name
         ));
     }
 
@@ -190,8 +190,8 @@ class RequestParamPlugin extends AbstractAttributePlugin
             '%s() expects an array for %s parameter "%s" (bound to $%s), string given.',
             $this->reflectionTools->getFunctionName($controller),
             $attribute->getParameterType(),
-            $attribute->getName(),
-            $attribute->getBindTo()
+            $attribute->name,
+            $attribute->bindTo
         ));
     }
 
@@ -209,8 +209,8 @@ class RequestParamPlugin extends AbstractAttributePlugin
             $this->reflectionTools->getFunctionName($controller),
             $type,
             $attribute->getParameterType(),
-            $attribute->getName(),
-            $attribute->getBindTo()
+            $attribute->name,
+            $attribute->bindTo
         ));
     }
 
@@ -228,8 +228,8 @@ class RequestParamPlugin extends AbstractAttributePlugin
             $this->reflectionTools->getFunctionName($controller),
             $type,
             $attribute->getParameterType(),
-            $attribute->getName(),
-            $attribute->getBindTo()
+            $attribute->name,
+            $attribute->bindTo
         ));
     }
 }

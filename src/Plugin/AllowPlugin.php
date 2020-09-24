@@ -25,7 +25,7 @@ class AllowPlugin extends AbstractAttributePlugin
 
             if ($attribute instanceof Allow) {
                 $method = $event->getRequest()->getMethod();
-                $allowedMethods = $attribute->getMethods();
+                $allowedMethods = $attribute->methods;
 
                 if (! in_array($method, $allowedMethods)) {
                     throw new HttpMethodNotAllowedException($allowedMethods);

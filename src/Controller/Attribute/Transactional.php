@@ -27,7 +27,7 @@ final class Transactional
     /**
      * The transaction isolation level.
      */
-    private $isolationLevel = TransactionIsolationLevel::SERIALIZABLE;
+    public $isolationLevel = TransactionIsolationLevel::SERIALIZABLE;
 
     /**
      * Maps the isolation level strings to constants.
@@ -48,10 +48,5 @@ final class Transactional
 
             $this->isolationLevel = self::ISOLATION_LEVELS[$isolationLevel];
         }
-    }
-
-    public function getIsolationLevel() : int
-    {
-        return $this->isolationLevel;
     }
 }
