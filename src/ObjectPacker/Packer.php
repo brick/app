@@ -45,7 +45,7 @@ class Packer
      * @param array $visited  The visited objects, for recursive calls.
      * @param int   $level    The nesting level.
      */
-    private function copy($variable, bool $pack, array & $visited = [], int $level = 0) : mixed
+    private function copy(mixed $variable, bool $pack, array & $visited = [], int $level = 0) : mixed
     {
         if (is_object($variable)) {
             $hash = spl_object_hash($variable);

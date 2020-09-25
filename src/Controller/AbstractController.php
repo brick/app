@@ -73,7 +73,7 @@ abstract class AbstractController
      * @param mixed $data   The data to encode, or a valid JSON string if `$encode` == `false`.
      * @param bool  $encode Whether to JSON-encode the data.
      */
-    protected function json($data, bool $encode = true) : Response
+    protected function json(mixed $data, bool $encode = true) : Response
     {
         if ($encode) {
             $data = json_encode($data);
