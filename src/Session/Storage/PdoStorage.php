@@ -29,11 +29,7 @@ use PDO;
  */
 class PdoStorage implements SessionStorage
 {
-    private PDO $pdo;
-
-    private array $options;
-
-    private static array $defaultOptions = [
+    private const DEFAULT_OPTIONS = [
         'table-name'         => 'session',       // The table name.
         'id-column'          => 's_id',          // The column containing the session id.
         'key-column'         => 's_key',         // The column containing the data key.
@@ -42,13 +38,17 @@ class PdoStorage implements SessionStorage
         'last-access-grace'  => 60               // The imprecision allowed for the last access timestamp, in seconds.
     ];
 
+    private PDO $pdo;
+
+    private array $options;
+
     /**
      * Class constructor.
      */
     public function __construct(PDO $pdo, array $options = [])
     {
         $this->pdo = $pdo;
-        $this->options = $options + self::$defaultOptions;
+        $this->options = $options + self::DEFAULT_OPTIONS;
     }
 
     public function read(string $id, string $key, Lock|null $lock = null) : string|null
