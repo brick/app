@@ -19,9 +19,6 @@ use Brick\DateTime\ZonedDateTime;
  */
 class DateTimePacker implements ObjectPacker
 {
-    /**
-     * {@inheritdoc}
-     */
     public function pack(object $object) : PackedObject|null
     {
         if ($object instanceof Duration) {
@@ -59,9 +56,6 @@ class DateTimePacker implements ObjectPacker
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unpack(PackedObject $packedObject) : object|null
     {
         $class = $packedObject->getClass();

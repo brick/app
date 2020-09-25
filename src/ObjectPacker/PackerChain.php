@@ -19,9 +19,6 @@ class PackerChain implements ObjectPacker
         $this->objectPackers[] = $objectPacker;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function pack(object $object) : PackedObject|null
     {
         foreach ($this->objectPackers as $objectPacker) {
@@ -35,9 +32,6 @@ class PackerChain implements ObjectPacker
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unpack(PackedObject $packedObject) : object|null
     {
         foreach ($this->objectPackers as $objectPacker) {

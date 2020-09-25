@@ -25,9 +25,6 @@ class GeometryPacker implements ObjectPacker
         $this->srid = $srid;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function pack(object $object) : PackedObject|null
     {
         if ($object instanceof Geometry) {
@@ -37,9 +34,6 @@ class GeometryPacker implements ObjectPacker
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unpack(PackedObject $packedObject) : object|null
     {
         $class = $packedObject->getClass();

@@ -96,9 +96,6 @@ class FormTableView implements View
         return $table->render();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render() : string
     {
         return
