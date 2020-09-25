@@ -12,71 +12,41 @@ namespace Brick\App\Session;
  */
 class SessionNamespace implements SessionInterface
 {
-    /**
-     * @var Session
-     */
-    private $session;
+    private Session $session;
 
-    /**
-     * @var string
-     */
-    private $namespace;
+    private string $namespace;
 
-    /**
-     * @param Session $session
-     * @param string  $namespace
-     */
     public function __construct(Session $session, string $namespace)
     {
         $this->session   = $session;
         $this->namespace = $namespace;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $key) : bool
     {
         return $this->session->has($this->getKey($key));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get(string $key)
+    public function get(string $key) : mixed
     {
         return $this->session->get($this->getKey($key));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function set(string $key, $value) : void
+    public function set(string $key, mixed $value) : void
     {
         $this->session->set($this->getKey($key), $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(string $key) : void
     {
         $this->session->remove($this->getKey($key));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function synchronize(string $key, callable $function)
+    public function synchronize(string $key, callable $function) : mixed
     {
         return $this->session->synchronize($this->getKey($key), $function);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
     private function getKey(string $key) : string
     {
         return $this->namespace .  '.' . $key;

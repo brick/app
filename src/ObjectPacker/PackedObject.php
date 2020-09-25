@@ -11,25 +11,21 @@ class PackedObject
 {
     /**
      * The canonical class name of the object.
-     *
-     * @var string
      */
-    private $class;
+    private string $class;
 
     /**
      * The packed data.
      *
      * Must be an integer, a string, or a non-empty array of integers and strings.
-     *
-     * @var int|string|array
      */
-    private $data;
+    private int|string|array $data;
 
     /**
      * @param string           $class The canonical class name of the object.
      * @param int|string|array $data  The packed data.
      */
-    public function __construct(string $class, $data)
+    public function __construct(string $class, int|string|array $data)
     {
         $this->class = $class;
         $this->data  = $data;
@@ -37,8 +33,6 @@ class PackedObject
 
     /**
      * Returns the canonical class name of the object.
-     *
-     * @return string
      */
     public function getClass() : string
     {
@@ -47,10 +41,8 @@ class PackedObject
 
     /**
      * Returns the packed data.
-     *
-     * @return mixed
      */
-    public function getData()
+    public function getData() : mixed
     {
         return $this->data;
     }

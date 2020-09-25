@@ -6,6 +6,7 @@ namespace Brick\App;
 
 use Brick\App\Controller\Attribute\Route;
 use LogicException;
+use ReflectionClass;
 use TypeError;
 
 /**
@@ -52,7 +53,7 @@ class AttributeRouteCompiler
         $result = [];
 
         foreach ($classNames as $className) {
-            $reflectionClass = new \ReflectionClass($className);
+            $reflectionClass = new ReflectionClass($className);
 
             $prefixPath = '';
             $prefixRegexp = '';

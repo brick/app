@@ -12,25 +12,17 @@ use Doctrine\ORM\Proxy\Proxy;
  */
 class DoctrinePacker implements ObjectPacker
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
+    private EntityManager $em;
 
     /**
      * Class constructor.
-     *
-     * @param \Doctrine\ORM\EntityManager $em
      */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function pack(object $object) : ?PackedObject
+    public function pack(object $object) : PackedObject|null
     {
         $uow = $this->em->getUnitOfWork();
 
@@ -53,10 +45,7 @@ class DoctrinePacker implements ObjectPacker
         return new PackedObject($this->getClass($object), $identity);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function unpack(PackedObject $packedObject) : ?object
+    public function unpack(PackedObject $packedObject) : object|null
     {
         $class = $packedObject->getClass();
 
@@ -67,11 +56,6 @@ class DoctrinePacker implements ObjectPacker
         return $this->em->getReference($class, $packedObject->getData());
     }
 
-    /**
-     * @param object $entity
-     *
-     * @return string
-     */
     private function getClass(object $entity) : string
     {
         return ($entity instanceof Proxy) ? get_parent_class($entity) : get_class($entity);

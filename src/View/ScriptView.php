@@ -9,9 +9,6 @@ namespace Brick\App\View;
  */
 abstract class ScriptView extends AbstractView
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render() : string
     {
         ob_start();
@@ -29,8 +26,6 @@ abstract class ScriptView extends AbstractView
      * Returns the absolute path to the view script.
      *
      * This is to be implemented by subclasses.
-     *
-     * @return string
      */
     abstract protected function getScriptPath() : string;
 }

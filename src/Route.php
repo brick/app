@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brick\App;
 
+use Brick\Http\Exception\HttpException;
 use Brick\Http\Request;
 
 /**
@@ -14,11 +15,11 @@ interface Route
     /**
      * Attempts to match the given request to a controller.
      *
-     * @param \Brick\Http\Request $request The request to match.
+     * @param Request $request The request to match.
      *
-     * @return \Brick\App\RouteMatch|null A match, or null if no match is found.
+     * @return RouteMatch|null A match, or null if no match is found.
      *
-     * @throws \Brick\Http\Exception\HttpException A route is allowed to throw HTTP exceptions.
+     * @throws HttpException A route is allowed to throw HTTP exceptions.
      */
-    public function match(Request $request) : ?RouteMatch;
+    public function match(Request $request) : RouteMatch|null;
 }

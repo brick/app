@@ -25,29 +25,15 @@ class CookieSession extends Session
         'http-only' => true
     ];
 
-    /**
-     * @var array
-     */
-    private $cookieParams = self::DEFAULT_COOKIE_PARAMS;
+    private array $cookieParams = self::DEFAULT_COOKIE_PARAMS;
 
-    /**
-     * @var int
-     */
-    private $idLength = 26;
+    private int $idLength = 26;
 
-    /**
-     * @param array $params
-     *
-     * @return void
-     */
     public function setCookieParams(array $params) : void
     {
         $this->cookieParams = $params + $this->cookieParams;
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function readSessionId(Request $request) : void
     {
         $sessionId = $request->getCookie($this->cookieParams['name']);
@@ -57,9 +43,6 @@ class CookieSession extends Session
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function writeSessionId(Response $response) : void
     {
         $lifetime = $this->cookieParams['lifetime'];
@@ -77,9 +60,6 @@ class CookieSession extends Session
         $response->setCookie($cookie);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function generateSessionId() : string
     {
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -100,10 +80,6 @@ class CookieSession extends Session
      * which makes it very secure and highly unlikely to get a collision.
      *
      * Do not change this value unless you have a very good reason to do so.
-     *
-     * @param int $length
-     *
-     * @return void
      */
     public function setIdLength(int $length) : void
     {
@@ -119,8 +95,6 @@ class CookieSession extends Session
      * Not all storage engines support id regeneration.
      * If the storage engine supports regeneration, this method returns true.
      * If the storage engine does not support regeneration, this method will do nothing and return false.
-     *
-     * @return bool
      */
     public function regenerateId() : bool
     {
@@ -140,10 +114,6 @@ class CookieSession extends Session
      *
      * This is a security measure to avoid forged session cookies,
      * that could be used for example to hack session adapters.
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     private function checkSessionId(string $id) : bool
     {

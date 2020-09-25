@@ -15,6 +15,7 @@ use Brick\Http\Exception\HttpException;
 use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
+use ReflectionParameter;
 
 /**
  * Automatically converts type-hinted objects in controller parameters, from their string or array representation.
@@ -24,22 +25,13 @@ use Brick\Http\Exception\HttpInternalServerErrorException;
  */
 class ObjectUnpackPlugin implements Plugin
 {
-    /**
-     * @var \Brick\App\ObjectPacker\ObjectPacker
-     */
-    private $objectPacker;
+    private ObjectPacker $objectPacker;
 
-    /**
-     * @param ObjectPacker $objectPacker
-     */
     public function __construct(ObjectPacker $objectPacker)
     {
         $this->objectPacker = $objectPacker;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, function(ControllerReadyEvent $event) {
@@ -48,8 +40,6 @@ class ObjectUnpackPlugin implements Plugin
     }
 
     /**
-     * @param ControllerReadyEvent $event
-     *
      * @return array The value to assign to the function parameter.
      *
      * @throws HttpException If the object cannot be instantiated.
@@ -73,14 +63,9 @@ class ObjectUnpackPlugin implements Plugin
     }
 
     /**
-     * @param \ReflectionParameter $parameter
-     * @param mixed                $value
-     *
-     * @return mixed
-     *
      * @throws HttpException If the object cannot be instantiated.
      */
-    private function getParameterValue(\ReflectionParameter $parameter, $value)
+    private function getParameterValue(ReflectionParameter $parameter, mixed $value) : mixed
     {
         $class = $parameter->getClass();
 
@@ -107,11 +92,9 @@ class ObjectUnpackPlugin implements Plugin
      * @param string $className The resulting object class name.
      * @param mixed  $value     The raw parameter value to convert to an object.
      *
-     * @return object
-     *
      * @throws HttpException If the object cannot be instantiated.
      */
-    private function getObject(string $className, $value) : object
+    private function getObject(string $className, mixed $value) : object
     {
         $packedObject = new PackedObject($className, $value);
 

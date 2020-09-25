@@ -29,9 +29,6 @@ class TransactionalPlugin extends AbstractAttributePlugin
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(RouteMatchedEvent::class, function (RouteMatchedEvent $event) {

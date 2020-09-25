@@ -13,33 +13,24 @@ use Brick\Http\Response;
 
 class ApplicationTest extends TestCase
 {
-    /**
-     * @param Response $response
-     *
-     * @return ResponseAssertion
-     */
-    private function assertResponse(Response $response)
+    private function assertResponse(Response $response) : ResponseAssertion
     {
         return new ResponseAssertion($this, $response);
     }
 
-    /**
-     * @param int      $statusCode
-     * @param Response $response
-     */
-    private function assertStatusCode($statusCode, Response $response)
+    private function assertStatusCode(int $statusCode, Response $response) : void
     {
         $this->assertSame($statusCode, $response->getStatusCode());
     }
 
-    public function testNoRouteReturns404()
+    public function testNoRouteReturns404() : void
     {
         $application = Application::create();
         $response = $application->handle(new Request());
         $this->assertStatusCode(404, $response);
     }
 
-    public function testRouting()
+    public function testRouting() : void
     {
         $application = Application::create();
         $application->addRoute(new HelloRoute());
@@ -66,7 +57,7 @@ class ApplicationTest extends TestCase
 
 class HelloRoute implements Route
 {
-    public function match(Request $request) : ?RouteMatch
+    public function match(Request $request) : RouteMatch|null
     {
         if ($request->getPath() === '/a') {
             return RouteMatch::forFunction(function() {

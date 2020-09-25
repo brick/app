@@ -11,8 +11,6 @@ interface View
 {
     /**
      * Renders the view as a string.
-     *
-     * @return string
      */
     public function render() : string;
 }

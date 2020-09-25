@@ -9,15 +9,9 @@ namespace Brick\App\View;
  */
 class MagicView extends ScriptView
 {
-    /**
-     * @var string
-     */
-    private $scriptPath;
+    private string $scriptPath;
 
-    /**
-     * @var array
-     */
-    private $parameters;
+    private array $parameters;
 
     /**
      * @param string $scriptPath The view script path, typically a .phtml file.
@@ -29,20 +23,15 @@ class MagicView extends ScriptView
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getScriptPath() : string
     {
         return $this->scriptPath;
     }
 
     /**
-     * @param string $name
-     *
      * @return mixed The value, or null if no parameter by that name.
      */
-    public function __get(string $name)
+    public function __get(string $name) : mixed
     {
         return $this->parameters[$name] ?? null;
     }
@@ -50,19 +39,12 @@ class MagicView extends ScriptView
     /**
      * @param string $name  The parameter name.
      * @param mixed  $value The parameter value.
-     *
-     * @return void
      */
-    public function __set(string $name, $value) : void
+    public function __set(string $name, mixed $value) : void
     {
         $this->parameters[$name] = $value;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function __isset(string $name) : bool
     {
         return isset($this->parameters[$name]);

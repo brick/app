@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Brick\App\Session\Storage;
 
+use PDO;
+
 /**
  * PDO storage engine for storing sessions in the database.
  *
@@ -27,20 +29,11 @@ namespace Brick\App\Session\Storage;
  */
 class PdoStorage implements SessionStorage
 {
-    /**
-     * @var \PDO
-     */
-    private $pdo;
+    private PDO $pdo;
 
-    /**
-     * @var array
-     */
-    private $options;
+    private array $options;
 
-    /**
-     * @var array
-     */
-    private static $defaultOptions = [
+    private static array $defaultOptions = [
         'table-name'         => 'session',       // The table name.
         'id-column'          => 's_id',          // The column containing the session id.
         'key-column'         => 's_key',         // The column containing the data key.
@@ -51,20 +44,14 @@ class PdoStorage implements SessionStorage
 
     /**
      * Class constructor.
-     *
-     * @param \PDO  $pdo
-     * @param array $options
      */
-    public function __construct(\PDO $pdo, array $options = [])
+    public function __construct(PDO $pdo, array $options = [])
     {
         $this->pdo = $pdo;
         $this->options = $options + self::$defaultOptions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function read(string $id, string $key, ?Lock $lock = null) : ?string
+    public function read(string $id, string $key, Lock|null $lock = null) : string|null
     {
         if ($lock) {
             $this->pdo->beginTransaction();
@@ -82,7 +69,7 @@ class PdoStorage implements SessionStorage
         $statement = $this->pdo->prepare($query);
         $statement->execute([$id, $key]);
 
-        $data = $statement->fetch(\PDO::FETCH_NUM);
+        $data = $statement->fetch(PDO::FETCH_NUM);
         $statement->closeCursor();
 
         if ($data === false) {
@@ -101,11 +88,6 @@ class PdoStorage implements SessionStorage
 
     /**
      * Updates a record with the current timestamp.
-     *
-     * @param string $id
-     * @param string $key
-     *
-     * @return void
      */
     private function touch(string $id, string $key) : void
     {
@@ -121,10 +103,7 @@ class PdoStorage implements SessionStorage
         $statement->execute([time(), $id, $key]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(string $id, string $key, string $value, ?Lock $lock = null) : void
+    public function write(string $id, string $key, string $value, Lock|null $lock = null) : void
     {
         $this->updateRecord($id, $key, $value) || $this->insertRecord($id, $key, $value);
 
@@ -133,9 +112,6 @@ class PdoStorage implements SessionStorage
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unlock(Lock $lock) : void
     {
         $this->pdo->rollBack();
@@ -146,10 +122,6 @@ class PdoStorage implements SessionStorage
      *
      * The CASE statement is here to ensure that if two updates occur within the same second,
      * the record will still be updated and the method will return true.
-     *
-     * @param string $id
-     * @param string $key
-     * @param string $value
      *
      * @return bool Whether the record exists and was updated.
      */
@@ -174,12 +146,6 @@ class PdoStorage implements SessionStorage
 
     /**
      * Creates a new record with the given id and key.
-     *
-     * @param string $id
-     * @param string $key
-     * @param string $value
-     *
-     * @return void
      */
     private function insertRecord(string $id, string $key, string $value) : void
     {
@@ -196,9 +162,6 @@ class PdoStorage implements SessionStorage
         $statement->execute([$id, $key, $value, time()]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(string $id, string $key) : void
     {
         $query = sprintf(
@@ -212,9 +175,6 @@ class PdoStorage implements SessionStorage
         $statement->execute([$id, $key]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear(string $id) : void
     {
         $query = sprintf(
@@ -227,9 +187,6 @@ class PdoStorage implements SessionStorage
         $statement->execute([$id]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function expire(int $lifetime) : void
     {
         $query = sprintf(
@@ -242,9 +199,6 @@ class PdoStorage implements SessionStorage
         $statement->execute([time() - $lifetime]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function updateId(string $oldId, string $newId) : bool
     {
         $query = sprintf(
@@ -264,12 +218,6 @@ class PdoStorage implements SessionStorage
         return true;
     }
 
-    /**
-     * @param string $query
-     * @param array  $parameters
-     *
-     * @return bool
-     */
     private function executeQuery(string $query, array $parameters) : bool
     {
         $statement = $this->pdo->prepare($query);

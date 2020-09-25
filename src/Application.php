@@ -23,37 +23,29 @@ use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Request;
 use Brick\Http\RequestHandler;
 use Brick\Http\Response;
+use ReflectionMethod;
+use ReflectionFunction;
+use Throwable;
+use UnexpectedValueException;
 
 /**
  * The web application kernel.
  */
 class Application implements RequestHandler
 {
-    /**
-     * @var \Brick\DI\Injector
-     */
-    private $injector;
+    private Injector $injector;
+
+    private ControllerValueResolver $valueResolver;
+
+    private EventDispatcher $eventDispatcher;
 
     /**
-     * @var \Brick\App\ControllerValueResolver
+     * @var Route[]
      */
-    private $valueResolver;
-
-    /**
-     * @var \Brick\Event\EventDispatcher
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var \Brick\App\Route[]
-     */
-    private $routes = [];
+    private array $routes = [];
 
     /**
      * Class constructor.
-     *
-     * @param ValueResolver   $resolver
-     * @param InjectionPolicy $policy
      */
     private function __construct(ValueResolver $resolver, InjectionPolicy $policy)
     {
@@ -71,7 +63,7 @@ class Application implements RequestHandler
      *
      * @return Application
      */
-    public static function create(?Container $container = null) : Application
+    public static function create(Container|null $container = null) : Application
     {
         if ($container !== null) {
             $valueResolver   = $container->getValueResolver();
@@ -84,11 +76,6 @@ class Application implements RequestHandler
         return new Application($valueResolver, $injectionPolicy);
     }
 
-    /**
-     * @param Route $route
-     *
-     * @return Application
-     */
     public function addRoute(Route $route) : Application
     {
         $this->routes[] = $route;
@@ -110,8 +97,6 @@ class Application implements RequestHandler
 
     /**
      * Runs the application.
-     *
-     * @return void
      */
     public function run() : void
     {
@@ -121,9 +106,7 @@ class Application implements RequestHandler
     }
 
     /**
-     * @param \Brick\Http\Request $request
-     *
-     * @return \Brick\Http\Response
+     * Handles the Request and returns a Response.
      */
     public function handle(Request $request) : Response
     {
@@ -131,18 +114,12 @@ class Application implements RequestHandler
             return $this->handleRequest($request);
         } catch (HttpException $e) {
             return $this->handleHttpException($e, $request);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleUncaughtException($e, $request);
         }
     }
 
     /**
-     * Converts an HttpException to a Response.
-     *
-     * @param \Brick\Http\Exception\HttpException $exception
-     * @param \Brick\Http\Request                 $request
-     *
-     * @return \Brick\Http\Response
      */
     private function handleHttpException(HttpException $exception, Request $request) : Response
     {
@@ -161,13 +138,8 @@ class Application implements RequestHandler
 
     /**
      * Wraps an uncaught exception in an HttpInternalServerErrorException, and converts it to a Response.
-     *
-     * @param \Throwable          $exception
-     * @param \Brick\Http\Request $request
-     *
-     * @return \Brick\Http\Response
      */
-    private function handleUncaughtException(\Throwable $exception, Request $request) : Response
+    private function handleUncaughtException(Throwable $exception, Request $request) : Response
     {
         $httpException = new HttpInternalServerErrorException('Uncaught exception', $exception);
 
@@ -175,12 +147,12 @@ class Application implements RequestHandler
     }
 
     /**
-     * @param \Brick\Http\Request $request The request to handle.
+     * @param Request $request The request to handle.
      *
-     * @return \Brick\Http\Response The generated response.
+     * @return Response The generated response.
      *
-     * @throws \Brick\Http\Exception\HttpException If a route throws such an exception, or no route matches the request.
-     * @throws \UnexpectedValueException           If a route or controller returned an invalid value.
+     * @throws HttpException If a route throws such an exception, or no route matches the request.
+     * @throws UnexpectedValueException           If a route or controller returned an invalid value.
      */
     private function handleRequest(Request $request) : Response
     {
@@ -197,14 +169,14 @@ class Application implements RequestHandler
 
         $this->valueResolver->setRequest($request);
 
-        if ($controllerReflection instanceof \ReflectionMethod) {
+        if ($controllerReflection instanceof ReflectionMethod) {
             $className = $controllerReflection->getDeclaringClass()->getName();
             $instance = $this->injector->instantiate($className, $match->getClassParameters());
             $callable = $controllerReflection->getClosure($instance);
-        } elseif ($controllerReflection instanceof \ReflectionFunction) {
+        } elseif ($controllerReflection instanceof ReflectionFunction) {
             $callable = $controllerReflection->getClosure();
         } else {
-            throw new \UnexpectedValueException('Unknown controller reflection type.');
+            throw new UnexpectedValueException('Unknown controller reflection type.');
         }
 
         $event = new ControllerReadyEvent($request, $match, $instance);
@@ -251,8 +223,8 @@ class Application implements RequestHandler
      *
      * @return RouteMatch The route match.
      *
-     * @throws HttpNotFoundException     If no route matches the request.
-     * @throws \UnexpectedValueException If a route returns an invalid value.
+     * @throws HttpNotFoundException    If no route matches the request.
+     * @throws UnexpectedValueException If a route returns an invalid value.
      */
     private function route(Request $request) : RouteMatch
     {
@@ -281,13 +253,13 @@ class Application implements RequestHandler
      * @param string $expected The expected return value type.
      * @param mixed  $actual   The actual return value.
      *
-     * @return \UnexpectedValueException
+     * @return UnexpectedValueException
      */
-    private function invalidReturnValue(string $what, string $expected, $actual) : \UnexpectedValueException
+    private function invalidReturnValue(string $what, string $expected, $actual) : UnexpectedValueException
     {
         $message = 'Invalid return value from %s: expected %s, got %s.';
         $actual  = is_object($actual) ? get_class($actual) : gettype($actual);
 
-        return new \UnexpectedValueException(sprintf($message, $what, $expected, $actual));
+        return new UnexpectedValueException(sprintf($message, $what, $expected, $actual));
     }
 }

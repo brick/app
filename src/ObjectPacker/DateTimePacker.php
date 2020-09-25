@@ -22,7 +22,7 @@ class DateTimePacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function pack(object $object) : ?PackedObject
+    public function pack(object $object) : PackedObject|null
     {
         if ($object instanceof Duration) {
             return new PackedObject(Duration::class, (string) $object);
@@ -62,7 +62,7 @@ class DateTimePacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function unpack(PackedObject $packedObject) : ?object
+    public function unpack(PackedObject $packedObject) : object|null
     {
         $class = $packedObject->getClass();
         $data  = $packedObject->getData();

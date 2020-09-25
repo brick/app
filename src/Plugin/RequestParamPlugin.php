@@ -11,15 +11,14 @@ use Brick\Http\Exception\HttpException;
 use Brick\Http\Request;
 use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
+use ReflectionAttribute;
+use ReflectionFunctionAbstract;
 
 /**
  * Injects request parameters into controllers using the QueryParam and PostParam attributes.
  */
 class RequestParamPlugin extends AbstractAttributePlugin
 {
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, function(ControllerReadyEvent $event) {
@@ -33,10 +32,10 @@ class RequestParamPlugin extends AbstractAttributePlugin
     /**
      * @throws HttpException
      */
-    private function getParameters(Request $request, \ReflectionFunctionAbstract $controller) : array
+    private function getParameters(Request $request, ReflectionFunctionAbstract $controller) : array
     {
         /** @var RequestParam[] $requestParamAttributes */
-        $requestParamAttributes = $controller->getAttributes(RequestParam::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $requestParamAttributes = $controller->getAttributes(RequestParam::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $parameters = [];
         foreach ($controller->getParameters() as $parameter) {
@@ -67,7 +66,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
      *
      * @throws HttpException
      */
-    private function getParameter(RequestParam $attribute, \ReflectionFunctionAbstract $controller, array $parameters, Request $request) : mixed
+    private function getParameter(RequestParam $attribute, ReflectionFunctionAbstract $controller, array $parameters, Request $request) : mixed
     {
         $requestParameters = $attribute->getRequestParameters($request);
         $parameterName = $attribute->name;
@@ -147,13 +146,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         throw $this->invalidScalarParameterException($controller, $attribute, $type);
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $controller
-     * @param RequestParam                $attribute
-     *
-     * @return HttpInternalServerErrorException
-     */
-    private function unknownParameterException(\ReflectionFunctionAbstract $controller, RequestParam $attribute) : HttpInternalServerErrorException
+    private function unknownParameterException(ReflectionFunctionAbstract $controller, RequestParam $attribute) : HttpInternalServerErrorException
     {
         return new HttpInternalServerErrorException(sprintf(
             '%s() does not have a $%s parameter, please check your attribute.',
@@ -162,13 +155,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         ));
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $controller
-     * @param RequestParam                $attribute
-     *
-     * @return HttpBadRequestException
-     */
-    private function missingParameterException(\ReflectionFunctionAbstract $controller, RequestParam $attribute) : HttpBadRequestException
+    private function missingParameterException(ReflectionFunctionAbstract $controller, RequestParam $attribute) : HttpBadRequestException
     {
         return new HttpBadRequestException(sprintf(
             '%s() requires a %s parameter "%s" which is missing in the request.',
@@ -178,13 +165,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         ));
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $controller
-     * @param RequestParam                $attribute
-     *
-     * @return HttpBadRequestException
-     */
-    private function invalidArrayParameterException(\ReflectionFunctionAbstract $controller, RequestParam $attribute) : HttpBadRequestException
+    private function invalidArrayParameterException(ReflectionFunctionAbstract $controller, RequestParam $attribute) : HttpBadRequestException
     {
         return new HttpBadRequestException(sprintf(
             '%s() expects an array for %s parameter "%s" (bound to $%s), string given.',
@@ -195,14 +176,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         ));
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $controller
-     * @param RequestParam                $attribute
-     * @param string                      $type
-     *
-     * @return HttpBadRequestException
-     */
-    private function invalidScalarParameterException(\ReflectionFunctionAbstract $controller, RequestParam $attribute, string $type) : HttpBadRequestException
+    private function invalidScalarParameterException(ReflectionFunctionAbstract $controller, RequestParam $attribute, string $type) : HttpBadRequestException
     {
         return new HttpBadRequestException(sprintf(
             '%s() received an invalid %s value for %s parameter "%s" (bound to $%s).',
@@ -214,14 +188,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
         ));
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $controller
-     * @param RequestParam                $attribute
-     * @param string                      $type
-     *
-     * @return HttpInternalServerErrorException
-     */
-    private function unsupportedBuiltinType(\ReflectionFunctionAbstract $controller, RequestParam $attribute, string $type) : HttpInternalServerErrorException
+    private function unsupportedBuiltinType(ReflectionFunctionAbstract $controller, RequestParam $attribute, string $type) : HttpInternalServerErrorException
     {
         return new HttpInternalServerErrorException(sprintf(
             '%s() requests an unsupported type (%s) for %s parameter "%s" (bound to $%s).',

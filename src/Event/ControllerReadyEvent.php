@@ -18,45 +18,35 @@ final class ControllerReadyEvent
 {
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
-     *
-     * @var \Brick\App\RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
-     *
-     * @var object|null
      */
-    private $instance;
+    private object|null $instance;
 
     /**
      * An associative array of parameters to resolve the controller arguments.
-     *
-     * @var array
      */
-    private $parameters = [];
+    private array $parameters = [];
 
     /**
      * An early response to return when a plugin decides to short-circuit the normal application flow.
-     *
-     * @var Response|null
      */
-    private $response;
+    private Response|null $response = null;
 
     /**
      * @param Request     $request    The request.
      * @param RouteMatch  $routeMatch The route match.
-     * @param object|null $instance   The controller instance.
+     * @param object|null $instance   The controller instance, if any.
      */
-    public function __construct(Request $request, RouteMatch $routeMatch, ?object $instance)
+    public function __construct(Request $request, RouteMatch $routeMatch, object|null $instance)
     {
         $this->request    = $request;
         $this->routeMatch = $routeMatch;
@@ -65,8 +55,6 @@ final class ControllerReadyEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {
@@ -75,8 +63,6 @@ final class ControllerReadyEvent
 
     /**
      * Returns the route match.
-     *
-     * @return \Brick\App\RouteMatch
      */
     public function getRouteMatch() : RouteMatch
     {
@@ -85,10 +71,8 @@ final class ControllerReadyEvent
 
     /**
      * Returns the controller instance, or null if the controller is not a class method.
-     *
-     * @return object|null
      */
-    public function getControllerInstance() : ?object
+    public function getControllerInstance() : object|null
     {
         return $this->instance;
     }
@@ -97,8 +81,6 @@ final class ControllerReadyEvent
      * Adds parameters to resolve the controller arguments.
      *
      * @param array $parameters An associative array of key-value pairs.
-     *
-     * @return void
      */
     public function addParameters(array $parameters) : void
     {
@@ -107,28 +89,18 @@ final class ControllerReadyEvent
 
     /**
      * Returns the parameters to resolve the controller arguments.
-     *
-     * @return array
      */
     public function getParameters() : array
     {
         return $this->parameters;
     }
 
-    /**
-     * @param Response|null $response
-     *
-     * @return void
-     */
-    public function setResponse(?Response $response = null) : void
+    public function setResponse(Response|null $response = null) : void
     {
         $this->response = $response;
     }
 
-    /**
-     * @return Response|null
-     */
-    public function getResponse() : ?Response
+    public function getResponse() : Response|null
     {
         return $this->response;
     }

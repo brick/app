@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Brick\App\Session;
 
+use Brick\App\ObjectPacker\ObjectPacker;
+use Brick\App\ObjectPacker\Packer;
+use Brick\App\Session\Storage\Lock;
+use Brick\App\Session\Storage\SessionStorage;
 use Brick\Http\Request;
 use Brick\Http\Response;
-
-use Brick\App\ObjectPacker\Packer;
-use Brick\App\ObjectPacker\ObjectPacker;
-use Brick\App\Session\Storage\Lock;
+use RuntimeException;
+use Throwable;
 
 /**
  * Persists data between HTTP requests.
@@ -18,17 +20,13 @@ abstract class Session implements SessionInterface
 {
     /**
      * The session storage mechanism.
-     *
-     * @var \Brick\App\Session\Storage\SessionStorage
      */
-    protected $storage;
+    protected SessionStorage $storage;
 
     /**
      * The object packer, if any.
-     *
-     * @var \Brick\App\ObjectPacker\Packer|null
      */
-    private $packer;
+    private Packer|null $packer;
 
     /**
      * The session id, or null if not available yet.
@@ -39,41 +37,26 @@ abstract class Session implements SessionInterface
      * If other words, for a request that is not associated with a session, the session id is created just in time when
      * a write occurs, to avoid sending a cookie with a ghost session id that would not map to an actual entry in the
      * session storage.
-     *
-     * @var string|null
      */
-    protected $id = null;
+    protected string|null $id = null;
 
     /**
      * Whether we're in the middle of a request/response cycle.
      *
      * i.e. handleRequest() has been called, handleResponse() has not yet been called.
-     *
-     * @var bool
      */
-    protected $inRequest = false;
+    protected bool $inRequest = false;
 
     /**
      * A local cache of the data loaded from the storage.
-     *
-     * @var array
      */
-    private $data = [];
+    private array $data = [];
 
-    /**
-     * @var int
-     */
-    private $gcDividend = 1;
+    private int $gcDividend = 1;
 
-    /**
-     * @var int
-     */
-    private $gcDivisor = 100;
+    private int $gcDivisor = 100;
 
-    /**
-     * @var int
-     */
-    private $lifetime = 1800;
+    private int $lifetime = 1800;
 
     /**
      * Class constructor.
@@ -81,7 +64,7 @@ abstract class Session implements SessionInterface
      * @param Storage\SessionStorage $storage      The session storage, or null to use a default file storage.
      * @param ObjectPacker|null      $objectPacker An optional object packer to use when serializing the session data.
      */
-    public function __construct(?Storage\SessionStorage $storage = null, ?ObjectPacker $objectPacker = null)
+    public function __construct(Storage\SessionStorage|null $storage = null, ObjectPacker|null $objectPacker = null)
     {
         if ($storage === null) {
             $storage = new Storage\FileStorage(session_save_path());
@@ -94,11 +77,6 @@ abstract class Session implements SessionInterface
         }
     }
 
-    /**
-     * @param string $namespace
-     *
-     * @return SessionNamespace
-     */
     public function getNamespace(string $namespace) : SessionNamespace
     {
         return new SessionNamespace($this, $namespace);
@@ -108,11 +86,6 @@ abstract class Session implements SessionInterface
      * Sets the probability for the garbage collection to be triggered on any given request.
      *
      * For example, setGcProbability(1, 100) gives a 1% chance for the gc to be triggered.
-     *
-     * @param int $dividend
-     * @param int $divisor
-     *
-     * @return void
      */
     public function setGcProbability(int $dividend, int $divisor) : void
     {
@@ -120,11 +93,6 @@ abstract class Session implements SessionInterface
         $this->gcDivisor = $divisor;
     }
 
-    /**
-     * @param int $lifetime
-     *
-     * @return void
-     */
     public function setLifetime(int $lifetime) : void
     {
         $this->lifetime = $lifetime;
@@ -132,10 +100,6 @@ abstract class Session implements SessionInterface
 
     /**
      * Reads the session cookie from the request.
-     *
-     * @param \Brick\Http\Request $request
-     *
-     * @return void
      */
     public function handleRequest(Request $request) : void
     {
@@ -151,10 +115,6 @@ abstract class Session implements SessionInterface
 
     /**
      * Writes the session cookie to the Response.
-     *
-     * @param \Brick\Http\Response $response
-     *
-     * @return void
      */
     public function handleResponse(Response $response) : void
     {
@@ -170,18 +130,8 @@ abstract class Session implements SessionInterface
         $this->reset();
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return void
-     */
     abstract protected function readSessionId(Request $request) : void;
 
-    /**
-     * @param Response $response
-     *
-     * @return void
-     */
     abstract protected function writeSessionId(Response $response) : void;
 
     /**
@@ -189,23 +139,15 @@ abstract class Session implements SessionInterface
      *
      * This is only relevant to cookie sessions.
      * IP sessions should throw an exeption here, as this method should never be called.
-     *
-     * @return string
      */
     abstract protected function generateSessionId() : string;
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $key) : bool
     {
         return $this->get($key) !== null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get(string $key)
+    public function get(string $key) : mixed
     {
         if (isset($this->data[$key])) {
             return $this->data[$key];
@@ -226,10 +168,7 @@ abstract class Session implements SessionInterface
         return $this->data[$key] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function set(string $key, $value) : void
+    public function set(string $key, mixed $value) : void
     {
         if ($value === null) {
             $this->remove($key);
@@ -244,9 +183,6 @@ abstract class Session implements SessionInterface
         $this->data[$key] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(string $key) : void
     {
         $id = $this->getOptionalId();
@@ -260,10 +196,7 @@ abstract class Session implements SessionInterface
         unset($this->data[$key]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function synchronize(string $key, callable $function)
+    public function synchronize(string $key, callable $function) : mixed
     {
         $id = $this->getId();
         $lock = new Lock();
@@ -274,7 +207,7 @@ abstract class Session implements SessionInterface
             $value = $function($value);
 
             $serialized = $this->serialize($value);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->storage->unlock($lock);
 
             throw $e;
@@ -285,9 +218,6 @@ abstract class Session implements SessionInterface
         return $this->data[$key] = $value;
     }
 
-    /**
-     * @return void
-     */
     public function clear() : void
     {
         $id = $this->getOptionalId();
@@ -301,27 +231,18 @@ abstract class Session implements SessionInterface
         $this->data = [];
     }
 
-    /**
-     * @return void
-     */
     public function collectGarbage()
     {
         $this->storage->expire($this->lifetime);
     }
 
-    /**
-     * @return string|null
-     */
-    private function getOptionalId() : ?string
+    private function getOptionalId() : string|null
     {
         $this->checkInRequest();
 
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     private function getId() : string
     {
         $this->checkInRequest();
@@ -334,34 +255,24 @@ abstract class Session implements SessionInterface
     }
 
     /**
-     * @return void
-     *
      * @throws \RuntimeException
      */
     private function checkInRequest() : void
     {
         if (! $this->inRequest) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Trying to access a Session object that has not yet been loaded. ' .
                 'This most likely means that you have not added the SessionPlugin to your application.'
             );
         }
     }
 
-    /**
-     * @return bool
-     */
     private function isTimeToCollectGarbage() : bool
     {
         return random_int(0, $this->gcDivisor - 1) < $this->gcDividend;
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return string
-     */
-    private function serialize($value) : string
+    private function serialize(mixed $value) : string
     {
         if ($this->packer !== null) {
             $value = $this->packer->pack($value);
@@ -370,12 +281,7 @@ abstract class Session implements SessionInterface
         return serialize($value);
     }
 
-    /**
-     * @param string $data
-     *
-     * @return mixed
-     */
-    private function unserialize(string $data)
+    private function unserialize(string $data) : mixed
     {
         $value = unserialize($data);
 
@@ -388,8 +294,6 @@ abstract class Session implements SessionInterface
 
     /**
      * Resets the session status.
-     *
-     * @return void
      */
     private function reset() : void
     {

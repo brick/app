@@ -16,14 +16,8 @@ use Brick\Html\Tag;
  */
 class FormView implements View
 {
-    /**
-     * @var \Brick\Form\Form
-     */
-    private $form;
+    private Form $form;
 
-    /**
-     * @param \Brick\Form\Form $form
-     */
     public function __construct(Form $form)
     {
         $this->form = $form;
@@ -31,10 +25,6 @@ class FormView implements View
 
     /**
      * Renders the errors of a Form or an Element as an unordered list.
-     *
-     * @param \Brick\Form\Base $base
-     *
-     * @return string
      */
     private function renderErrors(Base $base) : string
     {
@@ -58,10 +48,6 @@ class FormView implements View
 
     /**
      * Renders an element, along with its label.
-     *
-     * @param \Brick\Form\Element $element
-     *
-     * @return string
      */
     private function renderElement(Element $element) : string
     {
@@ -74,11 +60,6 @@ class FormView implements View
         return $label->render() . $element->render();
     }
 
-    /**
-     * @param \Brick\Form\Form $form
-     *
-     * @return string
-     */
     private function renderForm(Form $form) : string
     {
         $html = '';
@@ -98,9 +79,6 @@ class FormView implements View
         return $html;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render() : string
     {
         return

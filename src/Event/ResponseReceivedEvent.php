@@ -20,31 +20,23 @@ final class ResponseReceivedEvent
 {
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The response.
-     *
-     * @var Response
      */
-    private $response;
+    private Response $response;
 
     /**
      * The route match.
-     *
-     * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
-     *
-     * @var object|null
      */
-    private $instance;
+    private object|null $instance;
 
     /**
      * @param Request     $request    The request.
@@ -52,7 +44,7 @@ final class ResponseReceivedEvent
      * @param RouteMatch  $routeMatch The route match.
      * @param object|null $instance   The controller instance.
      */
-    public function __construct(Request $request, Response $response, RouteMatch $routeMatch, ?object $instance)
+    public function __construct(Request $request, Response $response, RouteMatch $routeMatch, object|null $instance)
     {
         $this->request    = $request;
         $this->response   = $response;
@@ -62,8 +54,6 @@ final class ResponseReceivedEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {
@@ -72,8 +62,6 @@ final class ResponseReceivedEvent
 
     /**
      * Returns the response.
-     *
-     * @return Response
      */
     public function getResponse() : Response
     {
@@ -82,8 +70,6 @@ final class ResponseReceivedEvent
 
     /**
      * Returns the route match.
-     *
-     * @return RouteMatch
      */
     public function getRouteMatch() : RouteMatch
     {
@@ -92,10 +78,8 @@ final class ResponseReceivedEvent
 
     /**
      * Returns the controller instance, or null if the controller is not a class method.
-     *
-     * @return object|null
      */
-    public function getControllerInstance() : ?object
+    public function getControllerInstance() : object|null
     {
         return $this->instance;
     }

@@ -14,17 +14,13 @@ final class RouteMatchedEvent
 {
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
-     *
-     * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * @param Request    $request    The request.
@@ -38,8 +34,6 @@ final class RouteMatchedEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {
@@ -48,8 +42,6 @@ final class RouteMatchedEvent
 
     /**
      * Returns the route match.
-     *
-     * @return RouteMatch
      */
     public function getRouteMatch() : RouteMatch
     {

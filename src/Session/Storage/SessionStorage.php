@@ -20,7 +20,7 @@ interface SessionStorage
      *
      * @return string|null The value read, or null if the key does not exist.
      */
-    public function read(string $id, string $key, ?Lock $lock = null) : ?string;
+    public function read(string $id, string $key, Lock|null $lock = null) : string|null;
 
     /**
      * Writes a specific key to the storage.
@@ -30,10 +30,8 @@ interface SessionStorage
      * @param string    $value The value to write.
      * @param Lock|null $lock  If not null, a lock set by `read()` is held on the key, and must be freed after writing.
      *                         The Lock object may contain a context set by `read()`.
-     *
-     * @return void
      */
-    public function write(string $id, string $key, string $value, ?Lock $lock = null) : void;
+    public function write(string $id, string $key, string $value, Lock|null $lock = null) : void;
 
     /**
      * Unlocks the resources locked by an aborted synchronized read-write.
@@ -42,8 +40,6 @@ interface SessionStorage
      * If an exception occurs, `read()` is called then `unlock()`.
      *
      * @param Lock $lock The lock object, that may contain a context set by `read()`.
-     *
-     * @return void
      */
     public function unlock(Lock $lock) : void;
 
@@ -51,37 +47,18 @@ interface SessionStorage
      * Removes a specific key from the storage.
      *
      * Removing a non-existent key is a valid operation and must not throw an exception.
-     *
-     * @param string $id
-     * @param string $key
-     *
-     * @return void
      */
     public function remove(string $id, string $key) : void;
 
     /**
      * Removes all the keys from the storage for the given session id.
-     *
-     * @param string $id
-     *
-     * @return void
      */
     public function clear(string $id) : void;
 
     /**
      * Removes all entries that have not been accessed for more than the given number of seconds.
-     *
-     * @param int $lifetime
-     *
-     * @return void
      */
     public function expire(int $lifetime) : void;
 
-    /**
-     * @param string $oldId
-     * @param string $newId
-     *
-     * @return bool
-     */
     public function updateId(string $oldId, string $newId) : bool;
 }

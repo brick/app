@@ -14,27 +14,14 @@ use Brick\Http\Response;
  */
 abstract class AbstractController
 {
-    /**
-     * @var \Brick\DI\Injector|null
-     */
-    private $injector = null;
+    private Injector|null $injector = null;
 
-    /**
-     * @param Injector $injector
-     *
-     * @return void
-     */
     #[Inject]
     public function setInjector(Injector $injector) : void
     {
         $this->injector = $injector;
     }
 
-    /**
-     * @param \Brick\App\View\View $view
-     *
-     * @return string
-     */
     protected function renderAsString(View $view) : string
     {
         if ($this->injector) {
@@ -46,10 +33,6 @@ abstract class AbstractController
 
     /**
      * Renders a View in a Response object.
-     *
-     * @param \Brick\App\View\View $view
-     *
-     * @return \Brick\Http\Response
      */
     protected function render(View $view) : Response
     {
@@ -60,8 +43,6 @@ abstract class AbstractController
      * Returns a plain text response.
      *
      * @param string $text The text content.
-     *
-     * @return \Brick\Http\Response
      */
     protected function text(string $text) : Response
     {
@@ -72,8 +53,6 @@ abstract class AbstractController
      * Returns an HTML response.
      *
      * @param string $html The HTML document.
-     *
-     * @return \Brick\Http\Response
      */
     protected function html(string $html) : Response
     {
@@ -82,8 +61,6 @@ abstract class AbstractController
 
     /**
      * @param string $xml The XML document.
-     *
-     * @return Response
      */
     protected function xml(string $xml) : Response
     {
@@ -95,8 +72,6 @@ abstract class AbstractController
      *
      * @param mixed $data   The data to encode, or a valid JSON string if `$encode` == `false`.
      * @param bool  $encode Whether to JSON-encode the data.
-     *
-     * @return \Brick\Http\Response
      */
     protected function json($data, bool $encode = true) : Response
     {
@@ -107,12 +82,6 @@ abstract class AbstractController
         return $this->createResponse($data, 'application/json');
     }
 
-    /**
-     * @param string $data
-     * @param string $contentType
-     *
-     * @return Response
-     */
     private function createResponse(string $data, string $contentType) : Response
     {
         return (new Response())
@@ -120,12 +89,6 @@ abstract class AbstractController
             ->setHeader('Content-Type', $contentType);
     }
 
-    /**
-     * @param string $uri
-     * @param int    $statusCode
-     *
-     * @return \Brick\Http\Response
-     */
     protected function redirect(string $uri, int $statusCode = 302) : Response
     {
         return (new Response())
@@ -135,10 +98,6 @@ abstract class AbstractController
 
     /**
      * Escapes a string for inclusion in an HTML or XML document.
-     *
-     * @param string $text
-     *
-     * @return string
      */
     protected function escape(string $text) : string
     {

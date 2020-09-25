@@ -28,10 +28,7 @@ class AttributeRoute implements Route
         $this->routes = $routes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function match(Request $request) : ?RouteMatch
+    public function match(Request $request) : RouteMatch|null
     {
         $path = $request->getPath();
         $httpMethod = $request->getMethod();

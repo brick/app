@@ -13,10 +13,8 @@ final class IncomingRequestEvent
 {
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * @param Request $request The request.
@@ -28,8 +26,6 @@ final class IncomingRequestEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {

@@ -14,10 +14,8 @@ class GeometryPacker implements ObjectPacker
 {
     /**
      * The default SRID to assign to the geometry when reading WKT.
-     *
-     * @var int
      */
-    private $srid;
+    private int $srid;
 
     /**
      * @param int $srid The default SRID to assign to the geometry when reading WKT.
@@ -30,7 +28,7 @@ class GeometryPacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function pack(object $object) : ?PackedObject
+    public function pack(object $object) : PackedObject|null
     {
         if ($object instanceof Geometry) {
             return new PackedObject(Geometry::class, $object->asText());
@@ -42,7 +40,7 @@ class GeometryPacker implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function unpack(PackedObject $packedObject) : ?object
+    public function unpack(PackedObject $packedObject) : object|null
     {
         $class = $packedObject->getClass();
         $data  = $packedObject->getData();

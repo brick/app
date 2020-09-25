@@ -12,21 +12,15 @@ class ConcatView implements View
     use Helper\PartialViewHelper;
 
     /**
-     * @var \Brick\App\View\View[]
+     * @var View[]
      */
-    private $views;
+    private array $views;
 
-    /**
-     * @param \Brick\App\View\View ...$views
-     */
     public function __construct(View ...$views)
     {
         $this->views = $views;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render() : string
     {
         $result = '';

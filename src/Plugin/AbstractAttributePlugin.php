@@ -6,6 +6,9 @@ namespace Brick\App\Plugin;
 
 use Brick\App\Plugin;
 use Brick\Reflection\ReflectionTools;
+use ReflectionAttribute;
+use ReflectionFunctionAbstract;
+use ReflectionMethod;
 
 /**
  * Base class for plugins checking controller attributes.
@@ -28,25 +31,22 @@ abstract class AbstractAttributePlugin implements Plugin
      *
      * This method does not support controller functions outside a class.
      *
-     * @param \ReflectionFunctionAbstract $controller
-     * @param string                      $attributeClass
-     *
      * @return object|null The attribute, or null if not found.
      */
-    protected function getControllerAttribute(\ReflectionFunctionAbstract $controller, string $attributeClass) : ?object
+    protected function getControllerAttribute(ReflectionFunctionAbstract $controller, string $attributeClass) : object|null
     {
-        $attributes = $controller->getAttributes($attributeClass, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $controller->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
 
         foreach ($attributes as $attribute) {
             return $attribute;
         }
 
-        if ($controller instanceof \ReflectionMethod) {
+        if ($controller instanceof ReflectionMethod) {
             $class = $controller->getDeclaringClass();
             $classes = $this->reflectionTools->getClassHierarchy($class);
 
             foreach ($classes as $class) {
-                $attributes = $class->getAttributes($attributeClass, \ReflectionAttribute::IS_INSTANCEOF);
+                $attributes = $class->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
 
                 foreach ($attributes as $attribute) {
                     return $attribute;
@@ -60,12 +60,9 @@ abstract class AbstractAttributePlugin implements Plugin
     /**
      * Checks whether a controller has a given attribute on the class or method.
      *
-     * @param \ReflectionFunctionAbstract $controller
-     * @param string                      $attributeClass
-     *
      * @return bool Whether the attribute is present.
      */
-    protected function hasControllerAttribute(\ReflectionFunctionAbstract $controller, string $attributeClass) : bool
+    protected function hasControllerAttribute(ReflectionFunctionAbstract $controller, string $attributeClass) : bool
     {
         return $this->getControllerAttribute($controller, $attributeClass) !== null;
     }

@@ -14,9 +14,6 @@ use Brick\Http\Exception\HttpMethodNotAllowedException;
  */
 class AllowPlugin extends AbstractAttributePlugin
 {
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(RouteMatchedEvent::class, function(RouteMatchedEvent $event) {

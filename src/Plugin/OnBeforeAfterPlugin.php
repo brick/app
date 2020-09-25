@@ -12,6 +12,7 @@ use Brick\Http\Exception\HttpInternalServerErrorException;
 use Brick\Http\Request;
 use Brick\Http\Response;
 use Brick\Reflection\ReflectionTools;
+use ReflectionParameter;
 
 /**
  * Registers functions to be called before and after controller method invocation.
@@ -21,17 +22,14 @@ class OnBeforeAfterPlugin implements Plugin
     /**
      * @var callable[][]
      */
-    private $onBefore = [];
+    private array $onBefore = [];
 
     /**
      * @var callable[][]
      */
-    private $onAfter = [];
+    private array $onAfter = [];
 
-    /**
-     * @var ReflectionTools
-     */
-    private $reflectionTools;
+    private ReflectionTools $reflectionTools;
 
     /**
      * Class constructor.
@@ -44,8 +42,6 @@ class OnBeforeAfterPlugin implements Plugin
     /**
      * @param string   $controllerClass The controller class or interface name.
      * @param callable $function        The function to invoke before the controller method.
-     *
-     * @return void
      */
     public function onBefore(string $controllerClass, callable $function) : void
     {
@@ -55,17 +51,12 @@ class OnBeforeAfterPlugin implements Plugin
     /**
      * @param string   $controllerClass The controller class or interface name.
      * @param callable $function        The function to invoke after the controller method.
-     *
-     * @return void
      */
     public function onAfter(string $controllerClass, callable $function) : void
     {
         $this->onAfter[$controllerClass][] = $function;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, function (ControllerReadyEvent $event) {
@@ -123,8 +114,6 @@ class OnBeforeAfterPlugin implements Plugin
      * @param callable $function The function to resolve.
      * @param object[] $objects  An associative array of available objects, indexed by their class or interface name.
      *
-     * @return array
-     *
      * @throws HttpInternalServerErrorException If the function requires a parameter that is not available.
      */
     private function getFunctionParameters(string $onEvent, callable $function, array $objects) : array
@@ -152,14 +141,7 @@ class OnBeforeAfterPlugin implements Plugin
         return $parameters;
     }
 
-    /**
-     * @param string               $onEvent
-     * @param string[]             $types
-     * @param \ReflectionParameter $parameter
-     *
-     * @return HttpInternalServerErrorException
-     */
-    private function cannotResolveParameter(string $onEvent, array $types, \ReflectionParameter $parameter) : HttpInternalServerErrorException
+    private function cannotResolveParameter(string $onEvent, array $types, ReflectionParameter $parameter) : HttpInternalServerErrorException
     {
         $message = 'Cannot resolve ' . $onEvent . ' function parameter $' . $parameter->getName() . ': ';
 

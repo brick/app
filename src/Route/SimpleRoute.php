@@ -22,25 +22,17 @@ use Brick\Http\Request;
  */
 class SimpleRoute implements Route
 {
-    /**
-     * @var array
-     */
-    private $routes;
+    private array $routes;
 
     /**
      * SimpleRoute constructor.
-     *
-     * @param array $routes
      */
     public function __construct(array $routes)
     {
         $this->routes = $routes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function match(Request $request) : ?RouteMatch
+    public function match(Request $request) : RouteMatch|null
     {
         $path = $request->getPath();
 
@@ -91,12 +83,8 @@ class SimpleRoute implements Route
      * Returns parameters to pass to the controller class, or NULL to skip this route.
      *
      * This is designed to be extended.
-     *
-     * @param Request $request
-     *
-     * @return array|null
      */
-    protected function getClassParameters(Request $request) : ?array
+    protected function getClassParameters(Request $request) : array|null
     {
         return [];
     }
@@ -105,26 +93,18 @@ class SimpleRoute implements Route
      * Returns parameters to pass to the controller function, or NULL to skip this route.
      *
      * This is designed to be extended.
-     *
-     * @param Request $request
-     *
-     * @return array|null
      */
-    protected function getFunctionParameters(Request $request) : ?array
+    protected function getFunctionParameters(Request $request) : array|null
     {
         return [];
     }
 
     /**
      * Capitalizes a dashed string, e.g. foo-bar => fooBar.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     private function capitalize(string $name) : string
     {
-        return preg_replace_callback('/\-([a-z])/', static function (array $matches) {
+        return preg_replace_callback('/\-([a-z])/', static function (array $matches) : string {
             return strtoupper($matches[1]);
         }, $name);
     }

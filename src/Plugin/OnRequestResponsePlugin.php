@@ -19,9 +19,6 @@ use Brick\Http\Response;
  */
 class OnRequestResponsePlugin implements Plugin
 {
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(ControllerReadyEvent::class, static function(ControllerReadyEvent $event) {

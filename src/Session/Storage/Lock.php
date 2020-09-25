@@ -8,8 +8,6 @@ class Lock
 {
     /**
      * A storage-specific lock context.
-     *
-     * @var mixed
      */
-    public $context;
+    public mixed $context;
 }

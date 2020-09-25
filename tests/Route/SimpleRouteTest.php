@@ -21,7 +21,7 @@ namespace Brick\App\Tests\Route
          * @param string $class  The expected controller class.
          * @param string $method The expected controller method.
          */
-        public function testRoute($path, $class, $method)
+        public function testRoute(string $path, string $class, string $method) : void
         {
             $request = new Request();
             $request->setPath($path);
@@ -43,10 +43,7 @@ namespace Brick\App\Tests\Route
             $this->assertSame($method, $reflection->getName());
         }
 
-        /**
-         * @return array
-         */
-        public function providerRoute()
+        public function providerRoute() : array
         {
             return [
                 ['/',                'name\space\IndexController',   'indexAction'],
@@ -64,14 +61,14 @@ namespace name\space
 {
     class IndexController
     {
-        public function indexAction() {}
-        public function fooAction() {}
+        public function indexAction() : void {}
+        public function fooAction() : void {}
     }
 
     class FooController
     {
-        public function indexAction() {}
-        public function barAction() {}
+        public function indexAction() : void {}
+        public function barAction() : void {}
     }
 }
 
@@ -79,7 +76,7 @@ namespace name\space\Foo
 {
     class BarController
     {
-        public function indexAction() {}
-        public function fooBarAction() {}
+        public function indexAction() : void {}
+        public function fooBarAction() : void {}
     }
 }

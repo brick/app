@@ -40,7 +40,7 @@ interface ObjectPacker
      *
      * @throws ObjectNotConvertibleException If the object is supported, but is not convertible for some reason.
      */
-    public function pack(object $object) : ?PackedObject;
+    public function pack(object $object) : PackedObject|null;
 
     /**
      * Unpacks an object from its flattened representation.
@@ -52,5 +52,5 @@ interface ObjectPacker
      * @throws ObjectNotConvertibleException If the class name is supported, but the representation is not valid.
      * @throws ObjectNotFoundException       If the class name is supported, but the object cannot be found.
      */
-    public function unpack(PackedObject $packedObject) : ?object;
+    public function unpack(PackedObject $packedObject) : object|null;
 }

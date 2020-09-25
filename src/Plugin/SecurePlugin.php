@@ -21,9 +21,6 @@ use Brick\Http\Exception\HttpRedirectException;
  */
 class SecurePlugin extends AbstractAttributePlugin
 {
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(RouteMatchedEvent::class, function(RouteMatchedEvent $event) {

@@ -27,7 +27,7 @@ final class Transactional
     /**
      * The transaction isolation level.
      */
-    public $isolationLevel = TransactionIsolationLevel::SERIALIZABLE;
+    public int $isolationLevel = TransactionIsolationLevel::SERIALIZABLE;
 
     /**
      * Maps the isolation level strings to constants.

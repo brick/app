@@ -6,26 +6,18 @@ namespace Brick\App;
 
 use Brick\App\ObjectPacker\NullPacker;
 use Brick\App\ObjectPacker\ObjectPacker;
+use RuntimeException;
 
 class UrlBuilder
 {
-    /**
-     * @var ObjectPacker
-     */
-    private $objectPacker;
+    private ObjectPacker $objectPacker;
 
     /**
      * Class constructor.
-     *
-     * @param ObjectPacker|null $objectPacker
      */
-    public function __construct(?ObjectPacker $objectPacker = null)
+    public function __construct(ObjectPacker|null $objectPacker = null)
     {
-        if ($objectPacker === null) {
-            $objectPacker = new NullPacker();
-        }
-
-        $this->objectPacker = $objectPacker;
+        $this->objectPacker = $objectPacker ?? new NullPacker();
     }
 
     /**
@@ -37,12 +29,7 @@ class UrlBuilder
      * If any of the method parameters is an object, it will be replaced by its packed representation,
      * as provided by the ObjectPacker implementation.
      *
-     * @param string $url
-     * @param array  $parameters
-     *
-     * @return string
-     *
-     * @throws \RuntimeException If an unsupported object is given as a parameter.
+     * @throws RuntimeException If an unsupported object is given as a parameter.
      */
     public function buildUrl(string $url, array $parameters = []) : string
     {
@@ -56,7 +43,7 @@ class UrlBuilder
                     $packedObject = $this->objectPacker->pack($value);
 
                     if ($packedObject === null) {
-                        throw new \RuntimeException('Cannot pack object ' . get_class($value));
+                        throw new RuntimeException('Cannot pack object ' . get_class($value));
                     }
 
                     $parameters[$key] = $packedObject->getData();

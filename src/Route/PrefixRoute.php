@@ -16,17 +16,13 @@ class PrefixRoute implements Route
 {
     /**
      * The route to forward to.
-     *
-     * @var Route
      */
-    private $route;
+    private Route $route;
 
     /**
      * The prefixes to match.
-     *
-     * @var array
      */
-    private $prefixes;
+    private array $prefixes;
 
     /**
      * @param Route $route    The route to forward to.
@@ -38,10 +34,7 @@ class PrefixRoute implements Route
         $this->prefixes = $prefixes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function match(Request $request) : ?RouteMatch
+    public function match(Request $request) : RouteMatch|null
     {
         $path = $request->getPath();
 

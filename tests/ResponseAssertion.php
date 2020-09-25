@@ -3,49 +3,28 @@
 namespace Brick\App\Tests;
 
 use Brick\Http\Response;
-
 use PHPUnit\Framework\TestCase;
 
 class ResponseAssertion
 {
-    /**
-     * @var TestCase
-     */
-    private $testCase;
+    private TestCase $testCase;
 
-    /**
-     * @var Response
-     */
-    private $response;
+    private Response $response;
 
-    /**
-     * @param TestCase $testCase
-     * @param Response $response
-     */
     public function __construct(TestCase $testCase, Response $response)
     {
         $this->testCase = $testCase;
         $this->response = $response;
     }
 
-    /**
-     * @param int $statusCode
-     *
-     * @return ResponseAssertion
-     */
-    public function hasStatusCode($statusCode)
+    public function hasStatusCode(int $statusCode) : ResponseAssertion
     {
         $this->testCase->assertSame($statusCode, $this->response->getStatusCode());
 
         return $this;
     }
 
-    /**
-     * @param string $body
-     *
-     * @return ResponseAssertion
-     */
-    public function hasBody($body)
+    public function hasBody(string $body) : ResponseAssertion
     {
         $this->testCase->assertSame($body, (string) $this->response->getBody());
 

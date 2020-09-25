@@ -22,24 +22,18 @@ final class ExceptionCaughtEvent
 {
     /**
      * The HTTP exception.
-     *
-     * @var HttpException
      */
-    private $exception;
+    private HttpException $exception;
 
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The response.
-     *
-     * @var Response
      */
-    private $response;
+    private Response $response;
 
     /**
      * @param HttpException $exception The HTTP exception.
@@ -55,8 +49,6 @@ final class ExceptionCaughtEvent
 
     /**
      * Returns the HTTP exception.
-     *
-     * @return HttpException
      */
     public function getException() : HttpException
     {
@@ -65,8 +57,6 @@ final class ExceptionCaughtEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {
@@ -77,8 +67,6 @@ final class ExceptionCaughtEvent
      * Returns the response.
      *
      * This response can be modified by listeners.
-     *
-     * @return Response
      */
     public function getResponse() : Response
     {

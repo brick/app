@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Brick\App\Session\Storage;
 
+use DirectoryIterator;
+
 /**
  * File storage engine for storing sessions on the filesystem.
  */
 class FileStorage implements SessionStorage
 {
-    /**
-     * @var string
-     */
-    private $directory;
+    private string $directory;
 
-    /**
-     * @var string
-     */
-    private $prefix;
+    private string $prefix;
 
     /**
      * The grace time during which the last access time of the session file is not updated, in seconds.
@@ -35,16 +31,11 @@ class FileStorage implements SessionStorage
      *
      * This can affect the lifetime of a session: for a 30 minutes session, a grace time of 5 minutes would make
      * the session actually last for between 25 and 30 minutes after the last read.
-     *
-     * @var int
      */
-    private $accessGraceTime = 300;
+    private int $accessGraceTime = 300;
 
     /**
      * Class constructor.
-     *
-     * @param string $directory
-     * @param string $prefix
      */
     public function __construct(string $directory, string $prefix = '')
     {
@@ -52,10 +43,7 @@ class FileStorage implements SessionStorage
         $this->prefix    = $prefix;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function read(string $id, string $key, ?Lock $lock = null) : ?string
+    public function read(string $id, string $key, Lock|null $lock = null) : string|null
     {
         $path = $this->getPath($id, $key);
 
@@ -84,10 +72,7 @@ class FileStorage implements SessionStorage
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(string $id, string $key, string $value, ?Lock $lock = null) : void
+    public function write(string $id, string $key, string $value, Lock|null $lock = null) : void
     {
         if ($lock) {
             $fp = $lock->context;
@@ -107,9 +92,6 @@ class FileStorage implements SessionStorage
         file_put_contents($path, $value, LOCK_EX);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unlock(Lock $lock) : void
     {
         $fp = $lock->context;
@@ -120,9 +102,6 @@ class FileStorage implements SessionStorage
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(string $id, string $key) : void
     {
         $path = $this->getPath($id, $key);
@@ -132,9 +111,6 @@ class FileStorage implements SessionStorage
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear(string $id) : void
     {
         $files = glob($this->directory . DIRECTORY_SEPARATOR . $this->prefix . $id . '_*');
@@ -144,12 +120,9 @@ class FileStorage implements SessionStorage
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function expire(int $lifetime) : void
     {
-        $files = new \DirectoryIterator($this->directory);
+        $files = new DirectoryIterator($this->directory);
 
         foreach ($files as $file) {
             if (! $file->isFile()) {
@@ -168,9 +141,6 @@ class FileStorage implements SessionStorage
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function updateId(string $oldId, string $newId) : bool
     {
         $prefix = $this->directory . DIRECTORY_SEPARATOR . $this->prefix;
@@ -188,12 +158,6 @@ class FileStorage implements SessionStorage
         return true;
     }
 
-    /**
-     * @param string $id
-     * @param string $key
-     *
-     * @return string
-     */
     private function getPath(string $id, string $key) : string
     {
         // Sanitize the session key: it may contain characters that could conflict with the filesystem.

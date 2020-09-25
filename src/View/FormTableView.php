@@ -8,28 +8,18 @@ use Brick\Form\Base;
 use Brick\Form\Form;
 use Brick\Form\Element;
 use Brick\Form\Group;
-
 use Brick\Html\Tag;
+use RuntimeException;
 
 /**
  * Renders a form in a table.
  */
 class FormTableView implements View
 {
-    /**
-     * @var \Brick\Form\Form
-     */
-    private $form;
+    private Form $form;
 
-    /**
-     * @var string
-     */
-    private $class;
+    private string $class;
 
-    /**
-     * @param \Brick\Form\Form $form
-     * @param string $class
-     */
     public function __construct(Form $form, string $class = '')
     {
         $this->form  = $form;
@@ -38,10 +28,6 @@ class FormTableView implements View
 
     /**
      * Renders the errors of a Form or an Element as an unordered list.
-     *
-     * @param \Brick\Form\Base $base
-     *
-     * @return string
      */
     private function renderErrors(Base $base) : string
     {
@@ -63,12 +49,6 @@ class FormTableView implements View
         return $ul->render();
     }
 
-    /**
-     * @param string $tagName
-     * @param string $html
-     *
-     * @return string
-     */
     private function renderCell(string $tagName, string $html) : string
     {
         $td = new Tag($tagName);
@@ -79,10 +59,6 @@ class FormTableView implements View
 
     /**
      * Renders an element, along with its label.
-     *
-     * @param \Brick\Form\Element $element
-     *
-     * @return string
      */
     private function renderElementAsRow(Element $element) : string
     {
@@ -97,11 +73,7 @@ class FormTableView implements View
     }
 
     /**
-     * @param \Brick\Form\Form $form
-     *
-     * @return string
-     *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function renderForm(Form $form) : string
     {

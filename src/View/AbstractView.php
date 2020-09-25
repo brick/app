@@ -18,8 +18,6 @@ abstract class AbstractView implements View
      *
      * @param string $text       The text to escape.
      * @param bool   $lineBreaks Whether to escape line breaks. Defaults to `false`.
-     *
-     * @return string
      */
     public function html(string $text, bool $lineBreaks = false) : string
     {

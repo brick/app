@@ -13,17 +13,11 @@ use Brick\Http\Request;
 #[Attribute]
 final class QueryParam extends RequestParam
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getParameterType() : string
     {
         return 'query';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRequestParameters(Request $request) : array
     {
         return $request->getQuery();

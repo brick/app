@@ -10,23 +10,14 @@ use Brick\App\RouteMatch;
 
 class CatchAllRoute implements Route
 {
-    /**
-     * @var \Brick\App\RouteMatch
-     */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
-    /**
-     * @param RouteMatch $routeMatch
-     */
     public function __construct(RouteMatch $routeMatch)
     {
         $this->routeMatch = $routeMatch;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function match(Request $request) : ?RouteMatch
+    public function match(Request $request) : RouteMatch|null
     {
         return $this->routeMatch;
     }

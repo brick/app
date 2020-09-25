@@ -13,16 +13,8 @@ use Brick\App\View\View;
  */
 trait PartialViewHelper
 {
-    /**
-     * @var \Brick\DI\Injector|null
-     */
-    private $injector;
+    private Injector|null $injector;
 
-    /**
-     * @param \Brick\DI\Injector $injector
-     *
-     * @return void
-     */
     #[Inject]
     final public function setInjector(Injector $injector) : void
     {
@@ -32,7 +24,7 @@ trait PartialViewHelper
     /**
      * Renders a partial View.
      *
-     * @param \Brick\App\View\View $view The View object to render.
+     * @param View $view The View object to render.
      *
      * @return string The rendered View.
      */

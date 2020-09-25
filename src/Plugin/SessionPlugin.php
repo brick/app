@@ -15,22 +15,13 @@ use Brick\App\Session\Session;
  */
 class SessionPlugin implements Plugin
 {
-    /**
-     * @var \Brick\App\Session\Session
-     */
-    private $session;
+    private Session $session;
 
-    /**
-     * @param \Brick\App\Session\Session $session
-     */
     public function __construct(Session $session)
     {
         $this->session = $session;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function register(EventDispatcher $dispatcher) : void
     {
         $dispatcher->addListener(IncomingRequestEvent::class, function(IncomingRequestEvent $event) {

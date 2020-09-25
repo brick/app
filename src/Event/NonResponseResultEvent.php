@@ -19,38 +19,28 @@ final class NonResponseResultEvent
 {
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
-     *
-     * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
-     *
-     * @var object|null
      */
-    private $instance;
+    private object|null $instance;
 
     /**
      * The controller return value.
-     *
-     * @var mixed
      */
-    private $result;
+    private mixed $result;
 
     /**
      * The response provided by a listener, or null if no response was provided.
-     *
-     * @var Response|null
      */
-    private $response;
+    private Response|null $response = null;
 
     /**
      * @param Request     $request    The request.
@@ -58,7 +48,7 @@ final class NonResponseResultEvent
      * @param object|null $instance   The controller instance.
      * @param mixed       $result     The controller result.
      */
-    public function __construct(Request $request, RouteMatch $routeMatch, ?object $instance, $result)
+    public function __construct(Request $request, RouteMatch $routeMatch, object|null $instance, mixed $result)
     {
         $this->request    = $request;
         $this->routeMatch = $routeMatch;
@@ -68,8 +58,6 @@ final class NonResponseResultEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {
@@ -78,8 +66,6 @@ final class NonResponseResultEvent
 
     /**
      * Returns the route match.
-     *
-     * @return RouteMatch
      */
     public function getRouteMatch() : RouteMatch
     {
@@ -88,30 +74,22 @@ final class NonResponseResultEvent
 
     /**
      * Returns the controller instance, or null if the controller is not a class method.
-     *
-     * @return object|null
      */
-    public function getControllerInstance() : ?object
+    public function getControllerInstance() : object|null
     {
         return $this->instance;
     }
 
     /**
      * Returns the value returned by the controller.
-     *
-     * @return mixed
      */
-    public function getControllerResult()
+    public function getControllerResult() : mixed
     {
         return $this->result;
     }
 
     /**
      * Sets the response.
-     *
-     * @param Response $response
-     *
-     * @return void
      */
     public function setResponse(Response $response) : void
     {
@@ -120,10 +98,8 @@ final class NonResponseResultEvent
 
     /**
      * Returns the response provided by a listener, or null if no response was provided.
-     *
-     * @return Response|null
      */
-    public function getResponse() : ?Response
+    public function getResponse() : Response|null
     {
         return $this->response;
     }

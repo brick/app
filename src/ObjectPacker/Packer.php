@@ -5,25 +5,18 @@ declare(strict_types=1);
 namespace Brick\App\ObjectPacker;
 
 use Brick\Reflection\ReflectionTools;
+use ReflectionClass;
+use RuntimeException;
 
 /**
  * Packs an object or deeply nested objects for serialization.
  */
 class Packer
 {
-    /**
-     * @var ObjectPacker
-     */
-    private $objectPacker;
+    private ObjectPacker $objectPacker;
 
-    /**
-     * @var \Brick\Reflection\ReflectionTools
-     */
-    private $reflectionTools;
+    private ReflectionTools $reflectionTools;
 
-    /**
-     * @param ObjectPacker $objectPacker
-     */
     public function __construct(ObjectPacker $objectPacker)
     {
         $this->objectPacker = $objectPacker;
@@ -32,24 +25,16 @@ class Packer
 
     /**
      * Returns a copy of the given variable, with all packable objects packed.
-     *
-     * @param mixed $variable
-     *
-     * @return mixed
      */
-    public function pack($variable)
+    public function pack(mixed $variable) : mixed
     {
         return $this->copy($variable, true);
     }
 
     /**
      * Returns a copy of the given variable, with all packable objects unpacked.
-     *
-     * @param mixed $variable
-     *
-     * @return mixed
      */
-    public function unpack($variable)
+    public function unpack(mixed $variable) : mixed
     {
         return $this->copy($variable, false);
     }
@@ -59,10 +44,8 @@ class Packer
      * @param bool  $pack     True to pack, false to unpack.
      * @param array $visited  The visited objects, for recursive calls.
      * @param int   $level    The nesting level.
-     *
-     * @return mixed
      */
-    private function copy($variable, bool $pack, array & $visited = [], int $level = 0)
+    private function copy($variable, bool $pack, array & $visited = [], int $level = 0) : mixed
     {
         if (is_object($variable)) {
             $hash = spl_object_hash($variable);
@@ -81,7 +64,7 @@ class Packer
                 $object = $this->objectPacker->unpack($variable);
 
                 if ($object === null) {
-                    throw new \RuntimeException('No object packer available for ' . $variable->getClass());
+                    throw new RuntimeException('No object packer available for ' . $variable->getClass());
                 }
 
                 if ($object !== null) {
@@ -89,7 +72,7 @@ class Packer
                 }
             }
 
-            $class = new \ReflectionClass($variable);
+            $class = new ReflectionClass($variable);
             $properties = $this->reflectionTools->getClassProperties($class);
 
             if (! $class->isUserDefined()) {

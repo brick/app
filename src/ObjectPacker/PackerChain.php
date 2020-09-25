@@ -12,13 +12,8 @@ class PackerChain implements ObjectPacker
     /**
      * @var ObjectPacker[]
      */
-    private $objectPackers = [];
+    private array $objectPackers = [];
 
-    /**
-     * @param ObjectPacker $objectPacker
-     *
-     * @return void
-     */
     public function addObjectPacker(ObjectPacker $objectPacker) : void
     {
         $this->objectPackers[] = $objectPacker;
@@ -27,7 +22,7 @@ class PackerChain implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function pack(object $object) : ?PackedObject
+    public function pack(object $object) : PackedObject|null
     {
         foreach ($this->objectPackers as $objectPacker) {
             $packedObject = $objectPacker->pack($object);
@@ -43,7 +38,7 @@ class PackerChain implements ObjectPacker
     /**
      * {@inheritdoc}
      */
-    public function unpack(PackedObject $packedObject) : ?object
+    public function unpack(PackedObject $packedObject) : object|null
     {
         foreach ($this->objectPackers as $objectPacker) {
             $object = $objectPacker->unpack($packedObject);

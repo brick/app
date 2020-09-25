@@ -13,10 +13,6 @@ interface SessionInterface
      * Checks if the session contains the given key.
      *
      * If the NULL value is stored, this method will return false.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function has(string $key) : bool;
 
@@ -27,24 +23,20 @@ interface SessionInterface
      *
      * @return mixed The value, null if the key does not exist.
      */
-    public function get(string $key);
+    public function get(string $key) : mixed;
 
     /**
      * Writes a key/value pair to the session.
      *
      * @param string $key   The key to write to.
      * @param mixed  $value The value to write.
-     *
-     * @return void
      */
-    public function set(string $key, $value) : void;
+    public function set(string $key, mixed $value) : void;
 
     /**
      * Removes a key from the session.
      *
      * @param string $key The key to remove.
-     *
-     * @return void
      */
     public function remove(string $key) : void;
 
@@ -58,5 +50,5 @@ interface SessionInterface
      *
      * @return mixed The return value of the function.
      */
-    public function synchronize(string $key, callable $function);
+    public function synchronize(string $key, callable $function) : mixed;
 }

@@ -14,31 +14,25 @@ final class ControllerInvocatedEvent
 {
     /**
      * The request.
-     *
-     * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
-     *
-     * @var \Brick\App\RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
-     *
-     * @var object|null
      */
-    private $instance;
+    private object|null $instance;
 
     /**
      * @param Request     $request    The request.
      * @param RouteMatch  $routeMatch The route match.
      * @param object|null $instance   The controller instance.
      */
-    public function __construct(Request $request, RouteMatch $routeMatch, ?object $instance)
+    public function __construct(Request $request, RouteMatch $routeMatch, object|null $instance)
     {
         $this->request    = $request;
         $this->routeMatch = $routeMatch;
@@ -47,8 +41,6 @@ final class ControllerInvocatedEvent
 
     /**
      * Returns the request.
-     *
-     * @return Request
      */
     public function getRequest() : Request
     {
@@ -57,8 +49,6 @@ final class ControllerInvocatedEvent
 
     /**
      * Returns the route match.
-     *
-     * @return RouteMatch
      */
     public function getRouteMatch() : RouteMatch
     {
@@ -67,10 +57,8 @@ final class ControllerInvocatedEvent
 
     /**
      * Returns the controller instance, or null if the controller is not a class method.
-     *
-     * @return object|null
      */
-    public function getControllerInstance() : ?object
+    public function getControllerInstance() : object|null
     {
         return $this->instance;
     }
