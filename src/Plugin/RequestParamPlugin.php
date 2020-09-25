@@ -13,6 +13,7 @@ use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
 use ReflectionAttribute;
 use ReflectionFunctionAbstract;
+use ReflectionParameter;
 
 /**
  * Injects request parameters into controllers using the QueryParam and PostParam attributes.
@@ -57,10 +58,10 @@ class RequestParamPlugin extends AbstractAttributePlugin
     }
 
     /**
-     * @param RequestParam                $attribute  The attribute.
-     * @param \ReflectionFunctionAbstract $controller The reflection of the controller function.
-     * @param \ReflectionParameter[]      $parameters An array of ReflectionParameter for the function, indexed by name.
-     * @param Request                     $request    The HTTP Request.
+     * @param RequestParam               $attribute  The attribute.
+     * @param ReflectionFunctionAbstract $controller The reflection of the controller function.
+     * @param ReflectionParameter[]      $parameters An array of ReflectionParameter for the function, indexed by name.
+     * @param Request                    $request    The HTTP Request.
      *
      * @return mixed The value to assign to the function parameter.
      *
