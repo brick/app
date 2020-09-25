@@ -21,6 +21,7 @@
         "brick/reflection": "~0.2.0 || ~0.3.0"
     },
     "require-dev": {
+        "ext-pdo": "*",
         "brick/form": "0.1.*",
         "brick/date-time": "0.1.*",
         "brick/geo": "0.2.*",
