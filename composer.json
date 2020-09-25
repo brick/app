@@ -26,7 +26,6 @@
         "brick/geo": "0.2.*",
         "doctrine/annotations": "1.*",
         "doctrine/orm": "2.*",
-        "doctrine/dbal": "2.*",
         "phpunit/phpunit": "8.*",
         "php-coveralls/php-coveralls": "2.*"
     },
