@@ -129,7 +129,7 @@ class AttributeRouteCompiler
     {
         $parameterNames = [];
 
-        $regexp = preg_replace_callback('/\{([^\}]+)\}|(.+?)/', function(array $matches) use ($attribute, & $parameterNames) : string {
+        $regexp = preg_replace_callback('/\{([^\}]+)\}|(.+?)/', static function(array $matches) use ($attribute, & $parameterNames) : string {
             if (isset($matches[2])) {
                 return preg_quote($matches[2], '/');
             }

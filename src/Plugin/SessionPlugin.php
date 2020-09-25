@@ -24,11 +24,11 @@ class SessionPlugin implements Plugin
 
     public function register(EventDispatcher $dispatcher) : void
     {
-        $dispatcher->addListener(IncomingRequestEvent::class, function(IncomingRequestEvent $event) {
+        $dispatcher->addListener(IncomingRequestEvent::class, static function(IncomingRequestEvent $event) {
             $this->session->handleRequest($event->getRequest());
         });
 
-        $dispatcher->addListener(ResponseReceivedEvent::class, function(ResponseReceivedEvent $event) {
+        $dispatcher->addListener(ResponseReceivedEvent::class, static function(ResponseReceivedEvent $event) {
             $this->session->handleResponse($event->getResponse());
         });
     }

@@ -59,7 +59,7 @@ class OnBeforeAfterPlugin implements Plugin
 
     public function register(EventDispatcher $dispatcher) : void
     {
-        $dispatcher->addListener(ControllerReadyEvent::class, function (ControllerReadyEvent $event) {
+        $dispatcher->addListener(ControllerReadyEvent::class, static function (ControllerReadyEvent $event) {
             $controller = $event->getControllerInstance();
 
             if ($controller === null) {
@@ -84,7 +84,7 @@ class OnBeforeAfterPlugin implements Plugin
             }
         });
 
-        $dispatcher->addListener(ResponseReceivedEvent::class, function (ResponseReceivedEvent $event) {
+        $dispatcher->addListener(ResponseReceivedEvent::class, static function (ResponseReceivedEvent $event) {
             $controller = $event->getControllerInstance();
 
             if ($controller === null) {

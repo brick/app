@@ -31,7 +31,7 @@ class TransactionalPlugin extends AbstractAttributePlugin
 
     public function register(EventDispatcher $dispatcher) : void
     {
-        $dispatcher->addListener(RouteMatchedEvent::class, function (RouteMatchedEvent $event) {
+        $dispatcher->addListener(RouteMatchedEvent::class, static function (RouteMatchedEvent $event) {
             $attribute = $this->getTransactionalAttribute($event->getRouteMatch());
 
             if ($attribute) {
@@ -40,7 +40,7 @@ class TransactionalPlugin extends AbstractAttributePlugin
             }
         });
 
-        $dispatcher->addListener(ControllerInvocatedEvent::class, function (ControllerInvocatedEvent $event) {
+        $dispatcher->addListener(ControllerInvocatedEvent::class, static function (ControllerInvocatedEvent $event) {
             $attribute = $this->getTransactionalAttribute($event->getRouteMatch());
 
             if ($attribute) {
