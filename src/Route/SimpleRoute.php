@@ -104,8 +104,6 @@ class SimpleRoute implements Route
      */
     private function capitalize(string $name) : string
     {
-        return preg_replace_callback('/\-([a-z])/', static function (array $matches) : string {
-            return strtoupper($matches[1]);
-        }, $name);
+        return preg_replace_callback('/\-([a-z])/', fn(array $matches) => strtoupper($matches[1]), $name);
     }
 }
