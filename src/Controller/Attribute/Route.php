@@ -16,7 +16,7 @@ use TypeError;
  *
  * When used on a function, named parameters will be provided as function parameters.
  */
-#[Attribute]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::TARGET_FUNCTION)]
 final class Route
 {
     /**

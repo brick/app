@@ -21,7 +21,7 @@ use Attribute;
  *
  * This attribute requires the `SecurePlugin`.
  */
-#[Attribute]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::TARGET_FUNCTION)]
 final class Secure
 {
     public string|null $hsts;

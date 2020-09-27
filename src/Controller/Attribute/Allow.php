@@ -14,7 +14,7 @@ use Attribute;
  *
  * This attribute requires the `AllowPlugin`.
  */
-#[Attribute]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::TARGET_FUNCTION)]
 final class Allow
 {
     /**
