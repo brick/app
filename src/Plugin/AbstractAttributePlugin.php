@@ -27,7 +27,7 @@ abstract class AbstractAttributePlugin implements Plugin
      *
      * If the attribute is found on both the controller class and method, the method attribute is returned.
      * If the attribute is found on several classes in the hierarchy of controller classes,
-     * the annotaattributetion of the child class is returned.
+     * the attribute of the child class is returned.
      *
      * This method does not support controller functions outside a class.
      *
