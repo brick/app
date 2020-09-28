@@ -7,6 +7,7 @@ namespace Brick\App;
 use Brick\Http\Request;
 use Brick\DI\ValueResolver;
 use Brick\Reflection\ReflectionTools;
+use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 
@@ -37,8 +38,9 @@ class ControllerValueResolver implements ValueResolver
 
     public function getParameterValue(ReflectionParameter $parameter) : mixed
     {
-        $class = $parameter->getClass();
-        if ($class && $class->getName() === Request::class) {
+        $type = $parameter->getType();
+
+        if ($type instanceof ReflectionNamedType && $type->getName() === Request::class) {
             return $this->request;
         }
 
