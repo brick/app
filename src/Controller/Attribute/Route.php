@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Brick\App\Controller\Attribute;
 
 use Attribute;
-use LogicException;
 use TypeError;
 
 /**
@@ -45,48 +44,28 @@ final class Route
     public array $methods;
 
     /**
-     * Available options:
-     *
-     * - 'patterns': a map of parameter name to regexp patterns
-     * - 'methods': a list of HTTP methods this route is valid for
+     * @param string $path     The path, with optional {named} parameters.
+     * @param array  $patterns A map of parameter name to regexp patterns.
+     * @param array  $methods  The list of HTTP methods this route is valid for.
      */
-    public function __construct(string $path, array $options = [])
+    public function __construct(string $path, array $patterns = [], array $methods = [])
     {
-        $this->path = $path;
+        $this->checkStringArray('patterns', $patterns);
+        $this->checkStringArray('methods', $methods);
 
-        if (isset($options['patterns'])) {
-            $this->checkStringArrayOption('patterns', $options['patterns']);
-            $this->patterns = $options['patterns'];
-            unset($options['patterns']);
-        }
-
-        if (isset($options['methods'])) {
-            $this->checkStringArrayOption('methods', $options['methods']);
-            $this->methods = $options['methods'];
-            unset($options['methods']);
-        }
-
-        foreach ($options as $option) {
-            throw new LogicException(sprintf("Unknown option '%s'.", $option));
-        }
+        $this->path     = $path;
+        $this->patterns = $patterns;
+        $this->methods  = $methods;
     }
 
-    private function checkStringArrayOption(string $name, mixed $value) : void
+    private function checkStringArray(string $name, array $values) : void
     {
-        if (! is_array($value)) {
-            throw new TypeError(sprintf(
-                "Option '%s' must be of type array, %s given.",
-                $name,
-                gettype($value)
-            ));
-        }
-
-        foreach ($value as $item) {
-            if (! is_string($item)) {
+        foreach ($values as $value) {
+            if (! is_string($value)) {
                 throw new TypeError(sprintf(
-                    "Option '%s' must only contain strings, %s given.",
+                    'Parameter $%s must only contain strings, %s given.',
                     $name,
-                    gettype($item)
+                    gettype($value)
                 ));
             }
         }
