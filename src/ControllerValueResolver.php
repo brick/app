@@ -49,8 +49,9 @@ class ControllerValueResolver implements ValueResolver
 
     public function getPropertyValue(ReflectionProperty $property) : mixed
     {
-        $class = $this->reflectionTools->getPropertyClass($property);
-        if ($class === Request::class) {
+        $type = $property->getType();
+
+        if ($type instanceof ReflectionNamedType && ! $type->allowsNull() && $type->getName() === Request::class) {
             return $this->request;
         }
 
