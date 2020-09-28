@@ -40,7 +40,7 @@ class ControllerValueResolver implements ValueResolver
     {
         $type = $parameter->getType();
 
-        if ($type instanceof ReflectionNamedType && $type->getName() === Request::class) {
+        if ($type instanceof ReflectionNamedType && ! $type->allowsNull() && $type->getName() === Request::class) {
             return $this->request;
         }
 
