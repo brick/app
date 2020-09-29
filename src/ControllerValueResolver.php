@@ -6,7 +6,6 @@ namespace Brick\App;
 
 use Brick\Http\Request;
 use Brick\DI\ValueResolver;
-use Brick\Reflection\ReflectionTools;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
@@ -20,12 +19,9 @@ class ControllerValueResolver implements ValueResolver
 
     private Request|null $request = null;
 
-    private ReflectionTools $reflectionTools;
-
     public function __construct(ValueResolver $fallbackResolver)
     {
         $this->fallbackResolver = $fallbackResolver;
-        $this->reflectionTools  = new ReflectionTools();
     }
 
     /**
