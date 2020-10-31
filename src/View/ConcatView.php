@@ -14,7 +14,7 @@ class ConcatView implements View
     /**
      * @var \Brick\App\View\View[]
      */
-    private $views;
+    private array $views;
 
     /**
      * @param \Brick\App\View\View ...$views

@@ -12,17 +12,17 @@ class RouteMatch
     /**
      * @var \ReflectionFunctionAbstract
      */
-    private $controller;
+    private \ReflectionFunctionAbstract $controller;
 
     /**
      * @var array
      */
-    private $classParameters = [];
+    private array $classParameters = [];
 
     /**
      * @var array
      */
-    private $functionParameters = [];
+    private array $functionParameters = [];
 
     /**
      * @param \ReflectionFunctionAbstract $controller         A reflection of the controller.

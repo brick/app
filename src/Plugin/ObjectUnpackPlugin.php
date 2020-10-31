@@ -25,9 +25,9 @@ use Brick\Http\Exception\HttpInternalServerErrorException;
 class ObjectUnpackPlugin implements Plugin
 {
     /**
-     * @var \Brick\App\ObjectPacker\ObjectPacker
+     * @var ObjectPacker
      */
-    private $objectPacker;
+    private ObjectPacker $objectPacker;
 
     /**
      * @param ObjectPacker $objectPacker

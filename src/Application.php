@@ -30,24 +30,24 @@ use Brick\Http\Response;
 class Application implements RequestHandler
 {
     /**
-     * @var \Brick\Di\Injector
+     * @var Injector
      */
-    private $injector;
+    private Injector $injector;
 
     /**
-     * @var \Brick\App\ControllerValueResolver
+     * @var ControllerValueResolver
      */
-    private $valueResolver;
+    private ControllerValueResolver $valueResolver;
 
     /**
-     * @var \Brick\Event\EventDispatcher
+     * @var EventDispatcher
      */
-    private $eventDispatcher;
+    private EventDispatcher $eventDispatcher;
 
     /**
-     * @var \Brick\App\Route[]
+     * @var Route[]
      */
-    private $routes = [];
+    private array $routes = [];
 
     /**
      * Class constructor.

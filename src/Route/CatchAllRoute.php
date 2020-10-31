@@ -11,9 +11,9 @@ use Brick\App\RouteMatch;
 class CatchAllRoute implements Route
 {
     /**
-     * @var \Brick\App\RouteMatch
+     * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * @param RouteMatch $routeMatch

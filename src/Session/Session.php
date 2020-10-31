@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brick\App\Session;
 
+use Brick\App\Session\Storage\SessionStorage;
 use Brick\Http\Request;
 use Brick\Http\Response;
 
@@ -19,16 +20,16 @@ abstract class Session implements SessionInterface
     /**
      * The session storage mechanism.
      *
-     * @var \Brick\App\Session\Storage\SessionStorage
+     * @var SessionStorage
      */
-    protected $storage;
+    protected SessionStorage $storage;
 
     /**
      * The object packer, if any.
      *
-     * @var \Brick\App\ObjectPacker\Packer|null
+     * @var Packer|null
      */
-    private $packer;
+    private ?Packer $packer = null;
 
     /**
      * The session id, or null if not available yet.
@@ -42,7 +43,7 @@ abstract class Session implements SessionInterface
      *
      * @var string|null
      */
-    protected $id = null;
+    protected ?string $id = null;
 
     /**
      * Whether we're in the middle of a request/response cycle.
@@ -51,29 +52,29 @@ abstract class Session implements SessionInterface
      *
      * @var bool
      */
-    protected $inRequest = false;
+    protected bool $inRequest = false;
 
     /**
      * A local cache of the data loaded from the storage.
      *
      * @var array
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * @var int
      */
-    private $gcDividend = 1;
+    private int $gcDividend = 1;
 
     /**
      * @var int
      */
-    private $gcDivisor = 100;
+    private int $gcDivisor = 100;
 
     /**
      * @var int
      */
-    private $lifetime = 1800;
+    private int $lifetime = 1800;
 
     /**
      * Class constructor.

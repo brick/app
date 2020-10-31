@@ -12,7 +12,7 @@ class PackerChain implements ObjectPacker
     /**
      * @var ObjectPacker[]
      */
-    private $objectPackers = [];
+    private array $objectPackers = [];
 
     /**
      * @param ObjectPacker $objectPacker

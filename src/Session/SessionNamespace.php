@@ -15,12 +15,12 @@ class SessionNamespace implements SessionInterface
     /**
      * @var Session
      */
-    private $session;
+    private Session $session;
 
     /**
      * @var string
      */
-    private $namespace;
+    private string $namespace;
 
     /**
      * @param Session $session

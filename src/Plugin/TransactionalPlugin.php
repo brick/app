@@ -19,9 +19,9 @@ use Doctrine\Common\Annotations\Reader;
 class TransactionalPlugin extends AbstractAnnotationPlugin
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Class constructor.

@@ -17,12 +17,12 @@ use Brick\Html\Tag;
 class FormView implements View
 {
     /**
-     * @var \Brick\Form\Form
+     * @var Form
      */
-    private $form;
+    private Form $form;
 
     /**
-     * @param \Brick\Form\Form $form
+     * @param Form $form
      */
     public function __construct(Form $form)
     {

@@ -29,7 +29,7 @@ final class Transactional extends AbstractAnnotation
      *
      * @var int
      */
-    private $isolationLevel = Connection::TRANSACTION_SERIALIZABLE;
+    private int $isolationLevel = Connection::TRANSACTION_SERIALIZABLE;
 
     /**
      * Maps the isolation level strings to constants.

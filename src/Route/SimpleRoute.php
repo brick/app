@@ -25,7 +25,7 @@ class SimpleRoute implements Route
     /**
      * @var array
      */
-    private $routes;
+    private array $routes;
 
     /**
      * SimpleRoute constructor.

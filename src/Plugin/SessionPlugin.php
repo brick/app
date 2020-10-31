@@ -16,12 +16,12 @@ use Brick\App\Session\Session;
 class SessionPlugin implements Plugin
 {
     /**
-     * @var \Brick\App\Session\Session
+     * @var Session
      */
-    private $session;
+    private Session $session;
 
     /**
-     * @param \Brick\App\Session\Session $session
+     * @param Session $session
      */
     public function __construct(Session $session)
     {

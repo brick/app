@@ -14,12 +14,12 @@ trait UrlBuilderHelper
     /**
      * @var \Brick\App\UrlBuilder|null
      */
-    private $builder;
+    private ?UrlBuilder $builder = null;
 
     /**
      * @Brick\Di\Annotation\Inject
      *
-     * @param \Brick\App\UrlBuilder $builder
+     * @param UrlBuilder $builder
      *
      * @return void
      */

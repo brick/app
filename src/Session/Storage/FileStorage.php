@@ -12,12 +12,12 @@ class FileStorage implements SessionStorage
     /**
      * @var string
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @var string
      */
-    private $prefix;
+    private string $prefix;
 
     /**
      * The grace time during which the last access time of the session file is not updated, in seconds.
@@ -38,7 +38,7 @@ class FileStorage implements SessionStorage
      *
      * @var int
      */
-    private $accessGraceTime = 300;
+    private int $accessGraceTime = 300;
 
     /**
      * Class constructor.

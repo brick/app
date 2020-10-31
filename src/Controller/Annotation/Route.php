@@ -22,7 +22,7 @@ final class Route extends AbstractAnnotation
      *
      * @var string
      */
-    public $path;
+    public string $path;
 
     /**
      * A map of parameter name to regexp patterns.
@@ -32,7 +32,7 @@ final class Route extends AbstractAnnotation
      *
      * @var string[]
      */
-    public $patterns;
+    public array $patterns;
 
     /**
      * The list of HTTP methods (e.g. GET or POST) this route is valid for.
@@ -42,7 +42,7 @@ final class Route extends AbstractAnnotation
      *
      * @var string[]
      */
-    public $methods;
+    public array $methods;
 
     /**
      * @param array $values

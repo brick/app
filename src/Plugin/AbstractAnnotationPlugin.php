@@ -16,14 +16,14 @@ use Doctrine\Common\Annotations\Reader;
 abstract class AbstractAnnotationPlugin implements Plugin
 {
     /**
-     * @var \Doctrine\Common\Annotations\Reader
+     * @var Reader
      */
-    protected $annotationReader;
+    protected Reader $annotationReader;
 
     /**
-     * @var \Brick\Reflection\ReflectionTools
+     * @var ReflectionTools
      */
-    protected $reflectionTools;
+    protected ReflectionTools $reflectionTools;
 
     /**
      * @param Reader $annotationReader

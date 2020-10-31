@@ -28,12 +28,12 @@ class CookieSession extends Session
     /**
      * @var array
      */
-    private $cookieParams = self::DEFAULT_COOKIE_PARAMS;
+    private array $cookieParams = self::DEFAULT_COOKIE_PARAMS;
 
     /**
      * @var int
      */
-    private $idLength = 26;
+    private int $idLength = 26;
 
     /**
      * @param array $params

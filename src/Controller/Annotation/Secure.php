@@ -27,7 +27,7 @@ final class Secure extends AbstractAnnotation
     /**
      * @var string|null
      */
-    public $hsts;
+    public ?string $hsts;
 
     /**
      * @param array $values

@@ -22,7 +22,7 @@ final class Allow extends AbstractAnnotation
      *
      * @var string[]
      */
-    private $methods;
+    private array $methods;
 
     /**
      * @param array $values

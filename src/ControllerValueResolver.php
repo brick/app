@@ -14,19 +14,19 @@ use Brick\Reflection\ReflectionTools;
 class ControllerValueResolver implements ValueResolver
 {
     /**
-     * @var \Brick\Di\ValueResolver
+     * @var ValueResolver
      */
-    private $fallbackResolver;
+    private ValueResolver $fallbackResolver;
 
     /**
-     * @var \Brick\Http\Request|null
+     * @var Request|null
      */
-    private $request = null;
+    private ?Request $request = null;
 
     /**
-     * @var \Brick\Reflection\ReflectionTools
+     * @var ReflectionTools
      */
-    private $reflectionTools;
+    private ReflectionTools $reflectionTools;
 
     /**
      * @param \Brick\Di\ValueResolver $fallbackResolver

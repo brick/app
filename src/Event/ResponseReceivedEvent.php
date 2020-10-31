@@ -23,28 +23,28 @@ final class ResponseReceivedEvent
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The response.
      *
      * @var Response
      */
-    private $response;
+    private Response $response;
 
     /**
      * The route match.
      *
      * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
      *
      * @var object|null
      */
-    private $instance;
+    private ?object $instance;
 
     /**
      * @param Request     $request    The request.

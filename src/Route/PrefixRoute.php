@@ -19,14 +19,14 @@ class PrefixRoute implements Route
      *
      * @var Route
      */
-    private $route;
+    private Route $route;
 
     /**
      * The prefixes to match.
      *
      * @var array
      */
-    private $prefixes;
+    private array $prefixes;
 
     /**
      * @param Route $route    The route to forward to.

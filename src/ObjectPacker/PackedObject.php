@@ -14,7 +14,7 @@ class PackedObject
      *
      * @var string
      */
-    private $class;
+    private string $class;
 
     /**
      * The packed data.

@@ -17,14 +17,14 @@ use Brick\Html\Tag;
 class FormTableView implements View
 {
     /**
-     * @var \Brick\Form\Form
+     * @var Form
      */
-    private $form;
+    private Form $form;
 
     /**
      * @var string
      */
-    private $class;
+    private string $class;
 
     /**
      * @param \Brick\Form\Form $form

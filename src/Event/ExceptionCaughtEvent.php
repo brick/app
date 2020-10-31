@@ -25,21 +25,21 @@ final class ExceptionCaughtEvent
      *
      * @var HttpException
      */
-    private $exception;
+    private HttpException $exception;
 
     /**
      * The request.
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The response.
      *
      * @var Response
      */
-    private $response;
+    private Response $response;
 
     /**
      * @param HttpException $exception The HTTP exception.

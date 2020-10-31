@@ -12,7 +12,7 @@ class TextView extends AbstractView
     /**
      * @var string
      */
-    private $html;
+    private string $html;
 
     /**
      * Private constructor. Use factory methods to obtain an instance.

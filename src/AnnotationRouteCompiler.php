@@ -20,19 +20,19 @@ class AnnotationRouteCompiler
      *
      * @var Reader
      */
-    private $annotationReader;
+    private Reader $annotationReader;
 
     /**
      * @var string[]
      */
-    private $defaultMethods;
+    private array $defaultMethods;
 
     /**
      * An array of [path, HTTP methods, controller class, controller method] arrays.
      *
      * @var array
      */
-    private $routes = [];
+    private array $routes = [];
 
     /**
      * AnnotationRouteCompiler constructor.

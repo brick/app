@@ -21,35 +21,35 @@ final class ControllerReadyEvent
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
      *
-     * @var \Brick\App\RouteMatch
+     * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
      *
      * @var object|null
      */
-    private $instance;
+    private ?object $instance;
 
     /**
      * An associative array of parameters to resolve the controller arguments.
      *
      * @var array
      */
-    private $parameters = [];
+    private array $parameters = [];
 
     /**
      * An early response to return when a plugin decides to short-circuit the normal application flow.
      *
      * @var Response|null
      */
-    private $response;
+    private ?Response $response = null;
 
     /**
      * @param Request     $request    The request.

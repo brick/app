@@ -12,7 +12,7 @@ class UrlBuilder
     /**
      * @var ObjectPacker
      */
-    private $objectPacker;
+    private ObjectPacker $objectPacker;
 
     /**
      * Class constructor.

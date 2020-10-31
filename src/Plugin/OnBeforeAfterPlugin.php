@@ -21,17 +21,17 @@ class OnBeforeAfterPlugin implements Plugin
     /**
      * @var callable[][]
      */
-    private $onBefore = [];
+    private array $onBefore = [];
 
     /**
      * @var callable[][]
      */
-    private $onAfter = [];
+    private array $onAfter = [];
 
     /**
      * @var ReflectionTools
      */
-    private $reflectionTools;
+    private ReflectionTools $reflectionTools;
 
     /**
      * Class constructor.

@@ -15,7 +15,7 @@ class DoctrinePacker implements ObjectPacker
     /**
      * @var \Doctrine\ORM\EntityManager
      */
-    private $em;
+    private EntityManager $em;
 
     /**
      * Class constructor.

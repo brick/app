@@ -22,21 +22,21 @@ final class NonResponseResultEvent
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
      *
      * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
      *
      * @var object|null
      */
-    private $instance;
+    private ?object $instance;
 
     /**
      * The controller return value.
@@ -50,7 +50,7 @@ final class NonResponseResultEvent
      *
      * @var Response|null
      */
-    private $response;
+    private ?Response $response = null;
 
     /**
      * @param Request     $request    The request.

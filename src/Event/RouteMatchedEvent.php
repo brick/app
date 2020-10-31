@@ -17,14 +17,14 @@ final class RouteMatchedEvent
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
      *
      * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * @param Request    $request    The request.

@@ -18,7 +18,7 @@ class AnnotationRoute implements Route
      *
      * @var array
      */
-    private $routes;
+    private array $routes;
 
     /**
      * AnnotationRoute constructor.

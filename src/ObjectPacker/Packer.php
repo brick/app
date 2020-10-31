@@ -14,12 +14,12 @@ class Packer
     /**
      * @var ObjectPacker
      */
-    private $objectPacker;
+    private ObjectPacker $objectPacker;
 
     /**
-     * @var \Brick\Reflection\ReflectionTools
+     * @var ReflectionTools
      */
-    private $reflectionTools;
+    private ReflectionTools $reflectionTools;
 
     /**
      * @param ObjectPacker $objectPacker

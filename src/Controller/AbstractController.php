@@ -15,9 +15,9 @@ use Brick\Http\Response;
 abstract class AbstractController
 {
     /**
-     * @var \Brick\Di\Injector|null
+     * @var Injector|null
      */
-    private $injector = null;
+    private ?Injector $injector = null;
 
     /**
      * @Inject

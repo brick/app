@@ -12,12 +12,12 @@ class MagicView extends ScriptView
     /**
      * @var string
      */
-    private $scriptPath;
+    private string $scriptPath;
 
     /**
      * @var array
      */
-    private $parameters;
+    private array $parameters;
 
     /**
      * @param string $scriptPath The view script path, typically a .phtml file.

@@ -16,14 +16,14 @@ abstract class RequestParam extends AbstractAnnotation
      *
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * The variable to bind to, or null if same as $name.
      *
      * @var string|null
      */
-    private $bindTo;
+    private ?string $bindTo;
 
     /**
      * @param array $values

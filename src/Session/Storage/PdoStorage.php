@@ -30,12 +30,12 @@ class PdoStorage implements SessionStorage
     /**
      * @var \PDO
      */
-    private $pdo;
+    private \PDO $pdo;
 
     /**
      * @var array
      */
-    private $options;
+    private array $options;
 
     /**
      * @var array

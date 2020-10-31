@@ -17,21 +17,21 @@ final class ControllerInvocatedEvent
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * The route match.
      *
-     * @var \Brick\App\RouteMatch
+     * @var RouteMatch
      */
-    private $routeMatch;
+    private RouteMatch $routeMatch;
 
     /**
      * The controller instance, or null if the controller is not a class method.
      *
      * @var object|null
      */
-    private $instance;
+    private ?object $instance;
 
     /**
      * @param Request     $request    The request.

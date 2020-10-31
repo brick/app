@@ -17,7 +17,7 @@ class GeometryPacker implements ObjectPacker
      *
      * @var int
      */
-    private $srid;
+    private int $srid;
 
     /**
      * @param int $srid The default SRID to assign to the geometry when reading WKT.

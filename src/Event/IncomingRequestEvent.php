@@ -16,7 +16,7 @@ final class IncomingRequestEvent
      *
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * @param Request $request The request.
