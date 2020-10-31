@@ -6,7 +6,8 @@ namespace Brick\App;
 
 use Brick\App\Event\ControllerInvocatedEvent;
 use Brick\App\Event\ControllerReadyEvent;
-use Brick\App\Event\ExceptionCaughtEvent;
+use Brick\App\Event\UncaughtExceptionEvent;
+use Brick\App\Event\HttpExceptionEvent;
 use Brick\App\Event\IncomingRequestEvent;
 use Brick\App\Event\NonResponseResultEvent;
 use Brick\App\Event\ResponseReceivedEvent;
@@ -146,15 +147,19 @@ class Application implements RequestHandler
      */
     private function handleHttpException(HttpException $exception, Request $request) : Response
     {
-        $response = new Response();
+        $event = new HttpExceptionEvent($exception, $request);
+        $this->eventDispatcher->dispatch(HttpExceptionEvent::class, $event);
 
-        $response->setContent($exception);
-        $response->setStatusCode($exception->getStatusCode());
-        $response->setHeaders($exception->getHeaders());
-        $response->setHeader('Content-Type', 'text/plain');
+        $response = $event->getResponse();
 
-        $event = new ExceptionCaughtEvent($exception, $request, $response);
-        $this->eventDispatcher->dispatch(ExceptionCaughtEvent::class, $event);
+        if ($response === null) {
+            $response = new Response();
+
+            $response->setContent($exception);
+            $response->setStatusCode($exception->getStatusCode());
+            $response->setHeaders($exception->getHeaders());
+            $response->setHeader('Content-Type', 'text/plain');
+        }
 
         return $response;
     }
@@ -169,7 +174,14 @@ class Application implements RequestHandler
      */
     private function handleUncaughtException(\Throwable $exception, Request $request) : Response
     {
-        $httpException = new HttpInternalServerErrorException('Uncaught exception', $exception);
+        $event = new UncaughtExceptionEvent($exception, $request);
+        $this->eventDispatcher->dispatch(UncaughtExceptionEvent::class, $event);
+
+        $httpException = $event->getHttpException();
+
+        if ($httpException === null) {
+            $httpException = new HttpInternalServerErrorException('Uncaught exception', $exception);
+        }
 
         return $this->handleHttpException($httpException, $request);
     }

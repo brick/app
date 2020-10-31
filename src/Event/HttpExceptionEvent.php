@@ -18,7 +18,7 @@ use Brick\Http\Response;
  * This event provides an opportunity to modify the default response
  * to present a customized error message to the client.
  */
-final class ExceptionCaughtEvent
+final class HttpExceptionEvent
 {
     /**
      * The HTTP exception.
@@ -37,20 +37,18 @@ final class ExceptionCaughtEvent
     /**
      * The response.
      *
-     * @var Response
+     * @var Response|null
      */
-    private Response $response;
+    private ?Response $response = null;
 
     /**
      * @param HttpException $exception The HTTP exception.
      * @param Request       $request   The request.
-     * @param Response      $response  The response.
      */
-    public function __construct(HttpException $exception, Request $request, Response $response)
+    public function __construct(HttpException $exception, Request $request)
     {
         $this->exception = $exception;
         $this->request   = $request;
-        $this->response  = $response;
     }
 
     /**
@@ -78,10 +76,20 @@ final class ExceptionCaughtEvent
      *
      * This response can be modified by listeners.
      *
-     * @return Response
+     * @return Response|null
      */
-    public function getResponse() : Response
+    public function getResponse() : ?Response
     {
         return $this->response;
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return void
+     */
+    public function setResponse(Response $response) : void
+    {
+        $this->response = $response;
     }
 }
