@@ -13,7 +13,7 @@ use Brick\App\View\View;
  */
 trait PartialViewHelper
 {
-    private Injector|null $injector;
+    private Injector|null $injector = null;
 
     #[Inject]
     final public function setInjector(Injector $injector) : void

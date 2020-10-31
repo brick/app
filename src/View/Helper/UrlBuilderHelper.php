@@ -13,7 +13,7 @@ use RuntimeException;
  */
 trait UrlBuilderHelper
 {
-    private UrlBuilder|null $builder;
+    private UrlBuilder|null $builder = null;
 
     #[Inject]
     final public function setUrlBuilder(UrlBuilder $builder) : void

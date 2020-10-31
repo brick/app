@@ -26,7 +26,7 @@ abstract class Session implements SessionInterface
     /**
      * The object packer, if any.
      */
-    private Packer|null $packer;
+    private Packer|null $packer = null;
 
     /**
      * The session id, or null if not available yet.
