@@ -70,10 +70,12 @@ class AnnotationRouteCompiler
             $prefixPath = '';
             $prefixRegexp = '';
             $classParameterNames = [];
+            $classPriority = null;
 
             foreach ($this->annotationReader->getClassAnnotations($reflectionClass) as $annotation) {
                 if ($annotation instanceof Route) {
                     $prefixPath = $annotation->path;
+                    $classPriority = $annotation->priority;
                     [$prefixRegexp, $classParameterNames] = $this->processAnnotation($annotation);
 
                     break;
@@ -94,6 +96,8 @@ class AnnotationRouteCompiler
                             $httpMethods = $this->defaultMethods;
                         }
 
+                        $priority = $annotation->priority ?? $classPriority ?? 0;
+
                         $this->routes[] = [
                             $prefixPath . $annotation->path,
                             $annotation->methods,
@@ -104,6 +108,7 @@ class AnnotationRouteCompiler
                         $result[] = [
                             $pathRegexp,
                             $httpMethods,
+                            $priority,
                             $className,
                             $methodName,
                             $classParameterNames,

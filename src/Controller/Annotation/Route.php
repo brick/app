@@ -25,6 +25,11 @@ final class Route extends AbstractAnnotation
     public string $path;
 
     /**
+     * @var int|null
+     */
+    public ?int $priority;
+
+    /**
      * A map of parameter name to regexp patterns.
      *
      * The pattern defaults to [^\/]+, but can be overridden here.
@@ -50,6 +55,7 @@ final class Route extends AbstractAnnotation
     public function __construct(array $values)
     {
         $this->path     = $this->getRequiredString($values, 'path', true);
+        $this->priority = $this->getOptionalInt($values, 'priority');
         $this->patterns = $this->getOptionalStringArray($values, 'patterns');
         $this->methods  = $this->getOptionalStringArray($values, 'methods');
     }

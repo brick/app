@@ -17,6 +17,36 @@ abstract class AbstractAnnotation
      * @param string $name
      * @param bool   $isFirst
      *
+     * @return int
+     *
+     * @throws \LogicException
+     */
+    final protected function getOptionalInt(array $values, string $name, bool $isFirst = false) : ?int
+    {
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } elseif ($isFirst && isset($values['value'])) {
+            $value = $values['value'];
+        } else {
+            return null;
+        }
+
+        if (! is_int($value)) {
+            throw new \LogicException(sprintf(
+                'Attribute "%s" of annotation %s expects an int, %s given.',
+                $name,
+                $this->getAnnotationName(),
+                gettype($value)
+            ));
+        }
+
+        return $value;
+    }
+    /**
+     * @param array  $values
+     * @param string $name
+     * @param bool   $isFirst
+     *
      * @return string
      *
      * @throws \LogicException
