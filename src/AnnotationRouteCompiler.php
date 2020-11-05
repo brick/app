@@ -133,8 +133,6 @@ class AnnotationRouteCompiler
     }
 
     /**
-     * @todo 0.4.0 make private
-     *
      * Creates a path regular expression and infer the parameter names from a Route annotation.
      *
      * @param Route $annotation The annotation to process.
@@ -143,7 +141,7 @@ class AnnotationRouteCompiler
      *
      * @throws \LogicException
      */
-    public function processAnnotation(Route $annotation) : array
+    private function processAnnotation(Route $annotation) : array
     {
         $parameterNames = [];
 
