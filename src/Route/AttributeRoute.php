@@ -14,7 +14,15 @@ use Brick\Http\Request;
 class AttributeRoute implements Route
 {
     /**
-     * A map of regexp to [className, methodName, classParameterNames, methodParameterNames].
+     * A list of routes. Each route is an array containing:
+     *
+     *   0: pathRegexp
+     *   1: httpMethods
+     *   2: priority
+     *   3: className
+     *   4: methodName
+     *   5: classParameterNames
+     *   6: methodParameterNames
      */
     private array $routes;
 
@@ -33,35 +41,61 @@ class AttributeRoute implements Route
         $path = $request->getPath();
         $httpMethod = $request->getMethod();
 
-        foreach ($this->routes as $values) {
-            [$regexp] = $values;
+        $matchingRoutes = [];
 
-            if (preg_match($regexp, $path, $matches) === 1) {
-                [, $httpMethods] = $values;
+        foreach ($this->routes as $route) {
+            $pathRegexp = $route[0];
+
+            if (preg_match($pathRegexp, $path, $matches) === 1) {
+                $httpMethods = $route[1];
 
                 if ($httpMethods && ! in_array($httpMethod, $httpMethods, true)) {
                     continue;
                 }
 
-                [, , $className, $methodName, $classParameterNames, $methodParameterNames] = $values;
-
-                $classParameters = [];
-                $methodParameters = [];
-
-                $index = 1;
-
-                foreach ($classParameterNames as $name) {
-                    $classParameters[$name] = $matches[$index++];
-                }
-
-                foreach ($methodParameterNames as $name) {
-                    $methodParameters[$name] = $matches[$index++];
-                }
-
-                return RouteMatch::forMethod($className, $methodName, $classParameters, $methodParameters);
+                $route[] = $matches;
+                $matchingRoutes[] = $route;
             }
         }
 
-        return null;
+        $route = $this->getHighestPriorityRoute($matchingRoutes);
+
+        if ($route === null) {
+            return null;
+        }
+
+        [, , , $className, $methodName, $classParameterNames, $methodParameterNames, $matches] = $route;
+
+        $classParameters = [];
+        $methodParameters = [];
+
+        $index = 1;
+
+        foreach ($classParameterNames as $name) {
+            $classParameters[$name] = $matches[$index++];
+        }
+
+        foreach ($methodParameterNames as $name) {
+            $methodParameters[$name] = $matches[$index++];
+        }
+
+        return RouteMatch::forMethod($className, $methodName, $classParameters, $methodParameters);
+    }
+
+    private function getHighestPriorityRoute(array $routes): ?array
+    {
+        $highestPriority = null;
+        $highestPriorityRoute = null;
+
+        foreach ($routes as $route) {
+            $priority = $route[2];
+
+            if ($highestPriority === null || $priority > $highestPriority) {
+                $highestPriority = $priority;
+                $highestPriorityRoute = $route;
+            }
+        }
+
+        return $highestPriorityRoute;
     }
 }

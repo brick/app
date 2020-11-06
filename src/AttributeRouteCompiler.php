@@ -58,10 +58,12 @@ class AttributeRouteCompiler
             $prefixPath = '';
             $prefixRegexp = '';
             $classParameterNames = [];
+            $classPriority = null;
 
             foreach ($reflectionClass->getAttributes(Route::class) as $attribute) {
                 /** @var Route $attribute */
                 $prefixPath = $attribute->path;
+                $classPriority = $attribute->priority;
                 [$prefixRegexp, $classParameterNames] = $this->processAttribute($attribute);
 
                 break;
@@ -81,6 +83,8 @@ class AttributeRouteCompiler
                         $httpMethods = $this->defaultMethods;
                     }
 
+                    $priority = $attribute->priority ?? $classPriority ?? 0;
+
                     $this->routes[] = [
                         $prefixPath . $attribute->path,
                         $attribute->methods,
@@ -91,6 +95,7 @@ class AttributeRouteCompiler
                     $result[] = [
                         $pathRegexp,
                         $httpMethods,
+                        $priority,
                         $className,
                         $methodName,
                         $classParameterNames,

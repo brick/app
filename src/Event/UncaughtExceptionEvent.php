@@ -6,7 +6,7 @@ namespace Brick\App\Event;
 
 use Brick\Http\Exception\HttpException;
 use Brick\Http\Request;
-use Brick\Http\Response;
+use Throwable;
 
 /**
  * Event dispatched as soon as an exception is caught.
@@ -18,45 +18,53 @@ use Brick\Http\Response;
  * This event provides an opportunity to modify the default response
  * to present a customized error message to the client.
  */
-final class ExceptionCaughtEvent
+final class UncaughtExceptionEvent
 {
     /**
      * The HTTP exception.
+     *
+     * @var Throwable
      */
-    private HttpException $exception;
+    private Throwable $exception;
 
     /**
      * The request.
+     *
+     * @var Request
      */
     private Request $request;
 
     /**
-     * The response.
+     * The converted HTTP exception.
+     *
+     * @var HttpException|null
      */
-    private Response $response;
+    private ?HttpException $httpException = null;
 
     /**
-     * @param HttpException $exception The HTTP exception.
-     * @param Request       $request   The request.
-     * @param Response      $response  The response.
+     * @param Throwable $exception The caught exception.
+     * @param Request   $request   The request.
      */
-    public function __construct(HttpException $exception, Request $request, Response $response)
+    public function __construct(Throwable $exception, Request $request)
     {
         $this->exception = $exception;
         $this->request   = $request;
-        $this->response  = $response;
     }
 
     /**
-     * Returns the HTTP exception.
+     * Returns the caught exception.
+     *
+     * @return Throwable
      */
-    public function getException() : HttpException
+    public function getException() : Throwable
     {
         return $this->exception;
     }
 
     /**
      * Returns the request.
+     *
+     * @return Request
      */
     public function getRequest() : Request
     {
@@ -67,9 +75,21 @@ final class ExceptionCaughtEvent
      * Returns the response.
      *
      * This response can be modified by listeners.
+     *
+     * @return HttpException|null
      */
-    public function getResponse() : Response
+    public function getHttpException() : ?HttpException
     {
-        return $this->response;
+        return $this->httpException;
+    }
+
+    /**
+     * @param HttpException $httpException
+     *
+     * @return void
+     */
+    public function setHttpException(HttpException $httpException) : void
+    {
+        $this->httpException = $httpException;
     }
 }

@@ -44,11 +44,21 @@ final class Route
     public array $methods;
 
     /**
-     * @param string $path     The path, with optional {named} parameters.
-     * @param array  $patterns A map of parameter name to regexp patterns.
-     * @param array  $methods  The list of HTTP methods this route is valid for.
+     * The route priority, in case multiple routes match the same path / method.
+     *
+     * Route with the highest priority wins. Default priority is zero.
+     *
+     * @var int|null
      */
-    public function __construct(string $path, array $patterns = [], array $methods = [])
+    public ?int $priority;
+
+    /**
+     * @param string   $path     The path, with optional {named} parameters.
+     * @param array    $patterns A map of parameter name to regexp patterns.
+     * @param array    $methods  The list of HTTP methods this route is valid for.
+     * @param int|null $priority The route priority, in case multiple routes match. Highest priority wins.
+     */
+    public function __construct(string $path, array $patterns = [], array $methods = [], ?int $priority = null)
     {
         $this->checkStringArray('patterns', $patterns);
         $this->checkStringArray('methods', $methods);
@@ -56,6 +66,7 @@ final class Route
         $this->path     = $path;
         $this->patterns = $patterns;
         $this->methods  = $methods;
+        $this->priority = $priority;
     }
 
     private function checkStringArray(string $name, array $values) : void
