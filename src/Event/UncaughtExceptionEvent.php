@@ -72,9 +72,7 @@ final class UncaughtExceptionEvent
     }
 
     /**
-     * Returns the response.
-     *
-     * This response can be modified by listeners.
+     * Returns the converted HTTP exception, if any.
      *
      * @return HttpException|null
      */
