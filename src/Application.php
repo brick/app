@@ -130,16 +130,15 @@ class Application implements RequestHandler
 
         $response = $event->getResponse();
 
-        if ($response === null) {
-            $response = new Response();
-
-            $response->setContent($exception);
-            $response->setStatusCode($exception->getStatusCode());
-            $response->setHeaders($exception->getHeaders());
-            $response->setHeader('Content-Type', 'text/plain');
+        if ($response !== null) {
+            return $response;
         }
 
-        return $response;
+        return (new Response())
+            ->withContent((string) $exception)
+            ->withStatusCode($exception->getStatusCode())
+            ->withHeaders($exception->getHeaders())
+            ->withHeader('Content-Type', 'text/plain');
     }
 
     /**

@@ -18,8 +18,9 @@ class IpSession extends Session
         $this->id = $request->getClientIp();
     }
 
-    protected function writeSessionId(Response $response) : void
+    protected function writeSessionId(Response $response) : Response
     {
+        return $response;
     }
 
     protected function generateSessionId() : string
