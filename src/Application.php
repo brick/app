@@ -165,7 +165,7 @@ class Application implements RequestHandler
     }
 
     /**
-     * Wraps an uncaught exception in an HttpInternalServerErrorException, and converts it to a Response.
+     * Converts an uncaught exception to a Response.
      *
      * @param \Throwable          $exception
      * @param \Brick\Http\Request $request
