@@ -121,6 +121,7 @@ class Application implements RequestHandler
     }
 
     /**
+     * Converts an HttpException to a Response.
      */
     private function handleHttpException(HttpException $exception, Request $request) : Response
     {
@@ -142,7 +143,7 @@ class Application implements RequestHandler
     }
 
     /**
-     * Wraps an uncaught exception in an HttpInternalServerErrorException, and converts it to a Response.
+     * Converts an uncaught exception to a Response.
      */
     private function handleUncaughtException(Throwable $exception, Request $request) : Response
     {
