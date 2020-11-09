@@ -138,7 +138,7 @@ abstract class Session implements SessionInterface
      *
      * @return void
      */
-    public function handleRequest(Request $request) : void
+    public function readSessionIdFromRequest(Request $request) : void
     {
         $this->reset();
         $this->readSessionId($request);
@@ -157,7 +157,7 @@ abstract class Session implements SessionInterface
      *
      * @return Response
      */
-    public function handleResponse(Response $response) : Response
+    public function writeSessionIdToResponse(Response $response) : Response
     {
         if ($this->id === null) {
             // The request was not associated with an existing session, and no session writes occurred.
