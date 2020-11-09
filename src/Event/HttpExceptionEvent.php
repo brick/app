@@ -9,14 +9,10 @@ use Brick\Http\Request;
 use Brick\Http\Response;
 
 /**
- * Event dispatched as soon as an exception is caught.
+ * Event dispatched when an HttpException is caught.
  *
- * If the exception is not an HttpException, it is wrapped in an HttpInternalServerErrorException first,
- * so that this event always receives an HttpException.
- *
- * A default response is created to display the details of the exception.
- * This event provides an opportunity to modify the default response
- * to present a customized error message to the client.
+ * At this stage, any uncaught exception will have been converted to an HttpException via the `UncaughtExceptionEvent`.
+ * This event will typically be used to generate an error response with a user-friendly error page.
  */
 final class HttpExceptionEvent
 {
