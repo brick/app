@@ -137,11 +137,9 @@ Now if you open your browser at `/hello?name=John`, you should get a "Hello, Joh
 
 The application can already do interesting things, but is still pretty dumb. Fortunately, there is a great way to extend it with extra functionality: *plugins*.
 
-The application ships with a few useful plugins. Let's have a look at one of them: the `RequestParamPlugin`.
+The application ships with a few useful plugins. Let's have a look at one of them: the `RequestParamPlugin`. This plugin allows you to automatically map request parameters to your controller parameters, with attributes.
 
-This plugin allows you to automatically map request parameters to your controller parameters, with annotations. To use it, you need to install an extra package with Composer: `doctrine/annotations`.
-
-Once this is done, let's add the plugin to our application:
+Let's add this plugin to our application:
 
 ```php
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -162,9 +160,7 @@ use Brick\Http\Response;
 
 class Index
 {
-    /**
-     * @QueryParam("name")
-     */
+    #[QueryParam('name')]
     public function helloAction(string $name)
     {
         return new Response('Hello, ' . $name);
