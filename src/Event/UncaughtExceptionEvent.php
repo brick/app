@@ -9,14 +9,11 @@ use Brick\Http\Request;
 use Throwable;
 
 /**
- * Event dispatched as soon as an exception is caught.
+ * Event dispatched when an uncaught exception occurs during request handling.
  *
- * If the exception is not an HttpException, it is wrapped in an HttpInternalServerErrorException first,
- * so that this event always receives an HttpException.
- *
- * A default response is created to display the details of the exception.
- * This event provides an opportunity to modify the default response
- * to present a customized error message to the client.
+ * This event gives an opportunity to plugins to control how exceptions are converted to `HttpException`s.
+ * If no plugin catches this event and sets an HttpException, the exception will be wrapped in an
+ * HttpInternalServerErrorException by the Application.
  */
 final class UncaughtExceptionEvent
 {
