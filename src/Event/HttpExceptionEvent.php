@@ -58,7 +58,7 @@ final class HttpExceptionEvent
     }
 
     /**
-     * Returns the response.
+     * Returns the response, if any.
      */
     public function getResponse() : ?Response
     {
@@ -66,6 +66,8 @@ final class HttpExceptionEvent
     }
 
     /**
+     * Sets a response.
+     *
      * @param Response $response
      *
      * @return void
