@@ -37,8 +37,9 @@ class SessionPlugin implements Plugin
             $this->session->handleRequest($event->getRequest());
         });
 
-        $dispatcher->addListener(ResponseReceivedEvent::class, function(ResponseReceivedEvent $event) {
-            $this->session->handleResponse($event->getResponse());
+        $dispatcher->addListener(ResponseReceivedEvent::class, static function(ResponseReceivedEvent $event) {
+            $updatedResponse = $this->session->handleResponse($event->getResponse());
+            $event->setResponse($updatedResponse);
         });
     }
 }

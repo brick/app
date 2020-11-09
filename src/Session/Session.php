@@ -151,24 +151,26 @@ abstract class Session implements SessionInterface
     }
 
     /**
-     * Writes the session cookie to the Response.
+     * Writes the session cookie to the Response, and returns the updated Response.
      *
-     * @param \Brick\Http\Response $response
+     * @param Response $response
      *
-     * @return void
+     * @return Response
      */
-    public function handleResponse(Response $response) : void
+    public function handleResponse(Response $response) : Response
     {
         if ($this->id === null) {
             // The request was not associated with an existing session, and no session writes occurred.
             // Sending a session cookie is unnecessary.
-            return;
+            return $response;
         }
 
         // Note: we re-send the session cookie even if it was part of the request, to refresh the expiration time.
 
-        $this->writeSessionId($response);
+        $response = $this->writeSessionId($response);
         $this->reset();
+
+        return $response;
     }
 
     /**
@@ -181,9 +183,9 @@ abstract class Session implements SessionInterface
     /**
      * @param Response $response
      *
-     * @return void
+     * @return Response
      */
-    abstract protected function writeSessionId(Response $response) : void;
+    abstract protected function writeSessionId(Response $response) : Response;
 
     /**
      * Generates a random session id.

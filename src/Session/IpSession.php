@@ -20,11 +20,9 @@ class IpSession extends Session
         $this->id = $request->getClientIp();
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function writeSessionId(Response $response) : void
+    protected function writeSessionId(Response $response) : Response
     {
+        return $response;
     }
 
     /**

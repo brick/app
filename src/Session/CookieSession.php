@@ -57,24 +57,21 @@ class CookieSession extends Session
         }
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function writeSessionId(Response $response) : void
+    protected function writeSessionId(Response $response) : Response
     {
         $lifetime = $this->cookieParams['lifetime'];
         $expires = ($lifetime == 0) ? 0 : time() + $lifetime;
 
         $cookie = new Cookie($this->cookieParams['name'], $this->id);
 
-        $cookie
-            ->setExpires($expires)
-            ->setPath($this->cookieParams['path'])
-            ->setDomain($this->cookieParams['domain'])
-            ->setSecure($this->cookieParams['secure'])
-            ->setHttpOnly($this->cookieParams['http-only']);
+        $cookie = $cookie
+            ->withExpires($expires)
+            ->withPath($this->cookieParams['path'])
+            ->withDomain($this->cookieParams['domain'])
+            ->withSecure($this->cookieParams['secure'])
+            ->withHttpOnly($this->cookieParams['http-only']);
 
-        $response->setCookie($cookie);
+        return $response->withCookie($cookie);
     }
 
     /**

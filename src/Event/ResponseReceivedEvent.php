@@ -81,6 +81,14 @@ final class ResponseReceivedEvent
     }
 
     /**
+     * Updates the response.
+     */
+    public function setResponse(Response $response): void
+    {
+        $this->response = $response;
+    }
+
+    /**
      * Returns the route match.
      *
      * @return RouteMatch
