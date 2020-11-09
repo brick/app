@@ -68,9 +68,7 @@ final class HttpExceptionEvent
     }
 
     /**
-     * Returns the response.
-     *
-     * This response can be modified by listeners.
+     * Returns the response, if any.
      *
      * @return Response|null
      */
@@ -80,6 +78,8 @@ final class HttpExceptionEvent
     }
 
     /**
+     * Sets a response.
+     *
      * @param Response $response
      *
      * @return void
