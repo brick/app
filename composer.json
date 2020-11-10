@@ -26,7 +26,7 @@
         "brick/date-time": "0.1.*",
         "brick/geo": "0.2.*",
         "doctrine/orm": "2.*",
-        "phpunit/phpunit": "8.*",
+        "phpunit/phpunit": "^9.0",
         "php-coveralls/php-coveralls": "^2.4"
     },
     "suggest": {
