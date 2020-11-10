@@ -270,11 +270,7 @@ class Application implements RequestHandler
             }
 
             if ($match !== null) {
-                if ($match instanceof RouteMatch) {
-                    return $match;
-                }
-
-                throw $this->invalidReturnValue('route', Route::class . ' or NULL', $match);
+                return $match;
             }
         }
 
