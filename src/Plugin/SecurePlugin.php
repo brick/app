@@ -23,7 +23,7 @@ class SecurePlugin extends AbstractAttributePlugin
 {
     public function register(EventDispatcher $dispatcher) : void
     {
-        $dispatcher->addListener(RouteMatchedEvent::class, static function(RouteMatchedEvent $event) {
+        $dispatcher->addListener(RouteMatchedEvent::class, function(RouteMatchedEvent $event) {
             $controller = $event->getRouteMatch()->getControllerReflection();
             $request    = $event->getRequest();
 
@@ -36,7 +36,7 @@ class SecurePlugin extends AbstractAttributePlugin
             }
         });
 
-        $dispatcher->addListener(ResponseReceivedEvent::class, static function (ResponseReceivedEvent $event) {
+        $dispatcher->addListener(ResponseReceivedEvent::class, function (ResponseReceivedEvent $event) {
             $controller = $event->getRouteMatch()->getControllerReflection();
 
             /** @var Secure|null $secure */

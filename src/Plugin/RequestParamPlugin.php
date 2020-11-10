@@ -22,7 +22,7 @@ class RequestParamPlugin extends AbstractAttributePlugin
 {
     public function register(EventDispatcher $dispatcher) : void
     {
-        $dispatcher->addListener(ControllerReadyEvent::class, static function(ControllerReadyEvent $event) {
+        $dispatcher->addListener(ControllerReadyEvent::class, function(ControllerReadyEvent $event) {
             $event->addParameters($this->getParameters(
                 $event->getRequest(),
                 $event->getRouteMatch()->getControllerReflection()

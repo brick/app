@@ -16,7 +16,7 @@ class AllowPlugin extends AbstractAttributePlugin
 {
     public function register(EventDispatcher $dispatcher) : void
     {
-        $dispatcher->addListener(RouteMatchedEvent::class, static function(RouteMatchedEvent $event) {
+        $dispatcher->addListener(RouteMatchedEvent::class, function(RouteMatchedEvent $event) {
             $controller = $event->getRouteMatch()->getControllerReflection();
             $attribute = $this->getControllerAttribute($controller, Allow::class);
 
