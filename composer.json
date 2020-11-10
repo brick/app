@@ -30,7 +30,6 @@
         "php-coveralls/php-coveralls": "^2.4"
     },
     "suggest": {
-        "doctrine/dbal": "To use the TransactionalPlugin",
         "doctrine/orm": "To use the DoctrineObjectPacker",
         "brick/date-time": "To use the DateTimeObjectPacker",
         "brick/geo": "To use the GeometryObjectPacker",
