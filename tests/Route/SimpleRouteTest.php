@@ -24,7 +24,7 @@ namespace Brick\App\Tests\Route
         public function testRoute(string $path, string $class, string $method) : void
         {
             $request = new Request();
-            $request->setPath($path);
+            $request = $request->withPath($path);
 
             $route = new SimpleRoute([
                 '/'         => \name\space\IndexController::class,

@@ -39,17 +39,17 @@ class ApplicationTest extends TestCase
         $this->assertResponse($application->handle($request))
             ->hasStatusCode(404);
 
-        $request->setPath('/a');
+        $request = $request->withPath('/a');
         $this->assertResponse($application->handle($request))
             ->hasStatusCode(200)
             ->hasBody('Hello');
 
-        $request->setPath('/b');
+        $request = $request->withPath('/b');
         $this->assertResponse($application->handle($request))
             ->hasStatusCode(200)
             ->hasBody('World');
 
-        $request->setPath('/c');
+        $request = $request->withPath('/c');
         $this->assertResponse($application->handle($request))
             ->hasStatusCode(404);
     }
@@ -61,13 +61,13 @@ class HelloRoute implements Route
     {
         if ($request->getPath() === '/a') {
             return RouteMatch::forFunction(function() {
-                return (new Response())->setBody(new MessageBodyString('Hello'));
+                return (new Response())->withBody(new MessageBodyString('Hello'));
             });
         }
 
         if ($request->getPath() === '/b') {
             return RouteMatch::forFunction(function() {
-                return (new Response())->setBody(new MessageBodyString('World'));
+                return (new Response())->withBody(new MessageBodyString('World'));
             });
         }
 
