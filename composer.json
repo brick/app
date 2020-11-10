@@ -25,13 +25,11 @@
         "brick/form": "0.1.*",
         "brick/date-time": "0.1.*",
         "brick/geo": "0.2.*",
-        "doctrine/annotations": "1.*",
         "doctrine/orm": "2.*",
         "phpunit/phpunit": "8.*",
         "php-coveralls/php-coveralls": "^2.4"
     },
     "suggest": {
-        "doctrine/annotations": "To use the annotation-based plugins",
         "doctrine/dbal": "To use the TransactionalPlugin",
         "doctrine/orm": "To use the DoctrineObjectPacker",
         "brick/date-time": "To use the DateTimeObjectPacker",

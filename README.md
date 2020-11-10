@@ -142,11 +142,9 @@ The application ships with a few useful plugins. Let's have a look at one of the
 Let's add this plugin to our application:
 
 ```php
-use Doctrine\Common\Annotations\AnnotationReader;
 use Brick\App\Plugin\RequestParamPlugin;
 
-$reader = new AnnotationReader();
-$plugin = new RequestParamPlugin($reader);
+$plugin = new RequestParamPlugin();
 $application->addPlugin($plugin);
 ```
 
@@ -167,8 +165,6 @@ class Index
     }
 }
 ```
-
-*Important: the annotation needs to be imported, do not forget the `use Brick\...\QueryParam;` line.*
 
 If you open your browser at `/hello?name=Bob`, you should get "Hello, Bob". We did not need to interact directly with the Request object anymore. Request variables are now automatically injected in our controller parameters. Magic.
 
