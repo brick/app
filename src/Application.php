@@ -147,20 +147,14 @@ class Application implements RequestHandler
      */
     private function handleHttpException(HttpException $exception, Request $request) : Response
     {
-        $event = new HttpExceptionEvent($exception, $request);
+        $response = (new Response())
+            ->withStatusCode($exception->getStatusCode())
+            ->withHeaders($exception->getHeaders());
+
+        $event = new HttpExceptionEvent($exception, $request, $response);
         $this->eventDispatcher->dispatch(HttpExceptionEvent::class, $event);
 
-        $response = $event->getResponse();
-
-        if ($response !== null) {
-            return $response;
-        }
-
-        return (new Response())
-            ->withContent((string) $exception)
-            ->withStatusCode($exception->getStatusCode())
-            ->withHeaders($exception->getHeaders())
-            ->withHeader('Content-Type', 'text/plain');
+        return $event->getResponse();
     }
 
     /**
