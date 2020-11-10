@@ -117,8 +117,8 @@ abstract class AbstractController
     private function createResponse(string $data, string $contentType) : Response
     {
         return (new Response())
-            ->setContent($data)
-            ->setHeader('Content-Type', $contentType);
+            ->withContent($data)
+            ->withHeader('Content-Type', $contentType);
     }
 
     /**
@@ -130,8 +130,8 @@ abstract class AbstractController
     protected function redirect(string $uri, int $statusCode = 302) : Response
     {
         return (new Response())
-            ->setStatusCode($statusCode)
-            ->setHeader('Location', $uri);
+            ->withStatusCode($statusCode)
+            ->withHeader('Location', $uri);
     }
 
     /**
