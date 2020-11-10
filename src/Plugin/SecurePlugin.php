@@ -43,7 +43,10 @@ class SecurePlugin extends AbstractAttributePlugin
             $secure = $this->getControllerAttribute($controller, Secure::class);
 
             if ($secure && $secure->hsts !== null && $event->getRequest()->isSecure()) {
-                $event->getResponse()->setHeader('Strict-Transport-Security', $secure->hsts);
+                $event->setResponse(
+                    $event->getResponse()
+                        ->withHeader('Strict-Transport-Security', $secure->hsts)
+                );
             }
         });
     }
