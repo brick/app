@@ -15,6 +15,8 @@ use Doctrine\Common\Annotations\Reader;
 
 /**
  * Configures the start of a database transaction with annotations.
+ *
+ * @deprecated
  */
 class TransactionalPlugin extends AbstractAnnotationPlugin
 {
