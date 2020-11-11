@@ -137,6 +137,11 @@ class Application implements RequestHandler
         }
     }
 
+    public function handleWithoutCatchingExceptions(Request $request): Response
+    {
+        return $this->handleRequest($request);
+    }
+
     /**
      * Converts an HttpException to a Response.
      *
@@ -235,8 +240,6 @@ class Application implements RequestHandler
                         throw $this->invalidReturnValue('controller', Response::class, $result);
                     }
                 }
-            } catch (HttpException $e) {
-                $response = $this->handleHttpException($e, $request);
             } finally {
                 $event = new ControllerInvocatedEvent($request, $match, $instance);
                 $this->eventDispatcher->dispatch(ControllerInvocatedEvent::class, $event);
