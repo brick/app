@@ -237,7 +237,7 @@ class Application implements RequestHandler
                     $response = $event->getResponse();
 
                     if ($response === null) {
-                        throw $this->invalidReturnValue('controller', Response::class, $result);
+                        throw $this->invalidControllerReturnValue($result);
                     }
                 }
             } finally {
@@ -281,17 +281,17 @@ class Application implements RequestHandler
     }
 
     /**
-     * @param string $what     The name of the expected resource.
-     * @param string $expected The expected return value type.
-     * @param mixed  $actual   The actual return value.
+     * @param mixed $value The controller return value.
      *
      * @return \UnexpectedValueException
      */
-    private function invalidReturnValue(string $what, string $expected, $actual) : \UnexpectedValueException
+    private function invalidControllerReturnValue($value) : \UnexpectedValueException
     {
-        $message = 'Invalid return value from %s: expected %s, got %s.';
-        $actual  = is_object($actual) ? get_class($actual) : gettype($actual);
+        $message  = 'Got a non-Response return value of type %s from controller, ';
+        $message .= 'and no registered plugin could create a Response out of the result.';
 
-        return new \UnexpectedValueException(sprintf($message, $what, $expected, $actual));
+        $type = is_object($value) ? get_class($value) : gettype($value);
+
+        return new \UnexpectedValueException(sprintf($message, $type));
     }
 }
