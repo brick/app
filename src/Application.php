@@ -249,7 +249,7 @@ class Application implements RequestHandler
         $event = new ResponseReceivedEvent($request, $response, $match, $instance);
         $this->eventDispatcher->dispatch(ResponseReceivedEvent::class, $event);
 
-        return $response;
+        return $event->getResponse();
     }
 
     /**
