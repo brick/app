@@ -259,8 +259,7 @@ class Application implements RequestHandler
      *
      * @return RouteMatch The route match.
      *
-     * @throws HttpNotFoundException     If no route matches the request.
-     * @throws \UnexpectedValueException If a route returns an invalid value.
+     * @throws HttpNotFoundException If no route matches the request.
      */
     private function route(Request $request) : RouteMatch
     {
