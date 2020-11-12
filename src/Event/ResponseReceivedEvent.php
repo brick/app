@@ -10,11 +10,6 @@ use Brick\App\RouteMatch;
 
 /**
  * Event dispatched after the controller response has been received.
- *
- * If an HttpException is caught during the controller method invocation,
- * the exception it is converted to a Response, and this event is dispatched as well.
- *
- * Other exceptions break the application flow and don't trigger this event.
  */
 final class ResponseReceivedEvent
 {

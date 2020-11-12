@@ -120,25 +120,24 @@ class Application implements RequestHandler
         }
     }
 
+    public function handleWithoutCatchingExceptions(Request $request): Response
+    {
+        return $this->handleRequest($request);
+    }
+
     /**
      * Converts an HttpException to a Response.
      */
     private function handleHttpException(HttpException $exception, Request $request) : Response
     {
-        $event = new HttpExceptionEvent($exception, $request);
+        $response = (new Response())
+            ->withStatusCode($exception->getStatusCode())
+            ->withHeaders($exception->getHeaders());
+
+        $event = new HttpExceptionEvent($exception, $request, $response);
         $this->eventDispatcher->dispatch(HttpExceptionEvent::class, $event);
 
-        $response = $event->getResponse();
-
-        if ($response !== null) {
-            return $response;
-        }
-
-        return (new Response())
-            ->withContent((string) $exception)
-            ->withStatusCode($exception->getStatusCode())
-            ->withHeaders($exception->getHeaders())
-            ->withHeader('Content-Type', 'text/plain');
+        return $event->getResponse();
     }
 
     /**
@@ -211,11 +210,9 @@ class Application implements RequestHandler
                     $response = $event->getResponse();
 
                     if ($response === null) {
-                        throw $this->invalidReturnValue('controller', Response::class, $result);
+                        throw $this->invalidControllerReturnValue($result);
                     }
                 }
-            } catch (HttpException $e) {
-                $response = $this->handleHttpException($e, $request);
             } finally {
                 $event = new ControllerInvocatedEvent($request, $match, $instance);
                 $this->eventDispatcher->dispatch(ControllerInvocatedEvent::class, $event);
@@ -225,7 +222,7 @@ class Application implements RequestHandler
         $event = new ResponseReceivedEvent($request, $response, $match, $instance);
         $this->eventDispatcher->dispatch(ResponseReceivedEvent::class, $event);
 
-        return $response;
+        return $event->getResponse();
     }
 
     /**
@@ -235,8 +232,7 @@ class Application implements RequestHandler
      *
      * @return RouteMatch The route match.
      *
-     * @throws HttpNotFoundException    If no route matches the request.
-     * @throws UnexpectedValueException If a route returns an invalid value.
+     * @throws HttpNotFoundException If no route matches the request.
      */
     private function route(Request $request) : RouteMatch
     {
@@ -249,11 +245,7 @@ class Application implements RequestHandler
             }
 
             if ($match !== null) {
-                if ($match instanceof RouteMatch) {
-                    return $match;
-                }
-
-                throw $this->invalidReturnValue('route', Route::class . ' or NULL', $match);
+                return $match;
             }
         }
 
@@ -261,17 +253,17 @@ class Application implements RequestHandler
     }
 
     /**
-     * @param string $what     The name of the expected resource.
-     * @param string $expected The expected return value type.
-     * @param mixed  $actual   The actual return value.
+     * @param mixed $value The controller return value.
      *
      * @return UnexpectedValueException
      */
-    private function invalidReturnValue(string $what, string $expected, mixed $actual) : UnexpectedValueException
+    private function invalidControllerReturnValue($value) : \UnexpectedValueException
     {
-        $message = 'Invalid return value from %s: expected %s, got %s.';
-        $actual  = is_object($actual) ? get_class($actual) : gettype($actual);
+        $message  = 'Got a non-Response return value of type %s from controller, ';
+        $message .= 'and no registered plugin could create a Response out of the result.';
 
-        return new UnexpectedValueException(sprintf($message, $what, $expected, $actual));
+        $type = is_object($value) ? get_class($value) : gettype($value);
+
+        return new \UnexpectedValueException(sprintf($message, $type));
     }
 }

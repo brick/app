@@ -29,16 +29,18 @@ final class HttpExceptionEvent
     /**
      * The response.
      */
-    private ?Response $response = null;
+    private Response $response;
 
     /**
      * @param HttpException $exception The HTTP exception.
      * @param Request       $request   The request.
+     * @param Response      $response  A Response pre-populated with status code & headers.
      */
-    public function __construct(HttpException $exception, Request $request)
+    public function __construct(HttpException $exception, Request $request, Response $response)
     {
         $this->exception = $exception;
         $this->request   = $request;
+        $this->response  = $response;
     }
 
     /**
@@ -58,19 +60,15 @@ final class HttpExceptionEvent
     }
 
     /**
-     * Returns the response, if any.
+     * Returns the response.
      */
-    public function getResponse() : ?Response
+    public function getResponse() : Response
     {
         return $this->response;
     }
 
     /**
-     * Sets a response.
-     *
-     * @param Response $response
-     *
-     * @return void
+     * Updates the response.
      */
     public function setResponse(Response $response) : void
     {
