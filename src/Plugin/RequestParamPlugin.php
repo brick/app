@@ -11,6 +11,7 @@ use Brick\Http\Exception\HttpException;
 use Brick\Http\Request;
 use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
+use ReflectionNamedType;
 
 /**
  * Injects request parameters into controllers with the QueryParam and PostParam annotations.
@@ -108,21 +109,32 @@ class RequestParamPlugin extends AbstractAnnotationPlugin
 
         $value = $requestParameters[$parameterName];
 
-        if ($value === '' && $parameter->getClass() && $parameter->allowsNull()) {
+        $parameterType = $parameter->getType();
+
+        if ($value === '' && $parameterType instanceof ReflectionNamedType && ! $parameterType->isBuiltin() && $parameter->allowsNull()) {
             return null;
         }
 
-        if ($parameter->isArray() && ! is_array($value)) {
+        $isArray = $parameterType instanceof ReflectionNamedType && $parameterType->getName() === 'array';
+
+        if ($isArray && ! is_array($value)) {
             throw $this->invalidArrayParameterException($controller, $annotation);
         }
 
-        if ($parameter->isArray() || $parameter->getClass()) {
+        $hasClass = $parameterType instanceof ReflectionNamedType && ! $parameterType->isBuiltin();
+
+        if ($isArray || $hasClass) {
             return $value;
         }
 
         $type = $parameter->getType();
 
         if ($type === null) {
+            return $value;
+        }
+
+        if (! $type instanceof ReflectionNamedType) {
+            // @todo handle union types
             return $value;
         }
 

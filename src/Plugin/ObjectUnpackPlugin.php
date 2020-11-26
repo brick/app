@@ -15,6 +15,7 @@ use Brick\Http\Exception\HttpException;
 use Brick\Http\Exception\HttpNotFoundException;
 use Brick\Http\Exception\HttpBadRequestException;
 use Brick\Http\Exception\HttpInternalServerErrorException;
+use ReflectionNamedType;
 
 /**
  * Automatically converts type-hinted objects in controller parameters, from their string or array representation.
@@ -82,10 +83,10 @@ class ObjectUnpackPlugin implements Plugin
      */
     private function getParameterValue(\ReflectionParameter $parameter, $value)
     {
-        $class = $parameter->getClass();
+        $type = $parameter->getType();
 
-        if ($class) {
-            $className = $class->getName();
+        if ($type instanceof ReflectionNamedType && ! $type->isBuiltin()) {
+            $className = $type->getName();
 
             if ($parameter->isVariadic()) {
                 $result = [];

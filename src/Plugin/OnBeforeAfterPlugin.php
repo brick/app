@@ -12,6 +12,7 @@ use Brick\Http\Exception\HttpInternalServerErrorException;
 use Brick\Http\Request;
 use Brick\Http\Response;
 use Brick\Reflection\ReflectionTools;
+use ReflectionNamedType;
 
 /**
  * Registers functions to be called before and after controller method invocation.
@@ -134,10 +135,10 @@ class OnBeforeAfterPlugin implements Plugin
         $reflectionFunction = $this->reflectionTools->getReflectionFunction($function);
 
         foreach ($reflectionFunction->getParameters() as $reflectionParameter) {
-            $parameterClass = $reflectionParameter->getClass();
+            $parameterType = $reflectionParameter->getType();
 
-            if ($parameterClass !== null) {
-                $parameterClassName = $parameterClass->getName();
+            if ($parameterType instanceof ReflectionNamedType && ! $parameterType->isBuiltin()) {
+                $parameterClassName = $parameterType->getName();
 
                 if (isset($objects[$parameterClassName])) {
                     $parameters[] = $objects[$parameterClassName];
@@ -163,12 +164,12 @@ class OnBeforeAfterPlugin implements Plugin
     {
         $message = 'Cannot resolve ' . $onEvent . ' function parameter $' . $parameter->getName() . ': ';
 
-        $parameterClass = $parameter->getClass();
+        $parameterType = $parameter->getType();
 
-        if ($parameterClass === null) {
+        if ($parameterType === null) {
             $message .= 'parameter is not typed.';
-        } else {
-            $message .= 'type ' . $parameterClass->getName() . ' is not in available types (' . implode(', ', $types) . ').';
+        } elseif ($parameterType instanceof ReflectionNamedType) {
+            $message .= 'type ' . $parameterType->getName() . ' is not in available types (' . implode(', ', $types) . ').';
         }
 
         return new HttpInternalServerErrorException($message);
