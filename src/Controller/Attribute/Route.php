@@ -76,7 +76,7 @@ final class Route
                 throw new TypeError(sprintf(
                     'Parameter $%s must only contain strings, %s given.',
                     $name,
-                    gettype($value)
+                    get_debug_type($value)
                 ));
             }
         }

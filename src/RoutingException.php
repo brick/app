@@ -24,7 +24,7 @@ class RoutingException extends \RuntimeException
     {
         return new self(sprintf(
             'Invalid controller function: function name or closure expected, %s given.',
-            is_string($function) ? '"' . $function . '"' : gettype($function)
+            is_string($function) ? '"' . $function . '"' : get_debug_type($function)
         ), 0, $e);
     }
 }

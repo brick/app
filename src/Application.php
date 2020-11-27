@@ -262,8 +262,6 @@ class Application implements RequestHandler
         $message  = 'Got a non-Response return value of type %s from controller, ';
         $message .= 'and no registered plugin could create a Response out of the result.';
 
-        $type = is_object($value) ? get_class($value) : gettype($value);
-
-        return new \UnexpectedValueException(sprintf($message, $type));
+        return new \UnexpectedValueException(sprintf($message, get_debug_type($value)));
     }
 }

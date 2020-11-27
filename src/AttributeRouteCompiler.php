@@ -36,7 +36,7 @@ class AttributeRouteCompiler
     {
         foreach ($defaultMethods as $method) {
             if (! is_string($method)) {
-                throw new TypeError(sprintf('Default HTTP methods must be an array of string, %s found in array.', gettype($method)));
+                throw new TypeError(sprintf('Default HTTP methods must be an array of string, %s found in array.', get_debug_type($method)));
             }
         }
 
