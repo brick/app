@@ -320,7 +320,7 @@ If you're using dependency injection in your app, you can have the `Session` obj
 Just register the container in your application, and instruct it to resolve sessions:
 
 ```php
-use Brick\Di\Container;
+use Brick\DI\Container;
 use Brick\App\Application;
 use Brick\App\Session\CookieSession;
 use Brick\App\Session\Session;
