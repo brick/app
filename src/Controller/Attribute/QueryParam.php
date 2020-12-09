@@ -10,7 +10,7 @@ use Brick\Http\Request;
 /**
  * This attribute requires the `RequestParamPlugin`.
  */
-#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_FUNCTION)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_FUNCTION | Attribute::IS_REPEATABLE)]
 final class QueryParam extends RequestParam
 {
     public function getParameterType() : string
