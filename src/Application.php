@@ -257,7 +257,7 @@ class Application implements RequestHandler
      *
      * @return UnexpectedValueException
      */
-    private function invalidControllerReturnValue($value) : \UnexpectedValueException
+    private function invalidControllerReturnValue(mixed $value) : \UnexpectedValueException
     {
         $message  = 'Got a non-Response return value of type %s from controller, ';
         $message .= 'and no registered plugin could create a Response out of the result.';
