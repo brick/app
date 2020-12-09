@@ -38,7 +38,7 @@ abstract class AbstractAttributePlugin implements Plugin
         $attributes = $controller->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
 
         foreach ($attributes as $attribute) {
-            return $attribute;
+            return $attribute->newInstance();
         }
 
         if ($controller instanceof ReflectionMethod) {
@@ -49,7 +49,7 @@ abstract class AbstractAttributePlugin implements Plugin
                 $attributes = $class->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
 
                 foreach ($attributes as $attribute) {
-                    return $attribute;
+                    return $attribute->newInstance();
                 }
             }
         }

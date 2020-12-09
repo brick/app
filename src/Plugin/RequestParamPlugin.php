@@ -36,8 +36,13 @@ class RequestParamPlugin extends AbstractAttributePlugin
      */
     private function getParameters(Request $request, ReflectionFunctionAbstract $controller) : array
     {
+        $reflectionAttributes = $controller->getAttributes(RequestParam::class, ReflectionAttribute::IS_INSTANCEOF);
+
         /** @var RequestParam[] $requestParamAttributes */
-        $requestParamAttributes = $controller->getAttributes(RequestParam::class, ReflectionAttribute::IS_INSTANCEOF);
+        $requestParamAttributes = array_map(
+            fn(ReflectionAttribute $attribute) => $attribute->newInstance(),
+            $reflectionAttributes
+        );
 
         $parameters = [];
         foreach ($controller->getParameters() as $parameter) {

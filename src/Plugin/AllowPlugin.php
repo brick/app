@@ -18,11 +18,13 @@ class AllowPlugin extends AbstractAttributePlugin
     {
         $dispatcher->addListener(RouteMatchedEvent::class, function(RouteMatchedEvent $event) {
             $controller = $event->getRouteMatch()->getControllerReflection();
-            $attribute = $this->getControllerAttribute($controller, Allow::class);
 
-            if ($attribute instanceof Allow) {
+            /** @var Allow|null $allow */
+            $allow = $this->getControllerAttribute($controller, Allow::class);
+
+            if ($allow !== null) {
                 $method = $event->getRequest()->getMethod();
-                $allowedMethods = $attribute->methods;
+                $allowedMethods = $allow->methods;
 
                 if (! in_array($method, $allowedMethods)) {
                     throw new HttpMethodNotAllowedException($allowedMethods);
