@@ -61,10 +61,11 @@ class AttributeRouteCompiler
             $classPriority = null;
 
             foreach ($reflectionClass->getAttributes(Route::class) as $attribute) {
-                /** @var Route $attribute */
-                $prefixPath = $attribute->path;
-                $classPriority = $attribute->priority;
-                [$prefixRegexp, $classParameterNames] = $this->processAttribute($attribute);
+                /** @var Route $route */
+                $route = $attribute->newInstance();
+                $prefixPath = $route->path;
+                $classPriority = $route->priority;
+                [$prefixRegexp, $classParameterNames] = $this->processAttribute($route);
 
                 break;
             }
@@ -73,21 +74,23 @@ class AttributeRouteCompiler
                 $methodName = $reflectionMethod->getName();
 
                 foreach ($reflectionMethod->getAttributes(Route::class) as $attribute) {
-                    /** @var Route $attribute */
-                    [$regexp, $methodParameterNames] = $this->processAttribute($attribute);
+                    /** @var Route $route */
+                    $route = $attribute->newInstance();
+
+                    [$regexp, $methodParameterNames] = $this->processAttribute($route);
 
                     $pathRegexp = '/^' . $prefixRegexp . $regexp . '$/';
-                    $httpMethods = $attribute->methods;
+                    $httpMethods = $route->methods;
 
                     if (! $httpMethods) {
                         $httpMethods = $this->defaultMethods;
                     }
 
-                    $priority = $attribute->priority ?? $classPriority ?? 0;
+                    $priority = $route->priority ?? $classPriority ?? 0;
 
                     $this->routes[] = [
-                        $prefixPath . $attribute->path,
-                        $attribute->methods,
+                        $prefixPath . $route->path,
+                        $route->methods,
                         $className,
                         $methodName
                     ];
