@@ -1,7 +1,13 @@
 language: php
 
 php:
-  - nightly
+  - 7.4
+  - 8.0
+
+matrix:
+  include:
+    - php: 7.4.0
+      env: dependencies=lowest
 
 before_script:
   - |
