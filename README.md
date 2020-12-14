@@ -5,7 +5,7 @@ Brick\App
 
 A web application framework.
 
-[![Build Status](https://secure.travis-ci.org/brick/app.svg?branch=master)](http://travis-ci.org/brick/app)
+[![Build Status](https://github.com/brick/app/workflows/CI/badge.svg)](https://github.com/brick/app/actions)
 [![Coverage Status](https://coveralls.io/repos/github/brick/app/badge.svg?branch=master)](https://coveralls.io/github/brick/app?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/brick/app/v/stable)](https://packagist.org/packages/brick/app)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
