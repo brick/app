@@ -24,14 +24,14 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          coverage: xdebug
+          coverage: pcov
 
       - name: Install composer dependencies
         uses: "ramsey/composer-install@v1"
 
       - name: Run PHPUnit
         run: |
-          mkdir -p mkdir -p build/logs
+          mkdir -p build/logs
           vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
       - name: Upload coverage report to Coveralls
