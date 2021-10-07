@@ -22,7 +22,7 @@ composer require brick/app
 Requirements
 ------------
 
-This library requires PHP 7.2 or later.
+This library requires PHP 8.0 or later.
 
 
 Project status & release process
