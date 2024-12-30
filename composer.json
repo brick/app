@@ -2,8 +2,6 @@
     "name": "brick/app",
     "description": "Web application framework",
     "type": "library",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "keywords": [
         "Brick",
         "App",
